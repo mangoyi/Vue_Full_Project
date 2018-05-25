@@ -1,0 +1,130 @@
+{
+    "status": 0,   
+    "msg"   : "",
+    "data": {
+        "list": [
+            {
+                "sequence"    : 1,
+                "taskId"      : 1011,                    
+                "taskName"    : "上海银行",
+                "number"      : 18281728171,
+                "startTime"   : "2018/2/19 09:09",
+                "duration"    : "200s",
+                "RobotId"     : 9001002,
+                "LaborId"     : 12009,
+                "recordSrc"   : "./static/audio/3.1.mp3",
+                "flag"        : "A"
+            },
+            {
+                "sequence"    : 1,
+                "taskId"      : 1011,                    
+                "taskName"    : "上海银行",
+                "number"      : 18281728171,
+                "startTime"   : "2018/2/19 09:09",
+                "duration"    : "200s",
+                "RobotId"     : 9001002,
+                "LaborId"     : 12009,
+                "recordSrc"   : "./static/audio/3.1.mp3",
+                "flag"        : "A"
+            },
+            {
+                "sequence"    : 1,
+                "taskId"      : 1011,                    
+                "taskName"    : "上海银行",
+                "number"      : 18281728171,
+                "startTime"   : "2018/2/19 09:09",
+                "duration"    : "200s",
+                "RobotId"     : 9001002,
+                "LaborId"     : 12009,
+                "recordSrc"   : "./static/audio/3.1.mp3",
+                "flag"        : "A"
+            },
+            {
+                "sequence"    : 1,
+                "taskId"      : 1011,                    
+                "taskName"    : "上海银行",
+                "number"      : 18281728171,
+                "startTime"   : "2018/2/19 09:09",
+                "duration"    : "200s",
+                "RobotId"     : 9001002,
+                "LaborId"     : 12009,
+                "recordSrc"   : "./static/audio/3.1.mp3",
+                "flag"        : "A"
+            },
+            {
+                "sequence"    : 1,
+                "taskId"      : 1011,                    
+                "taskName"    : "上海银行",
+                "number"      : 18281728171,
+                "startTime"   : "2018/2/19 09:09",
+                "duration"    : "200s",
+                "RobotId"     : 9001002,
+                "LaborId"     : 12009,
+                "recordSrc"   : "./static/audio/3.1.mp3",
+                "flag"        : "A"
+            },
+            {
+                "sequence"    : 1,
+                "taskId"      : 1011,                    
+                "taskName"    : "上海银行",
+                "number"      : 18281728171,
+                "startTime"   : "2018/2/19 09:09",
+                "duration"    : "200s",
+                "RobotId"     : 9001002,
+                "LaborId"     : 12009,
+                "recordSrc"   : "./static/audio/3.1.mp3",
+                "flag"        : "A"
+            },
+            {
+                "sequence"    : 1,
+                "taskId"      : 1011,                    
+                "taskName"    : "上海银行",
+                "number"      : 18281728171,
+                "startTime"   : "2018/2/19 09:09",
+                "duration"    : "200s",
+                "RobotId"     : 9001002,
+                "LaborId"     : 12009,
+                "recordSrc"   : "./static/audio/3.1.mp3",
+                "flag"        : "A"
+            },
+            {
+                "sequence"    : 1,
+                "taskId"      : 1011,                    
+                "taskName"    : "上海银行",
+                "number"      : 18281728171,
+                "startTime"   : "2018/2/19 09:09",
+                "duration"    : "200s",
+                "RobotId"     : 9001002,
+                "LaborId"     : 12009,
+                "recordSrc"   : "./static/audio/3.1.mp3",
+                "flag"        : "A"
+            },
+            {
+                "sequence"    : 1,
+                "taskId"      : 1011,                    
+                "taskName"    : "上海银行",
+                "number"      : 18281728171,
+                "startTime"   : "2018/2/19 09:09",
+                "duration"    : "200s",
+                "RobotId"     : 9001002,
+                "LaborId"     : 12009,
+                "recordSrc"   : "./static/audio/3.1.mp3",
+                "flag"        : "A"
+            },
+            {
+                "sequence"    : 1,
+                "taskId"      : 1011,                    
+                "taskName"    : "上海银行",
+                "number"      : 18281728171,
+                "startTime"   : "2018/2/19 09:09",
+                "duration"    : "200s",
+                "RobotId"     : 9001002,
+                "LaborId"     : 12009,
+                "recordSrc"   : "./static/audio/3.1.mp3",
+                "flag"        : "A"
+            }
+        ]
+    }
+}
+
+

@@ -1,0 +1,110 @@
+{
+    "status": 0,   
+    "msg"   : "",
+    "data": {
+        "list": [
+            {
+                "sequence"    : 1,
+                "taskId"      : 1011,                    
+                "taskName"    : "上海银行",
+                "taskStatus"  : "进行中",
+                "promulgator" : "mangoyi",
+                "startTime"   : "2018/2/19 09:09",
+                "speed"       : "120/200",
+                "RobotNub"    : 30
+            },
+            {
+                "sequence"    : 1,
+                "taskId"      : 1012,                    
+                "taskName"    : "上海银行",
+                "taskStatus"  : "进行中",
+                "promulgator" : "mangoyi",
+                "startTime"   : "2018/2/19 09:09",
+                "speed"       : "120/200",
+                "RobotNub"    : 30
+            },
+            {
+                "sequence"    : 1,
+                "taskId"      : 1013,                    
+                "taskName"    : "上海银行",
+                "taskStatus"  : "进行中",
+                "promulgator" : "mangoyi",
+                "startTime"   : "2018/2/19 09:09",
+                "speed"       : "120/200",
+                "RobotNub"    : 30
+            },
+            {
+                "sequence"    : 1,
+                "taskId"      : 1014,                    
+                "taskName"    : "上海银行",
+                "taskStatus"  : "进行中",
+                "promulgator" : "mangoyi",
+                "startTime"   : "2018/2/19 09:09",
+                "speed"       : "120/200",
+                "RobotNub"    : 30
+            },
+            {
+                "sequence"    : 1,
+                "taskId"      : 1015,                    
+                "taskName"    : "上海银行",
+                "taskStatus"  : "进行中",
+                "promulgator" : "mangoyi",
+                "startTime"   : "2018/2/19 09:09",
+                "speed"       : "120/200",
+                "RobotNub"    : 30
+            },
+            {
+                "sequence"    : 1,
+                "taskId"      : 1011,                    
+                "taskName"    : "上海银行",
+                "taskStatus"  : "进行中",
+                "promulgator" : "mangoyi",
+                "startTime"   : "2018/2/19 09:09",
+                "speed"       : "120/200",
+                "RobotNub"    : 30
+            },
+            {
+                "sequence"    : 1,
+                "taskId"      : 1011,                    
+                "taskName"    : "上海银行",
+                "taskStatus"  : "进行中",
+                "promulgator" : "mangoyi",
+                "startTime"   : "2018/2/19 09:09",
+                "speed"       : "120/200",
+                "RobotNub"    : 30
+            },
+            {
+                "sequence"    : 1,
+                "taskId"      : 1011,                    
+                "taskName"    : "上海银行",
+                "taskStatus"  : "进行中",
+                "promulgator" : "mangoyi",
+                "startTime"   : "2018/2/19 09:09",
+                "speed"       : "120/200",
+                "RobotNub"    : 30
+            },
+            {
+                "sequence"    : 1,
+                "taskId"      : 1011,                    
+                "taskName"    : "上海银行",
+                "taskStatus"  : "进行中",
+                "promulgator" : "mangoyi",
+                "startTime"   : "2018/2/19 09:09",
+                "speed"       : "120/200",
+                "RobotNub"    : 30
+            },
+            {
+                "sequence"    : 1,
+                "taskId"      : 1011,                    
+                "taskName"    : "上海银行",
+                "taskStatus"  : "进行中",
+                "promulgator" : "mangoyi",
+                "startTime"   : "2018/2/19 09:09",
+                "speed"       : "120/200",
+                "RobotNub"    : 30
+            }
+        ]
+    }
+}
+
+

@@ -1,0 +1,140 @@
+{
+    "status": 0,   
+    "msg"   : "",
+    "data": {
+        "list": [
+            {
+                "sequence"  : 1,
+                "line"      : 1011,
+                "callStatus": "接通",
+                "inCall"    : 18812918921,
+                "outCall"   : 13828191827,
+                "startTime" : "2018/2/19 09:09",
+                "duration"  : "200s",
+                "RobotId"   : 90012,
+                "LaborId"   : 12009,
+                "recordSrc" : "./static/audio/3.1.mp3",
+                "recordFlag": false
+            },
+            {
+                "sequence"  : 1,
+                "line"      : 1011,
+                "callStatus": "接通",
+                "inCall"    : 18812918921,
+                "outCall"   : 13828191827,
+                "startTime" : "2018/2/19 09:09",
+                "duration"  : "200s",
+                "RobotId"   : 90012,
+                "LaborId"   : 12009,
+                "recordSrc" : "./static/audio/5.1.mp3",
+                "recordFlag": false
+            },
+            {
+                "sequence"  : 1,
+                "line"      : 1011,
+                "callStatus": "接通",
+                "inCall"    : 18812918921,
+                "outCall"   : 13828191827,
+                "startTime" : "2018/2/19 09:09",
+                "duration"  : "200s",
+                "RobotId"   : 90012,
+                "LaborId"   : 12009,
+                "recordSrc" : "./static/audio/7.1.mp3",
+                "recordFlag": false
+            },
+            {
+                "sequence"  : 1,
+                "line"      : 1011,
+                "callStatus": "接通",
+                "inCall"    : 18812918921,
+                "outCall"   : 13828191827,
+                "startTime" : "2018/2/19 09:09",
+                "duration"  : "200s",
+                "RobotId"   : 90012,
+                "LaborId"   : 12009,
+                "recordSrc" : "./static/audio/8.1.mp3",
+                "recordFlag": false
+            },
+            {
+                "sequence"  : 1,
+                "line"      : 1011,
+                "callStatus": "接通",
+                "inCall"    : 18812918921,
+                "outCall"   : 13828191827,
+                "startTime" : "2018/2/19 09:09",
+                "duration"  : "200s",
+                "RobotId"   : 90012,
+                "LaborId"   : 12009,
+                "recordSrc" : "./static/audio/9.1.mp3",
+                "recordFlag": false
+            },
+            {
+                "sequence"  : 1,
+                "line"      : 1011,
+                "callStatus": "接通",
+                "inCall"    : 18812918921,
+                "outCall"   : 13828191827,
+                "startTime" : "2018/2/19 09:09",
+                "duration"  : "200s",
+                "RobotId"   : 90012,
+                "LaborId"   : 12009,
+                "recordSrc" : "./static/audio/10.1.mp3",
+                "recordFlag": false
+            },
+            {
+                "sequence"  : 1,
+                "line"      : 1011,
+                "callStatus": "接通",
+                "inCall"    : 18812918921,
+                "outCall"   : 13828191827,
+                "startTime" : "2018/2/19 09:09",
+                "duration"  : "200s",
+                "RobotId"   : 90012,
+                "LaborId"   : 12009,
+                "recordSrc" : "./static/audio/11.1.mp3",
+                "recordFlag": false
+            },
+            {
+                "sequence"  : 1,
+                "line"      : 1011,
+                "callStatus": "接通",
+                "inCall"    : 18812918921,
+                "outCall"   : 13828191827,
+                "startTime" : "2018/2/19 09:09",
+                "duration"  : "200s",
+                "RobotId"   : 90012,
+                "LaborId"   : 12009,
+                "recordSrc" : "./static/audio/12.1.mp3",
+                "recordFlag": false
+            },
+            {
+                "sequence"  : 1,
+                "line"      : 1011,
+                "callStatus": "接通",
+                "inCall"    : 18812918921,
+                "outCall"   : 13828191827,
+                "startTime" : "2018/2/19 09:09",
+                "duration"  : "200s",
+                "RobotId"   : 90012,
+                "LaborId"   : 12009,
+                "recordSrc" : "./static/audio/13.1.mp3",
+                "recordFlag": false
+            },
+            {
+                "sequence"  : 1,
+                "line"      : 1011,
+                "callStatus": "接通",
+                "inCall"    : 18812918921,
+                "outCall"   : 13828191827,
+                "startTime" : "2018/2/19 09:09",
+                "duration"  : "200s",
+                "RobotId"   : 90012,
+                "LaborId"   : 12009,
+                "recordSrc" : "./static/audio/15.1.mp3",
+                "recordFlag": false
+            }
+        ]
+    }
+}
+
+
