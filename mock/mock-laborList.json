@@ -1,0 +1,63 @@
+{
+    "status": 0,   
+    "msg"   : "",
+    "data": {
+        "list": [
+            {
+                "laborId"      : 11001,
+                "laborStatus"  : 0,
+                "laborTask"    : ""
+            },
+            {
+                "laborId"      : 11002,
+                "laborStatus"  : 1,
+                "laborTask"    : 10001                
+            },
+            {
+                "laborId"      : 11003,
+                "laborStatus"  : 0,
+                "laborTask"    : ""
+            },
+            {
+                "laborId"      : 11004,
+                "laborStatus"  : 0,
+                "laborTask"    : 10002                
+            },
+            {
+                "laborId"      : 11005,
+                "laborStatus"  : 1,
+                "laborTask"    : 10002
+            },
+            {
+                "laborId"      : 11006,
+                "laborStatus"  : 1,
+                "laborTask"    : 10002                
+            },
+            {
+                "laborId"      : 11007,
+                "laborStatus"  : 0,
+                "laborTask"    : ""
+            },
+            {
+                "laborId"      : 11008,
+                "laborStatus"  : 1,
+                "laborTask"    : 10001                
+            },
+            {
+                "laborId"      : 11001,
+                "laborStatus"  : 0,
+                "laborTask"    : ""
+            },
+            {
+                "laborId"      : 11010,
+                "laborStatus"  : 1,
+                "laborTask"    : 10002               
+            },
+            {
+                "laborId"      : 11011,
+                "laborStatus"  : 1,
+                "laborTask"    : 10001               
+            }
+        ]
+    }
+}

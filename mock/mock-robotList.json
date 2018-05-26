@@ -1,0 +1,63 @@
+{
+    "status": 0,   
+    "msg"   : "",
+    "data": {
+        "list": [
+            {
+                "robotId"      : 91001,
+                "robotStatus"  : 0,
+                "robotTask"    : ""
+            },
+            {
+                "robotId"      : 91002,
+                "robotStatus"  : 1,
+                "robotTask"    : 10001                
+            },
+            {
+                "robotId"      : 91003,
+                "robotStatus"  : 0,
+                "robotTask"    : ""
+            },
+            {
+                "robotId"      : 91004,
+                "robotStatus"  : 0,
+                "robotTask"    : 10002                
+            },
+            {
+                "robotId"      : 91005,
+                "robotStatus"  : 1,
+                "robotTask"    : 10002
+            },
+            {
+                "robotId"      : 91006,
+                "robotStatus"  : 1,
+                "robotTask"    : 10002                
+            },
+            {
+                "robotId"      : 91007,
+                "robotStatus"  : 0,
+                "robotTask"    : ""
+            },
+            {
+                "robotId"      : 91008,
+                "robotStatus"  : 1,
+                "robotTask"    : 10001                
+            },
+            {
+                "robotId"      : 91009,
+                "robotStatus"  : 0,
+                "robotTask"    : ""
+            },
+            {
+                "robotId"      : 91010,
+                "robotStatus"  : 1,
+                "robotTask"    : 10002               
+            },
+            {
+                "robotId"      : 91011,
+                "robotStatus"  : 1,
+                "robotTask"    : 10001               
+            }
+        ]
+    }
+}
