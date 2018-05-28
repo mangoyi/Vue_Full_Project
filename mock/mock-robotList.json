@@ -4,56 +4,67 @@
     "data": {
         "list": [
             {
+                "sequence"     : "001",
                 "robotId"      : 91001,
                 "robotStatus"  : 0,
                 "robotTask"    : ""
             },
             {
+                "sequence"     : "002",            
                 "robotId"      : 91002,
                 "robotStatus"  : 1,
                 "robotTask"    : 10001                
             },
             {
+                "sequence"     : "003",        
                 "robotId"      : 91003,
                 "robotStatus"  : 0,
                 "robotTask"    : ""
             },
             {
+                "sequence"     : "004",
                 "robotId"      : 91004,
                 "robotStatus"  : 0,
                 "robotTask"    : 10002                
             },
             {
+                "sequence"     : "005",
                 "robotId"      : 91005,
                 "robotStatus"  : 1,
                 "robotTask"    : 10002
             },
             {
+                "sequence"     : "006",
                 "robotId"      : 91006,
                 "robotStatus"  : 1,
                 "robotTask"    : 10002                
             },
             {
+                "sequence"     : "007",
                 "robotId"      : 91007,
                 "robotStatus"  : 0,
                 "robotTask"    : ""
             },
             {
+                "sequence"     : "008",
                 "robotId"      : 91008,
                 "robotStatus"  : 1,
                 "robotTask"    : 10001                
             },
             {
+                "sequence"     : "009",
                 "robotId"      : 91009,
                 "robotStatus"  : 0,
                 "robotTask"    : ""
             },
             {
+                "sequence"     : "010",
                 "robotId"      : 91010,
                 "robotStatus"  : 1,
                 "robotTask"    : 10002               
             },
             {
+                "sequence"     : "011",
                 "robotId"      : 91011,
                 "robotStatus"  : 1,
                 "robotTask"    : 10001               

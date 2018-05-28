@@ -49,6 +49,8 @@ export default {
   },
   methods: {
     open() {
+      if(appointTitle == "")
+
       axios.post("/user/ModelAdd", {
         appointTitle: appointTitle,
         appointDesc: appointDesc,

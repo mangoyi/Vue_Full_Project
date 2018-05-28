@@ -1,0 +1,12 @@
+{
+    "status": 0,   
+    "msg"   : "",
+    "data": {
+        "list": [
+            {
+                "name"     : "广东银行.zip",
+                "url"      : "http://www.baidu.com"
+            }
+        ]
+    }
+}

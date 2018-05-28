@@ -139,20 +139,6 @@ export default {
                 return;
             }
             this.cartList = data.data.list;
-
-            /*
-            axios.post("/users/setDefault", {
-                number     : number,
-                startDate  : startDate,
-                endDate    : endDate
-            }).then((response) => {
-                let res = response.data;
-                if( res.status == '0') {         // 表示默认地址设置成功
-                    console.log("setDefault success");
-                    this.init();
-                }
-            });
-            */
         },
         handleCurrentChange(val) {
             alert("当前页:"+`${val}`+", 当前页个数:"+this.pageSize )
@@ -162,7 +148,7 @@ export default {
         },
         init(currentPage, pageSize) {
             /*
-            axios.get("/user/init", {
+            axios.get("/api/home/callRecords", {
                 params: {
                     currentPage: currentPage == undefined ? 1 : currentPage,
                     pageSize: pageSize == undefined ? 1 : pageSize

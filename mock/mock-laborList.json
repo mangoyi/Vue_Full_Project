@@ -4,56 +4,67 @@
     "data": {
         "list": [
             {
+                "sequence"     : "001",
                 "laborId"      : 11001,
                 "laborStatus"  : 0,
                 "laborTask"    : ""
             },
             {
+                "sequence"     : "002",
                 "laborId"      : 11002,
                 "laborStatus"  : 1,
                 "laborTask"    : 10001                
             },
             {
+                "sequence"     : "003",
                 "laborId"      : 11003,
                 "laborStatus"  : 0,
                 "laborTask"    : ""
             },
             {
+                "sequence"     : "004",
                 "laborId"      : 11004,
                 "laborStatus"  : 0,
                 "laborTask"    : 10002                
             },
             {
+                "sequence"     : "005",                
                 "laborId"      : 11005,
                 "laborStatus"  : 1,
                 "laborTask"    : 10002
             },
             {
+                "sequence"     : "006",                
                 "laborId"      : 11006,
                 "laborStatus"  : 1,
                 "laborTask"    : 10002                
             },
             {
+                "sequence"     : "007",                
                 "laborId"      : 11007,
                 "laborStatus"  : 0,
                 "laborTask"    : ""
             },
             {
+                "sequence"     : "008",                
                 "laborId"      : 11008,
                 "laborStatus"  : 1,
                 "laborTask"    : 10001                
             },
             {
-                "laborId"      : 11001,
+                "sequence"     : "009",                
+                "laborId"      : 11009,
                 "laborStatus"  : 0,
                 "laborTask"    : ""
             },
             {
+                "sequence"     : "010",                
                 "laborId"      : 11010,
                 "laborStatus"  : 1,
                 "laborTask"    : 10002               
             },
             {
+                "sequence"     : "011",                
                 "laborId"      : 11011,
                 "laborStatus"  : 1,
                 "laborTask"    : 10001               

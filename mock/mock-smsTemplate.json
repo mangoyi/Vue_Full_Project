@@ -1,0 +1,73 @@
+{
+    "status": 0,
+    "msg": "",
+    "data": {
+        "list": [{
+                "sequence": 1,
+                "smsTemplateId": 10001,
+                "smsTemplateName": "浦发信用卡",
+                "smsTemplateText": "上海联通祝您新年快乐，万事如意，万事大吉，身体健康，狗年快乐，年年有余，岁岁平安，合家幸福，六六大顺，笑口常开，事事顺心，恭喜发财。"
+            },
+            {
+                "sequence": 2,
+                "smsTemplateId": 10002,
+                "smsTemplateName": "浦发信用卡",
+                "smsTemplateText": "上海联通祝您新年快乐，万事如意，万事大吉，身体健康，狗年快乐，年年有余，岁岁平安，合家幸福，六六大顺，笑口常开，事事顺心，恭喜发财。"
+            },
+            {
+                "sequence": 3,
+                "smsTemplateId": 10003,
+                "smsTemplateName": "浦发信用卡",
+                "smsTemplateText": "上海联通祝您新年快乐，万事如意，万事大吉，身体健康，狗年快乐，年年有余，岁岁平安，合家幸福，六六大顺，笑口常开，事事顺心，恭喜发财。"
+            },
+            {
+                "sequence": 4,
+                "smsTemplateId": 10004,
+                "smsTemplateName": "浦发信用卡",
+                "smsTemplateText": "上海联通祝您新年快乐，万事如意，万事大吉，身体健康，狗年快乐，年年有余，岁岁平安，合家幸福，六六大顺，笑口常开，事事顺心，恭喜发财。"
+            },
+            {
+                "sequence": 5,
+                "smsTemplateId": 10005,
+                "smsTemplateName": "浦发信用卡",
+                "smsTemplateText": "上海联通祝您新年快乐，万事如意，万事大吉，身体健康，狗年快乐，年年有余，岁岁平安，合家幸福，六六大顺，笑口常开，事事顺心，恭喜发财。"
+            },
+            {
+                "sequence": 6,
+                "smsTemplateId": 10006,
+                "smsTemplateName": "浦发信用卡",
+                "smsTemplateText": "上海联通祝您新年快乐，万事如意，万事大吉，身体健康，狗年快乐，年年有余，岁岁平安，合家幸福，六六大顺，笑口常开，事事顺心，恭喜发财。"
+            },
+            {
+                "sequence": 7,
+                "smsTemplateId": 10007,
+                "smsTemplateName": "浦发信用卡",
+                "smsTemplateText": "上海联通祝您新年快乐，万事如意，万事大吉，身体健康，狗年快乐，年年有余，岁岁平安，合家幸福，六六大顺，笑口常开，事事顺心，恭喜发财。"
+            },
+            {
+                "sequence": 8,
+                "smsTemplateId": 10008,
+                "smsTemplateName": "浦发信用卡",
+                "smsTemplateText": "上海联通祝您新年快乐，万事如意，万事大吉，身体健康，狗年快乐，年年有余，岁岁平安，合家幸福，六六大顺，笑口常开，事事顺心，恭喜发财。"
+            },
+            {
+                "sequence": 9,
+                "smsTemplateId": 10009,
+                "smsTemplateName": "浦发信用卡",
+                "smsTemplateText": "上海联通祝您新年快乐，万事如意，万事大吉，身体健康，狗年快乐，年年有余，岁岁平安，合家幸福，六六大顺，笑口常开，事事顺心，恭喜发财。"
+            },
+            {
+                "sequence": 10,
+                "smsTemplateId": 10010,
+                "smsTemplateName": "浦发信用卡",
+                "smsTemplateText": "上海联通祝您新年快乐，万事如意，万事大吉，身体健康，狗年快乐，年年有余，岁岁平安，合家幸福，六六大顺，笑口常开，事事顺心，恭喜发财。"
+            },
+            {
+                "sequence": 11,
+                "smsTemplateId": 10011,
+                "smsTemplateName": "浦发信用卡",
+                "smsTemplateText": "上海联通祝您新年快乐，万事如意，万事大吉，身体健康，狗年快乐，年年有余，岁岁平安，合家幸福，六六大顺，笑口常开，事事顺心，恭喜发财。"
+            }
+        ]
+    }
+}

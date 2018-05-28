@@ -158,7 +158,7 @@ export default {
         },
         init(currentPage, pageSize) {
             /*
-            axios.get("/user/init", {
+            axios.get("/api/home/initTaskDetails", {
                 params: {
                     currentPage: currentPage == undefined ? 1 : currentPage,
                     pageSize: pageSize == undefined ? 1 : pageSize

@@ -1,8 +1,9 @@
 <template>
   <div class="fluid">
-    <h3 class="taskName">
-      <i class="fa fa-jpy fa-lg"></i>{{taskName}}
-    </h3>
+    <div class="taskrate">
+      <div class="col-md-3">
+      </div>
+    </div>
     <div id="taskChart">
     </div>
   </div>
@@ -13,8 +14,7 @@
     name: 'hello',
     data() {
       return {
-        msg: "Welcom to Your Vue.js App",
-        taskName: "上海银行催欠业务"
+        msg: "Welcom to Your Vue.js App"
       }
     },
     mounted() {
@@ -31,13 +31,13 @@
         let option = null;
         option = {
           title: {
-              text: '折线图堆叠'
+              text: '任务工作量'
           },
           tooltip: {
               trigger: 'axis'
           },
           legend: {
-              data:['邮件营销','联盟广告','视频广告','直接访问','搜索引擎']
+              data:['上海移动','北京联通','合肥银行','南京银行','中兴银行']
           },
           grid: {
               left: '3%',
@@ -60,31 +60,31 @@
           },
           series: [
               {
-                  name:'邮件营销',
+                  name:'上海移动',
                   type:'line',
                   stack: '总量',
                   data:[120, 132, 101, 134, 90, 230, 210]
               },
               {
-                  name:'联盟广告',
+                  name:'北京联通',
                   type:'line',
                   stack: '总量',
                   data:[220, 182, 191, 234, 290, 330, 310]
               },
               {
-                  name:'视频广告',
+                  name:'合肥银行',
                   type:'line',
                   stack: '总量',
                   data:[150, 232, 201, 154, 190, 330, 410]
               },
               {
-                  name:'直接访问',
+                  name:'南京银行',
                   type:'line',
                   stack: '总量',
                   data:[320, 332, 301, 334, 390, 330, 320]
               },
               {
-                  name:'搜索引擎',
+                  name:'中兴银行',
                   type:'line',
                   stack: '总量',
                   data:[820, 932, 901, 934, 1290, 1330, 1320]
@@ -106,13 +106,8 @@
     padding: 0 2% 100px 2%; 
     background: #ffffff;
   }
-  .taskName {
-    font-size: 18px;
-    height: 40px;
-    line-height: 40px;
-    color: salmon;
-  }
   #taskChart {
+    margin-top: 30px;
     width: 100%;
     height: 300px;
     text-align: center;
