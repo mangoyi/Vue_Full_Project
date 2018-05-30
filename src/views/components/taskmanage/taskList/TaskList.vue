@@ -50,20 +50,20 @@
                         </thead>
                         <tbody>
                             <tr v-for="item in cartList" :key="item.id">
-                                <td>{{item.sequence}}</td>
+                                <td>{{item.Id}}</td>
                                 <td>{{item.taskName}}</td>
                                 <td>{{item.taskStatus}}</td>
-                                <td>{{item.promulgator}}</td>
+                                <td>{{item.publisher}}</td>
                                 <td>{{item.startTime}}</td>
                                 <td>{{item.speed}}</td>
-                                <td>{{item.RobotNub}}</td>
+                                <td>{{item.robotNum}}</td>
                                 <td>
                                     <router-link :to="{path: '/taskManage/TaskDetails', query: {
-                                        taskId: item.taskId
+                                        taskId: item.taskID
                                     }}">查看明细</router-link>
                                 </td>
                                 <td>
-                                    <button class="btn btn-danger" style="color: #fff;" @click="stop(item.taskId)">暂停</button>
+                                    <button class="btn btn-danger" style="color: #fff;" @click="stop(item.taskID)">暂停</button>
                                     <router-link class="btn btn-warning" :to="{path: '/taskmanage/TaskRelease', query: {
                                         taskId: item.taskId
                                     }}" style="color: #fff;">修改</router-link>
@@ -152,18 +152,23 @@ export default {
             this.init(currentPage, pageSize);           
         },
         init(currentPage, pageSize) {
-            /*
-           axios.post("/api/home/taskList", {
+           let _this = this;
+           axios.post("/api/api/task/taskList", {
                currentPage: currentPage == undefined ? 1 : currentPage,
                pageSize: pageSize == undefined ? 10 : pageSize
            }).then(function(response) {
+               console.log(response.data);
                let res = response.data;
-               this.cartList = res.list;
+               if (res.status == 0) {
+
+                _this.cartList  =  res.data.list;
+
+               }
            }).catch(function(error) {
                alert(error);
            });
-           */
-          this.cartList = data.data.list;
+           
+
         },
         stop(taskId) {
             this.centerDialogVisible = true;

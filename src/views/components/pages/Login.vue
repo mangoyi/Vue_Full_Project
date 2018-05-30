@@ -70,12 +70,13 @@ export default {
           }
         });
         */
-        axios.post("http://116.62.224.107:10018/Bank/sms.ashx", {
-          "userid": this.username
+        axios.post("api/api/home/loginUser", {
+          "username": this.username,
+          "password": this.password
         }).then((response) => {
           let res = response.data;
           console.log(res);
-          if(res.status == '00') {
+          if(res.status == 0) {
             console.log("success");
           }
         });
