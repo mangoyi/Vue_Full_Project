@@ -78,7 +78,7 @@
                             :current-page.sync="currentPage"
                             :page-size="10"
                             layout="total, prev, pager, next"
-                            :total="1000"
+                            :total="totalPage"
                         >
                         </el-pagination>
                     </div>
@@ -117,6 +117,7 @@ export default {
             centerDialogVisible: false,
             currentPage: 1,
             pageSize: 10,
+            totalPage: 10,
             cartList: []
         };
     },
@@ -128,20 +129,19 @@ export default {
             let startDate = this.startDate;
             let endDate   = this.endDate;
             if(startDate == false && endDate == false) {
-                alert('请填写至少一个搜索条件');
+                this.init();
                 return;
             }
-            this.cartList = data.data.list;
+            // this.cartList = data.data.list;
 
-            /*
-            axios.post("/api/home/searchTask", {
+            
+            axios.post("/api/api/home/searchTask", {
                 startTime: '2018-01-11',
                 endTime  : '2018-09-09'
             }).then((response) => {
                 let res = response.data;
                 console.log("请求成功");
             })
-            */
 
 
         },
