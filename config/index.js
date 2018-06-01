@@ -28,14 +28,7 @@ module.exports = {
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         proxyTable: {
-            // '/login.ashx' : {
-            //   target: 'http://localhost:32089/ashx/login.ashx',
-            //   changeOrigin: true
-            // },
-            // '/test.ashx' : {
-            //   target: 'http://localhost:32089/ashx/test.ashx',
-            //   changeOrigin: true
-            // }
+            /*
             '/api': {
                 target: 'http://www.zzbn.cn:8090/',
                 changeOrigin: true,
@@ -43,10 +36,14 @@ module.exports = {
                     '^/api': ''
                 }
             }
-            // '/home/loginUser': {
-            //   target: 'http://www.zzbn.cn:8090/home/loginUser',
-            //   changeOrigin: true
-            // }
+            */
+            '/api': {
+                target: 'http://zzbn.s1.natapp.cc',
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/api': ''
+                }
+            }
         },
         // CSS Sourcemaps off by default because relative paths are "buggy"
         // with this option, according to the CSS-Loader README

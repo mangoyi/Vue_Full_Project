@@ -46,19 +46,19 @@
                         </thead>
                         <tbody>
                             <tr v-for="item in cartList" :key="item.id">
-                                <td>{{item.sequence}}</td>
-                                <td>{{item.number}}</td>
+                                <td>{{item.Id}}</td>
+                                <td>{{item.phone}}</td>
                                 <td>{{item.startTime}}</td>
                                 <td>{{item.duration}}</td>
-                                <td>{{item.RobotId}}</td>
-                                <td>{{item.LaborId}}</td>
+                                <td>{{item.robotId}}</td>
+                                <td>{{item.manualId}}</td>
                                 <td>
                                     <a class="i-wrap" @click="listen(item)" style="color: black">
-                                        <i class="fa fa-microphone"  v-bind:class="{'text-success': item.recordFlag }"></i>
+                                        <i class="fa fa-microphone"  v-bind:class="{'text-success': !!item.recordPlayState }"></i>
                                     </a>
                                 </td>
                                 <td>
-                                    <el-button class="btn btn-primary" plain @click="openDialog(item)" >查看聊天对话</el-button>
+                                    <el-button class="btn btn-primary" plain @click="openDialog(item.dialogJsonText)" >查看聊天对话</el-button>
                                 </td>
                                 <td>{{item.flag}}</td>
                             </tr>                                          
@@ -71,7 +71,7 @@
                             :current-page.sync="currentPage"
                             :page-size="10"
                             layout="total, prev, pager, next"
-                            :total="1000"
+                            :total="totalPage"
                         >
                         </el-pagination>
                     </div>
@@ -118,6 +118,7 @@ export default {
             centerDialogVisible: false,
             currentPage: 1,
             pageSize: 10,
+            totalPage: 1,
             cartList: [],
             dialog: ""
         };
@@ -134,7 +135,7 @@ export default {
                 alert('请填写至少一个搜索条件');
                 return;
             }
-            this.cartList = data.data.list;
+            // this.cartList = data.data.list;
 
             /*
             axios.post("/users/setDefault", {
@@ -157,38 +158,40 @@ export default {
             this.init(currentPage, pageSize);           
         },
         init(currentPage, pageSize) {
-            /*
-            axios.get("/api/home/initTaskDetails", {
-                params: {
-                    currentPage: currentPage == undefined ? 1 : currentPage,
-                    pageSize: pageSize == undefined ? 1 : pageSize
-                }
+            let taskId = this.$route.query.taskId;
+            let _this = this;
+            axios.post("/api/api/task/taskDetail", {                                            // 初始化任务明细内容
+                taskId: taskId,
+                currentPage: currentPage == undefined ? 1 : currentPage,
+                pageSize: pageSize == undefined ? 10 : pageSize
             }).then(function(response) {
                 let res = response.data;
-                this.cartList = res.list;    // 将数组赋值给cartList全局变量
+                if (res.status == 0) {
+                    _this.cartList = res.data.list;    
+                    _this.totalPage = res.data.totalPageNum;
+                }
             }).catch(function(error) {
                 alert(error);
             });
-            */
         },
 
         // 录音
         listen(item) {
-            if (!item.recordFlag) {                 // 说明是播放
+            if (!item.recordPlayState) {                                                // 说明是播放
                 this.recordSrc = item.recordSrc;
                 console.log(this.recordSrc + "-----------------------播放--------------------------");
             } else {
                 // 暂停
                 document.getElementsByClassName('callaudio')[0].pause();
             }
-            item.recordFlag = !item.recordFlag;
-            console.log(item.recordFlag);
+            item.recordPlayState = !item.recordPlayState;
+            console.log(item.recordPlayState);
         },
 
         // open 对话内容
-        openDialog(item) {
-            let taskId = item.taskId;
-            let number = item.number;
+        openDialog(text) {
+            // let taskId = item.taskId;
+            // let number = item.number;
 
             // 请求聊天记录数据 chatDialog
             /*
@@ -202,14 +205,17 @@ export default {
                 }
             });
             */
-            let data = chatdata.data.list;
+            // let data = chatdata.data.list;
+            let data = text;
+            
+            console.log(data);
             let chatDetail = "";
             let chatDetailArr = [];
             data.forEach(item => {
-                if(item.sayStatus == 0) {           // 机器人问
-                    chatDetail += '<div class="say" style="position: relative;width: 276px;background: #ebebeb;overflow: hidden;"><div class="say_svg common_svg"  style="position: absolute; width: 14px; height: 14px;top: 3px;left: 0px;"><svg viewBox="0 0 120 180" id="trigon-left" width="100%" height="100%" ><path fill="#fff" d="M104.555,178.368l-1.313-1.013l-97.863-76.5C2.064,98.269,0,94.387,0,90.056c0-4.332,2.126-8.212,5.378-10.8l97.676-76.443l1.626-1.294C106.243,0.563,108.119,0,110.12,0c5.44,0,9.88,4.162,9.88,9.338l0,0v161.324l0,0c0,5.175-4.439,9.338-9.88,9.338C108.057,180,106.118,179.381,104.555,178.368L104.555,178.368z"></path></svg></div><div class="say_text common_text" style="max-width: 220px;padding: 6px; border: 1px solid #d9d9d9;border-radius: 8px;font-size: 14px;line-height: 18px;color: #333;word-break: break-all;margin-left: 10px; background: #fff;">'+item.sayText+'</div></div>';
-                } else if(item.sayStatus == 1) {                            // 客户回答
-                    chatDetail += '<div class="replay" style="position: relative;width: 276px;background: #ebebeb;overflow: auto;"><div class="replay_svg common_svg"  style="position: absolute; width: 14px; height: 14px; right: 0px;top: 3px;"><svg viewBox="0 0 120 180" id="trigon-left" width="100%" height="100%" ><path fill="#9fe658" d="M15.446,1.631l1.313,1.013l97.863,76.5c3.313,2.587,5.378,6.469,5.378,10.8c0,4.332-2.126,8.212-5.378,10.8l-97.676,76.443l-1.626,1.294C13.757,179.438,11.881,180,9.88,180C4.44,180,0,175.838,0,170.662l0,0V9.337l0,0C0,4.163,4.44,0,9.88,0C11.944,0,13.882,0.619,15.446,1.631L15.446,1.631z"></path></svg></div><div class="replay_text common_text" style="max-width: 220px;padding: 6px; border: 1px solid #d9d9d9;border-radius: 8px;font-size: 14px;line-height: 18px;color: #333;word-break: break-all;float: right;margin-right: 10px; background: #9fe658;">'+item.sayText+'</div></div>';
+                if(item.infoType == "R") {                                   // 机器人问
+                    chatDetail += '<div class="say" style="position: relative;width: 420px;background: #ebebeb;overflow: hidden;"><div class="say_svg common_svg"  style="position: absolute; width: 14px; height: 14px;top: 3px;left: 0px;"><svg viewBox="0 0 120 180" id="trigon-left" width="100%" height="100%" ><path fill="#fff" d="M104.555,178.368l-1.313-1.013l-97.863-76.5C2.064,98.269,0,94.387,0,90.056c0-4.332,2.126-8.212,5.378-10.8l97.676-76.443l1.626-1.294C106.243,0.563,108.119,0,110.12,0c5.44,0,9.88,4.162,9.88,9.338l0,0v161.324l0,0c0,5.175-4.439,9.338-9.88,9.338C108.057,180,106.118,179.381,104.555,178.368L104.555,178.368z"></path></svg></div><div class="say_text common_text" style="max-width: 390px;padding: 6px; border: 1px solid #d9d9d9;border-radius: 8px;font-size: 14px;line-height: 18px;color: #333;word-break: break-all;margin-left: 10px; background: #fff;">'+item.speakText+'</div></div>';
+                } else if(item.infoType == "M") {                            // 客户回答
+                    chatDetail += '<div class="replay" style="position: relative;width: 420px;background: #ebebeb;overflow: auto;"><div class="replay_svg common_svg"  style="position: absolute; width: 14px; height: 14px; right: 0px;top: 3px;"><svg viewBox="0 0 120 180" id="trigon-left" width="100%" height="100%" ><path fill="#9fe658" d="M15.446,1.631l1.313,1.013l97.863,76.5c3.313,2.587,5.378,6.469,5.378,10.8c0,4.332-2.126,8.212-5.378,10.8l-97.676,76.443l-1.626,1.294C13.757,179.438,11.881,180,9.88,180C4.44,180,0,175.838,0,170.662l0,0V9.337l0,0C0,4.163,4.44,0,9.88,0C11.944,0,13.882,0.619,15.446,1.631L15.446,1.631z"></path></svg></div><div class="replay_text common_text" style="max-width: 390px;padding: 6px; border: 1px solid #d9d9d9;border-radius: 8px;font-size: 14px;line-height: 18px;color: #333;word-break: break-all;float: right;margin-right: 10px; background: #9fe658;">'+item.speakText+'</div></div>';
                 }
             });
             console.log(chatDetail);               // 聊天的html文件

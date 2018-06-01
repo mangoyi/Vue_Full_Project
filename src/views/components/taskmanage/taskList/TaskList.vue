@@ -15,22 +15,9 @@
                     <el-date-picker size="large" v-model="endDate" type="date" placeholder="选择日期时间" value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </div>
-                <!-- <div class="col-md-3 search-field">
-                    <div class="label" style="left:0px;">模板名称：</div>
-                    <el-input v-model="input" placeholder="请输入内容"></el-input>
-                </div>
-                <div class="col-md-3 search-field">
-                    <div style="left: 0px" class="label">查询号码：</div>
-                    <input type="text" class="form-control input-field" placeholder="请输入电话号码" v-model="number" />
-                </div> -->
                 <div class="col-md-1 search-field search-field_controls">
                     <button class="btn btn-primary search-btn" v-on:click.stop="searchList">搜索</button>
                 </div>
-                <!-- <div class="col-md-1 search-field search-field_controls">
-                    <router-link class="btn btn-success" :to="'/message/addModal'">
-                        新增
-                    </router-link>
-                </div> -->
             </div>
             <div class="row">
                 <div class="col-lg-12">
@@ -41,7 +28,8 @@
                                 <th>任务名称</th>
                                 <th>任务状态</th>
                                 <th>发布者</th>
-                                <th>时间</th>
+                                <th>创建时间</th>
+                                <th>修改时间</th>
                                 <th>任务进度</th>
                                 <th>机器人个数</th>
                                 <th>查看明细</th>
@@ -55,6 +43,7 @@
                                 <td>{{item.taskStatus}}</td>
                                 <td>{{item.publisher}}</td>
                                 <td>{{item.startTime}}</td>
+                                <td>{{item.zipUpdateTime}}</td>
                                 <td>{{item.speed}}</td>
                                 <td>{{item.robotNum}}</td>
                                 <td>
@@ -63,10 +52,11 @@
                                     }}">查看明细</router-link>
                                 </td>
                                 <td>
-                                    <button class="btn btn-danger" style="color: #fff;" @click="stop(item.taskID)">暂停</button>
+                                    <button class="btn btn-primary" style="color: #fff;" @click="stop(item.taskID)">暂停</button>
                                     <router-link class="btn btn-warning" :to="{path: '/taskmanage/TaskRelease', query: {
                                         taskId: item.taskId
                                     }}" style="color: #fff;">修改</router-link>
+                                    <button class="btn btn-danger" style="color: #fff;" @click="over(item.taskID)">结束</button>
                                 </td>
                             </tr>                                          
                         </tbody>
@@ -94,7 +84,6 @@
                 <span>确定要暂停任务吗?</span>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="centerDialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="confirmStop">确 定</el-button>
             </span>
         </el-dialog>
@@ -102,7 +91,7 @@
 </template>
 
 <script>
-import { Pagination, DatePicker, Button, Input} from "element-ui";
+import { Pagination, DatePicker, Button, Input, Message} from "element-ui";
 import axios from 'axios';
 import data from "@/../mock/mock-taskList.json";                             // mock json
 
@@ -117,7 +106,8 @@ export default {
             centerDialogVisible: false,
             currentPage: 1,
             pageSize: 10,
-            totalPage: 10,
+            totalPage: 1,
+
             cartList: []
         };
     },
@@ -128,22 +118,18 @@ export default {
         searchList() {
             let startDate = this.startDate;
             let endDate   = this.endDate;
+            let _this     = this;
             if(startDate == false && endDate == false) {
                 this.init();
                 return;
             }
-            // this.cartList = data.data.list;
-
-            
-            axios.post("/api/api/home/searchTask", {
-                startTime: '2018-01-11',
-                endTime  : '2018-09-09'
+            axios.post("/api/api/task/searchTaskList", {                        // 查询任务列表
+                startTime: startDate,
+                endTime  : endDate
             }).then((response) => {
                 let res = response.data;
-                console.log("请求成功");
-            })
-
-
+                _this.cartList = res.data.list;
+            });
         },
         handleCurrentChange(val) {
             alert("当前页:"+`${val}`+", 当前页个数:"+this.pageSize )
@@ -157,18 +143,15 @@ export default {
                currentPage: currentPage == undefined ? 1 : currentPage,
                pageSize: pageSize == undefined ? 10 : pageSize
            }).then(function(response) {
-               console.log(response.data);
+               console.log(response);
                let res = response.data;
                if (res.status == 0) {
-
-                _this.cartList  =  res.data.list;
-
+                    _this.cartList  =  res.data.list;
+                    _this.totalPage =  res.data.totalPageNum;
                }
            }).catch(function(error) {
                alert(error);
            });
-           
-
         },
         stop(taskId) {
             this.centerDialogVisible = true;
@@ -176,17 +159,43 @@ export default {
             console.log(this.stopTaskid);
         },
         confirmStop() {
+            let _this = this;
             this.centerDialogVisible = false;
-            /*
-            axios.post("/home/stopTask", {
+            
+            axios.post("/api/api/task/pauseTask", {                                                  // 暂停任务
                 taskId: this.stopTaskid
             }).then(function(response) {
                 let res = response.data;
-                if (res.status == '0') {
-                    console.log("删除成功");
+                if (res.status == 0) {
+                    _this.$message.success("任务暂停成功!");
+                    _this.init();
                 }
             });
-            */
+        },
+        over(taskID) {
+            let _this = this;
+
+            this.$confirm('此操作将永久结束该任务, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+                center: 'true'
+            }).then(() => {
+                axios.post("/api/api/task/overTask", {                                              //  结束任务
+                    taskId: taskID
+                }).then((response ) => {
+                    let res = response.data;
+                    if (res.status == 0) {
+                        this.$message.success("任务结束");
+                        _this.init();
+                    }
+                })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '取消结束'
+                });          
+            }); 
         }
     }
 };

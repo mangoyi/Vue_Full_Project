@@ -7,7 +7,7 @@
             <div class="row list-search">
                 <div class="search-field">
                     <div class="label" style="left:0px;top: 4px;">任务名称：</div>
-                    <el-input v-model="input1" placeholder="请输入内容"  :disabled="checkTaskflag"></el-input>
+                    <el-input v-model.trim="input1" placeholder="请输入内容"  :disabled="checkTaskflag"></el-input>
                 </div>
                 <div class="col-md-12 search-field">
                     <div class="label" style="left:0px;top: 24px;">选择文件：</div>
@@ -55,10 +55,11 @@
                         ></el-transfer>
                     </div>
                 </div>
-                <div class="search-field" style="margin-bottom: 36px;">
+                
+                <!-- <div class="search-field" style="margin-bottom: 36px;">
                     <div class="label" style="left:0px;top: 4px;">短信模板：</div>
                     <el-input v-model="input2" placeholder="选择模板"  @focus="selectSmsTemplate=true"  ></el-input>
-                </div>
+                </div> -->
                 <div class="col-md-12 search-field">
                     <el-button type="primary" class="col-md-2" @click="confirmCreate">确认创建</el-button>
                 </div>
@@ -75,6 +76,7 @@
         </el-dialog>
 
         <!-- 选择模板 -->
+        <!--
         <el-dialog title="选择模板" :modal-append-to-body="false" :visible.sync="selectSmsTemplate" width="60%" center>
             <div class="row mb-6">
                 <div class="col-lg-12">
@@ -117,7 +119,7 @@
                 <el-button type="primary" @click="confirmSmsTemplate">确 定</el-button>
             </span>
         </el-dialog>
-
+        -->
 
     </div>
 </template>
@@ -157,7 +159,7 @@ export default {
             currentPage: 1,
             pageSize: 10,
             input1: '',
-            input2: '',
+            // input2: '',
             fileList: [],       
             cartList: [],
 
@@ -172,9 +174,9 @@ export default {
             transferData1: [],
             checkedTransferData1: [],
 
-            selectSmsTemplate: false,
-            templateList: [],
-            radio: '',
+            // selectSmsTemplate: false,
+            // templateList: [],
+            // radio: '',
             
             pesk: "action"
 
@@ -197,31 +199,43 @@ export default {
             this.initZipfile();
         },
         beforeAvatarUpload(file){
-            // const isJPG = file.type === 'application/zip';
             const testmsg=file.name.substring(file.name.lastIndexOf('.')+1);  
             const extention = testmsg === 'zip';
-            const isLt2M = file.size / 1024 / 1024 < 2;
-            console.log(extention);
+            const isLt4M = file.size / 1024 / 1024 < 4;
             if (!extention) {
-                this.$message.error('上传文件格式只能是 zip 格式!');
+                this.$confirm('上传文件只能是zip格式,请重新选择', '提示', {
+                        confirmButtonText: '确定',
+                        callback: action => {
+                            this.$message({
+                            type: 'warning',
+                            message: `action: ${ action }`
+                        });
+                    }
+                });
             }
-            if (!isLt2M) {
-                this.$message.error('上传文件不能超过 2MB!');
+            if (!isLt4M) {
+                this.$confirm('上传文件不能超过4MB,请重新选择', '提示', {
+                        confirmButtonText: '确定',
+                        callback: action => {
+                            this.$message({
+                            type: 'warning',
+                            message: `action: ${ action }`
+                        });
+                    }
+                });
             }
-            return extention && isLt2M;
+            return extention && isLt4M;
         },
         handleFileChange(file) {
-            
+            this.formfile = ""; 
+            let fileType = this.beforeAvatarUpload(file);                  // 判断上传格式和大小并反馈给管理者
             let obj = {
                 name: name,
                 file
             }
-
-            this.formfile = obj;
-            console.log(file);
-            // this.formData = new FormData();
-            // this.formData.append("file", file.raw);
-            // console.log(this.formData + "111111111111111111111111111111111111111111111111111111111111111111111111111");
+            if (fileType) {                                                // 文件格式和大小都符合要求
+                this.formfile = obj;
+            }
         },
         initZipfile() {
             if (this.checkTaskflag) {
@@ -246,7 +260,7 @@ export default {
             this.$refs.upload.submit();
         },
         handleRemove(file, fileList) {
-            console.log(file, fileList);
+            console.log(file, this.fileList);
         },
         handlePreview(file) {
             console.log(file);
@@ -429,6 +443,7 @@ export default {
             console.log(this.templateList+ "-----------------------------------------------");
         },
 
+        /*
         confirmSmsTemplate() {
             this.selectSmsTemplate = false;
             if (!this.radio) {
@@ -438,60 +453,43 @@ export default {
             }
 
         },
-
+        */
         confirmCreate() {
             // 创建任务
-            let taskName = this.input1;                             // 任务名称
-            //let formData = this.formData;                           // 压缩文件
+            let taskName = this.input1;                                 // 任务名称
+            let robotSeat = this.checkedTransferData;                   // 选择机器人
+            let manualSeat = this.checkedTransferData1;                 // 选择员工
+            // let smsTemplate = this.input2;                           // 短信模板
+            let formData = new FormData();
             
-            let robotSeat = this.checkedTransferData;               // 选择机器人
-            let manualSeat = this.checkedTransferData1;             // 选择员工
-            let smsTemplate = this.input2;                          // 短信模板
-            
-            if (!taskName && formData != "" && robotSeat.length > 0 && manualSeat > 0 && smsTemplate != "") {
-                /*
-                axios("/api/api/task/addNewTask", {
-                    taskName: taskName,
-                    publisher: "mangoyi",
-                    file: formData,
-                    robotAccount: robotSeat,
-                    // manualSeat: manualSeat,
-                    // smsTemplate: smsTemplate
-                }).then((response) => {
-                    console.log("successs   ..............................");
-                });
-                */
-            }
-        
-           let formData = new FormData();
-
-           let obj = {
-                taskName: taskName,
-                publisher: "mangoyi",
-                robotAccount: robotSeat
-            };  
-
+            // 当然如果是多个文件就要采用这样的遍历方式
             // for(let key in this.formfile) {
             //     formData.append(key, this.formfile);
             // }
             formData.append("file", this.formfile.raw);
-            // formData.append("name", this.formfile.raw);
-
+            let obj = {
+                taskName: taskName,
+                publisher: "mangoyi",
+                robotAccount: robotSeat
+            };  
             for(let key in obj){
                 formData.append(key, obj);
             };
-
-           axios({
-                url: "/api/api/task/addNewTask",
-                method: "post",
-                data: formData,
-                headers: {"Content-Type": "multipart/form-data"}
-            }).then((response) => {
-                console.log(response);
-            });
- 
-
-
+            if ( !!taskName && !!this.formfile && robotSeat.length > 0 && manualSeat.length > 0 ) {
+                axios({
+                    url: "/api/api/task/addNewTask",
+                    method: "post",
+                    data: formData,
+                    headers: {"Content-Type": "multipart/form-data"}
+                }).then((response) => {
+                    let res = response.data;
+                    if (res.status == 0) {
+                        this.$message.success("任务创建成功！");
+                    } else if (res.status == 1) {
+                        this.$message.error("任务创建失败！请重试")
+                    }
+                });
+            }
         }
     }
 };

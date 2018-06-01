@@ -311,5 +311,14 @@ input:focus {
     }
   }
 }
+
+// 增加聊天记录width
+.el-notification {
+  width: 470px;
+}
+.el-notification__content {
+  max-height: 600px;
+  overflow: auto;
+}
 </style>
 

@@ -54,22 +54,6 @@ export default {
         this.info = '请输入用户信息';
       } else {
         this.login_err = false;
-        console.log(this.username);
-        console.log(this.password);
-        /*
-        axios.get("api/home/loginUser", {
-          params: {
-          "username": this.username,
-          "pwd": this.password
-          }
-        }).then((response) => {
-          let res = response.data;
-          console.log(res);
-          if(res.status == '0') {
-            console.log("success");
-          }
-        });
-        */
         axios.post("api/api/home/loginUser", {
           "username": this.username,
           "password": this.password
@@ -81,7 +65,7 @@ export default {
           }
         });
 
-        // this.$router.push("/dashboard");
+        this.$router.push("/dashboard");
       }
     }
   }
