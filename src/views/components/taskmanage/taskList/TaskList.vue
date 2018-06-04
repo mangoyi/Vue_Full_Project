@@ -54,7 +54,7 @@
                                 <td>
                                     <button class="btn btn-primary" style="color: #fff;" @click="stop(item.taskID)">暂停</button>
                                     <router-link class="btn btn-warning" :to="{path: '/taskmanage/TaskRelease', query: {
-                                        taskId: item.taskId
+                                        taskId: item.taskID
                                     }}" style="color: #fff;">修改</router-link>
                                     <button class="btn btn-danger" style="color: #fff;" @click="over(item.taskID)">结束</button>
                                 </td>
@@ -93,7 +93,7 @@
 <script>
 import { Pagination, DatePicker, Button, Input, Message} from "element-ui";
 import axios from 'axios';
-import data from "@/../mock/mock-taskList.json";                             // mock json
+import data from "@/../mock/mock-taskList.json";                                                                        // mock json
 
 /* eslint-disable */
 export default {

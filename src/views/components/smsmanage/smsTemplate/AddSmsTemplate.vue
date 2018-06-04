@@ -47,17 +47,15 @@ export default {
   methods: {
     open() {
       if(this.smsTemplateTitle != "" && this.smsTemplateText != "") {
-        
-        /*
-        axios.post("/api/home/addSmsTemplate", {
+        axios.post("/api/api/sms/addSmsTemplate", {
             "smsTemplateTitle": this.smsTemplateTitle,
             "smsTemplateText": this.smsTemplateText
         }).then((response) => {
             let res = response.data;
-            console.log(res);
+            if (res.status == 0) {
+              this.$message.success("新增模板成功");
+            }
         });
-        */  
-        this.$message.success("新增模板成功");
       } else {
           this.$message.error("请填写所有的内容!");
       }

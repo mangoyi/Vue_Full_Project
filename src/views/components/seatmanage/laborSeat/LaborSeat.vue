@@ -37,12 +37,14 @@
                         </thead>
                         <tbody>
                             <tr v-for="item in cartList" :key="item.id">
-                                <td>{{item.sequence}}</td>
-                                <td>{{item.laborId}}</td>
+                                <td>{{item.accountName}}</td>
+                                <td>{{item.accountUser}}</td>
                                 <td>
-                                    <i class="fa fa-lg" :class="{'fa-phone': item.laborStatus}"></i>
+                                    <i class="fa fa-lg" :class="{'fa-phone': item.onLineState == '未知' ? true : false}"></i>
                                 </td>
-                                <td>{{item.laborTask}}</td>
+                                <td>
+                                    <span v-for="info in item.taskInfo" :key="info.id">{{info.taskName}} ,</span>
+                                </td>
                             </tr>                                          
                         </tbody>
                     </table>
@@ -116,7 +118,16 @@ export default {
             this.init(currentPage, pageSize);           
         },
         init(currentPage, pageSize) {
-          this.cartList = data.data.list;
+            let _this = this;
+            axios.post("/api/api/account/manualWorkState ", {
+                currentPage: currentPage == undefined ? 1 : currentPage,
+                pageSize   : pageSize    == undefined ? 10: pageSize
+            }).then((response) => {
+                let res = response.data;
+                if(res.status == 0) {
+                    _this.cartList = response.data.data.list;
+                }
+            });
         },
         stop(taskId) {
             this.centerDialogVisible = true;

@@ -125,20 +125,32 @@ export default {
             cartList: []
         };
     },
-    mounted() {
-        this.init();
-    },
     methods: {
-        searchList() {
+        searchList(currentPage, pageSize) {
             let number    = this.number;
             let startDate = this.startDate;
-            let endDate   = this.endDate + 1;
-            console.log(endDate)
-            if(number == false && startDate == false && endDate == false) {
+            let endDate   = this.endDate;
+            let _this     = this;
+            if(!number && !startDate && !endDate) {
                 alert('请填写至少一个搜索条件');
                 return;
             }
-            this.cartList = data.data.list;
+            axios.post("/api/api/callLog/searchCallRecord", {
+                currentPage: currentPage == undefined ? 1 : currentPage,
+                pageSize: pageSize == undefined ? 10 : pageSize
+            }).then(function(response) {
+                let res = response.data;
+                if (res.status == 0) {
+                    let data = res.data.list;
+                    if (data.length == 0) {
+                        _this.$message.success("当前无通话记录");
+                    } else {
+                        _this.cartList = data;
+                    }
+                }
+            }).catch(function(error) {
+                alert(error);
+            });
         },
         handleCurrentChange(val) {
             alert("当前页:"+`${val}`+", 当前页个数:"+this.pageSize )
@@ -146,22 +158,6 @@ export default {
             let pageSize = this.pageSize;
             this.init(currentPage, pageSize);           
         },
-        init(currentPage, pageSize) {
-            /*
-            axios.get("/api/home/callRecords", {
-                params: {
-                    currentPage: currentPage == undefined ? 1 : currentPage,
-                    pageSize: pageSize == undefined ? 1 : pageSize
-                }
-            }).then(function(response) {
-                let res = response.data;
-                this.cartList = res.list;    // 将数组赋值给cartList全局变量
-            }).catch(function(error) {
-                alert(error);
-            });
-            */
-        },
-
         // 录音
         listen(item) {
             if (!item.recordFlag) {                 // 说明是播放
@@ -172,9 +168,7 @@ export default {
                 document.getElementsByClassName('callaudio')[0].pause();
             }
             item.recordFlag = !item.recordFlag;
-            console.log(item.recordFlag);
         }
-
     }
 };
 </script>

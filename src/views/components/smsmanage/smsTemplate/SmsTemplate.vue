@@ -33,8 +33,8 @@
                         <tbody>
                             <tr v-for="item in cartList" :key="item.id">
                                 <td>{{item.sequence}}</td>
-                                <td>{{item.smsTemplateId}}</td>
-                                <td>{{item.smsTemplateName}}</td>
+                                <td>{{item.smsTempLateId}}</td>
+                                <td>{{item.smsTempLateName}}</td>
                                 <td>{{item.smsTemplateText}}</td>
                                 <td>
                                     <!-- <router-link :to="{path: '/horse/updateTreatment',       
@@ -96,20 +96,21 @@ export default {
     },
     methods: {
         searchSmsTemplate() {
+            let _this = this;
             let templateContent = this.input;
             if (templateContent == "") {
                 alert("请输入内容");
                 return;
             } 
             alert(this.input + "搜索成功");
-            /*
-            axios.post("/api/home/searchSmsTemplate", {
-                templateContent: templateContent
+           
+            axios.post("/api/api/sms/searchSmsTemplate", {
+                templateContent: "真是银行"
             }).then((response) => {
                 let res = response.data;
-                this.cartList = res.list;
+                this.cartList = res.data.list;
             });
-            */
+           
             this.cartList = searchData.data.list;
             console.log(this.cartList);
         },
@@ -120,20 +121,20 @@ export default {
             this.init(currentPage, pageSize);           
         },
         init(currentPage, pageSize) {
-            /*
-            axios.get("/api/home/initSmsTemplate", {
+            let _this = this;
+            axios.get("/api/api/sms/smsTempList", {                                                     // 短信模板
                 params: {
                     currentPage: currentPage == undefined ? 1 : currentPage,
-                    pageSize: pageSize == undefined ? 1 : pageSize
+                    pageSize: pageSize == undefined ? 10 : pageSize
                 }
             }).then(function(response) {
                 let res = response.data;
-                this.cartList = res.result;    // 将数组赋值给cartList全局变量
+                if (res.status == 0) {
+                    _this.cartList = res.data.list;    
+                }
             }).catch(function(error) {
                 alert(error);
             });
-            */
-           this.cartList = data.data.list;
         },
         Del(templateId) {
             this.centerDialogVisible = true;
