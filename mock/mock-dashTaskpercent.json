@@ -1,0 +1,47 @@
+{
+    "status": 0,
+    "msg": "",
+    "data": {
+        "list": [{
+                "taskId": "10001",
+                "taskName": "上海银行",
+                "taskPercent": 80,
+                "complete": 80,
+                "total": 100,
+                "color": "#c23531"
+            },
+            {
+                "taskId": "10004",
+                "taskName": "北京联通",
+                "taskPercent": 40,
+                "complete": 40,
+                "total": 100,
+                "color": "#2f4554"
+            },
+            {
+                "taskId": "10002",
+                "taskName": "合肥银行",
+                "taskPercent": "90",
+                "complete": 90,
+                "total": 100,
+                "color": "#61a0a8"
+            },
+            {
+                "taskId": "10003",
+                "taskName": "南京银行",
+                "taskPercent": "10",
+                "complete": 10,
+                "total": 100,
+                "color": "#d48265"
+            },
+            {
+                "taskId": "10004",
+                "taskName": "中兴银行",
+                "taskPercent": "20",
+                "complete": 20,
+                "total": 100,
+                "color": "#91c7ae"
+            }
+        ]
+    }
+}
