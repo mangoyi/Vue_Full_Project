@@ -10,17 +10,13 @@
       <div class="row list-search">
         <div class="col-md-4 search-field">
           <div class="label">模板名称：</div>
-          <input type="text" v-model="appointTitle" class="form-control input-field" placeholder="请输入模板标题" />
+          <input type="text" v-model.trim="appointTitle" class="form-control input-field" placeholder="请输入模板标题" />
         </div>
-        <!-- <div class="col-md-4 search-field">
-          <div class="label">模板签名：</div>
-          <input type="text" v-model="appointDesc" class="form-control input-field" placeholder="请输入签名" />
-        </div> -->
       </div>
       <div class="row list-search">
         <div class="col-md-12 search-field">
           <div class="label">模板内容：</div>
-          <input type="text" v-model="appointText" class="form-control input-field" placeholder="请输入短信内容" />
+          <input type="text" v-model.trim="appointText" class="form-control input-field" placeholder="请输入短信内容" />
         </div>
       </div>
     </div>
@@ -68,8 +64,8 @@ export default {
     },
 
     init() {
-        let smsTemplateId = this.$route.query.smsTemplateId;
-
+        let smsTempLateId = this.$route.query.smsTempLateId;
+        
         /* 
         axios.post("/api/home/updateSmsTemplate", {
             smsTemplateId: smsTemplateId

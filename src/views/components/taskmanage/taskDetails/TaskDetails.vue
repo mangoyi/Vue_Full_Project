@@ -45,7 +45,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in cartList" :key="item.id">
+                            <tr v-for="item in detailList" :key="item.id">
                                 <td>{{item.Id}}</td>
                                 <td>{{item.phone}}</td>
                                 <td>{{item.startTime}}</td>
@@ -64,7 +64,7 @@
                             </tr>                                          
                         </tbody>
                     </table>
-                    <div class="page" v-show="cartList.length > 0">
+                    <div class="page" v-show="detailList.length > 0">
                         <el-pagination 
                             background 
                             @current-change="handleCurrentChange"
@@ -75,7 +75,7 @@
                         >
                         </el-pagination>
                     </div>
-                    <div class="info" v-show="cartList.length == 0">
+                    <div class="info" v-show="detailList.length == 0">
                         请根据条件搜索记录
                     </div>
                 </div>
@@ -107,14 +107,14 @@ export default {
             startDate: "",
             endDate: "",
             number: "",
-            listenFlag: false,
-            recordSrc: "",
+            // listenFlag: false,
+            recordSrc: "",                                                      // 录音地址
             centerDialogVisible: false,
             currentPage: 1,
             pageSize: 10,
             totalPage: 1,
-            cartList: [],
-            dialog: ""
+            detailList: [],
+            // dialog: ""
         };
     },
     mounted() {
@@ -126,7 +126,7 @@ export default {
             let startDate = this.startDate;
             let endDate   = this.endDate;
             let _this     = this;
-            if(!startDate && !endDate && !number) {                             // 三个条件都为空
+            if(!startDate && !endDate && !number) {                                             // 三个条件都为空
                 alert('请填写至少一个搜索条件');
                 return;
             } else {
@@ -137,7 +137,7 @@ export default {
                 }).then((response) => {
                     let res = response.data;
                     if( res.status == 0) {       
-                        _this.cartList = res.data.list;
+                        _this.detailList = res.data.list;
                     }
                 });
             }
@@ -158,7 +158,7 @@ export default {
             }).then(function(response) {
                 let res = response.data;
                 if (res.status == 0) {
-                    _this.cartList = res.data.list;    
+                    _this.detailList = res.data.list;    
                     _this.totalPage = res.data.totalPageNum;
                 }
             }).catch(function(error) {
@@ -222,26 +222,22 @@ export default {
     }
     .callaudio{
         width: 100%;
-        // height: 33px;
     }
     .info {
         padding-top: 14px;
         text-align: center;
         color: #666;
     }
-
     .table tr:hover>td {
         background-color: #f5f7fa;
     }
     .table tr td {
         transition: background-color .25s ease;
     }
-
     .el-notification__group .left {
         background: salmon;
     }
     .right {
         background: rebeccapurple;
     }
-
 </style>

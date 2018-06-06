@@ -7,7 +7,7 @@
             <div class="row list-search">
                 <div class="search-field">
                     <div class="label" style="left:0px;top: 4px;">任务名称：</div>
-                    <el-input v-model.trim="input1" placeholder="请输入内容"  :disabled="checkTaskflag"></el-input>
+                    <el-input v-model.trim="taskName" placeholder="请输入内容"  :disabled="checkTaskflag"></el-input>
                 </div>
                 <div class="col-md-12 search-field">
                     <div class="label" style="left:0px;top: 24px;">选择文件：</div>
@@ -17,14 +17,13 @@
                             ref="upload"
                             action="https://jsonplaceholder.typicode.com/posts/"                                        
                             :before-upload = "beforeAvatarUpload"
-                            :on-preview="handlePreview"
                             :on-remove="handleRemove"
                             :on-change = "handleFileChange"
                             :limit = 1
+                            :on-exceed="handleLimit"
                             :file-list="fileList"
                             :auto-upload="false">
                             <el-button slot="trigger" size="small" type="primary">选取压缩文件</el-button>
-                            <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button> -->
                             <div slot="tip" class="el-upload__tip">只能上传单个zip文件，且不超过2MB</div>
                         </el-upload>
                     </div>
@@ -38,7 +37,6 @@
                                 :data="transferData"
                                 :titles="['所有机器人', '工作机器人']"
                                 :button-texts="['移除', '添加']"
-                                @change="handleChange"
                             ></el-transfer>
                         </template>                        
                     </div>
@@ -51,7 +49,6 @@
                             :data="transferData1"
                             :titles="['所有员工', '工作员工']"
                             :button-texts="['移除', '添加']"
-                            @change="handleChange1"
                         ></el-transfer>
                     </div>
                 </div>
@@ -135,52 +132,25 @@ import smsTemplate from "@/../mock/mock-smsTemplate.json";                     /
 /* eslint-disable */
 export default {
     data() {
-        // const generateData = _ => {
-        //     const transferData = [];
-        //     for (let i = 1; i <= 15; i++) {
-        //         transferData.push({
-        //             key: i,
-        //             label: `机器人 ${ i }`,
-        //             disabled: i % 4 === 0
-        //         });
-        //     }
-        //     console.log(transferData);
-        //     return transferData;
-        // };
-
         return {
-            checkTaskflag: false,
-            startDate: "",
-            endDate: "",
-            number: "",
-            listenFlag: false,
-            recordSrc: "",
+            checkTaskflag: false,                                // 默认创建任务
             centerDialogVisible: false,
-            currentPage: 1,
-            pageSize: 10,
-            input1: '',
-            // input2: '',
+            // currentPage: 1,
+            // pageSize: 10,
+            taskName: '',
             fileList: [],       
-            cartList: [],
-
-            formData: "",
             formfile: "",
 
-            // transferData: generateData(),
-            transferData: [],
-            checkedTransferData: [],
-            workRobotId: [],
+            transferData: [],                                   // 所有机器人坐席
+            checkedTransferData: [],                            // 工作的机器人坐席
 
             // labor data
-            transferData1: [],
-            checkedTransferData1: [],
-            workLaborId: [],
+            transferData1: [],                                  // 所有的员工坐席
+            checkedTransferData1: [],                           // 工作的员工坐席
 
             // selectSmsTemplate: false,
             // templateList: [],
             // radio: '',
-            
-            pesk: "action"
 
         };
     },
@@ -188,12 +158,10 @@ export default {
         this.checkTaskid();
         this.initRobot();
         this.initLabor();
-
-        this.initsmsTemplate();
     },
     methods: {
         checkTaskid() {
-            if(this.$route.query.taskId) {              //  如果存在taskId那么说明是从修改任务过来
+            if(this.$route.query.taskId) {              //  如果存在taskId那么说明是修改任务
                 this.checkTaskflag = true;
             }
 
@@ -248,26 +216,22 @@ export default {
 
                 // 初始化 当前任务zip文件
                 /*
-                axios.post('/home/taskZipfile', {
-                    taskId: "10001"
-                }).then((response) => {
-                    let res = response.data;
-                    console.log('获取压缩文件成功');
-                });
+                    axios.post('/home/taskZipfile', {
+                        taskId: "10001"
+                    }).then((response) => {
+                        let res = response.data;
+                        console.log('获取压缩文件成功');
+                    });
                 */
 
             }
         },
-        // submitUpload() {
-        //     this.$refs.upload.submit();
-        // },
         handleRemove(file, fileList) {
-            console.log(file, this.fileList);
+            this.$message.success("已成功移除了" + file.name + "文件");
         },
-        handlePreview(file) {
-            console.log(file);
+        handleLimit(file, fileList) {                                                   // 超出文件个数的钩子
+            this.$message.warning('只能上传单个zip文件！');
         },
-
 
         initRobot() {
             let data = "";
@@ -300,7 +264,7 @@ export default {
                                     } 
                                     return {
                                         key: index,                                                         // 自增, 所有机器人(空闲机器人)
-                                        label: item.Raccount,
+                                        label: item.Raccount ,
                                         disabled: false
                                     }
                                 } else {                                                                    // 表示url中没有taskId,是直接创建任务的入口
@@ -316,7 +280,7 @@ export default {
                                     }
                                     return {
                                         key: index,                                                         // 自增, 所有机器人(空闲机器人)
-                                        label: "" + item.Raccount,
+                                        label: item.Raccount,
                                         disabled: false
                                     }
                                 
@@ -328,109 +292,62 @@ export default {
                 }
             });
         },
-        handleChange() {
-            // 机器人坐席变化时触发的事件  计算变化后的checkedTransferData,  （移除机器人，增加机器人）
-            let workRobotList = this.checkedTransferData;
-            // let workRobotId = [];
-            workRobotList.forEach(item => {
-                console.log(this.transferData[item].label);
-                this.workRobotId.push(this.transferData[item].label);                    // 将对应剩下的机器人ID存放到workRobotId数组中
-            })
-            // console.log(workRobotId);
-            console.log(this.checkedTransferData);
-        },
 
         // labor
         initLabor() {
-            // 请求所有员工
-            /*
-            axios.post("/home/laborList", {}).then((response) => {
-                let res = response.data;                        // 获取所有员工
-                if (res.status == 0) {
-                    console.log("请求成功");
-                }
-            });
-            */
-            
-            let data = laborList.data.list;                      // 所有员工
+            // 员工坐席
+            let _this = this;
             let thatcheckedTransferData = this.checkedTransferData1;
 
-            let _this = this;
-            data.forEach((item, index) => {
-                this.transferData1.push(
-                    (function() {
-                        console.log(item);
-                        if(_this.checkTaskflag) {
-                            console.log("==============================================================================修改任务");
-                            if ( item.laborStatus == 1 && item.laborTask != 10001) {                    // 员工在工作，并且不是在当前这个任务中。 所以不能选择
-                                return {
-                                    key: index,
-                                    label: "" + item.laborId,
-                                    disabled: true
-                                }
-                            } else if ( item.laborStatus == 1 && item.laborTask == 10001) {
-                                thatcheckedTransferData.push(index);                                // 员工在工作，并且在当前这个任务中。所以显示在右侧
-                            } 
-                            return {
-                                key: index,                                                         // 自增, 所有员工(空闲员工)
-                                label: "" + item.laborId,
-                                disabled: false
-                            }
-
-                        } else {
-                            console.log("==============================================================================创建任务");
-                            
-                            if ( item.laborStatus == 1) {                    // 员工在工作，所以不能选择
-                                return {
-                                    key: index,
-                                    label: "" + item.laborId,
-                                    disabled: true
-                                }
-                            } 
-                            return {
-                                key: index,                                                         // 自增, 所有员工(空闲员工)
-                                label: "" + item.laborId,
-                                disabled: false
-                            }
-
-                        }
-                    })()
-                );
-            });
-            // console.log("data" + this.transferData1);      
-        },
-        handleChange1() {
-            // 员工坐席变化时触发的事件  计算变化后的checkedTransferData1,  （移除员工，增加员工）
-            let workLaborList = this.checkedTransferData1;
-            // let workLaborId = [];
-            workLaborList.forEach(item => {
-                this.workLaborId.push(Number(this.transferData1[item].label));            // 将对应剩下的员工ID存放到workLaborId数组中
-            })
-            // workLaborId.forEach(item => {
-            //     console.log(item);
-            // })
-
-            /*
-            axios.post("/home/changetaskLabor/", {
-                taskId: 1011,
-                workLabor: workLaborId                                              // 将对应剩下的员工ID传递给后台
-            }).then((response) => {
+            axios.post("/api/api/account/getFreeManualList",{}).then((response) => {
                 let res = response.data;
-                if(res.status == 0) {
-                    console.log("修改成功");
+                if (res.status == 0) {
+                    let data = res.data.list;
+                    console.log(data);
+                    data.forEach((item, index) => {
+                        this.transferData1.push(
+                            (function() {
+                                console.log(item);
+                                if(_this.checkTaskflag) {
+                                    console.log("==============================================================================修改任务");
+                                    if ( item.manualState == 1 && item.taskId != 10001) {                    // 员工在工作，并且不是在当前这个任务中。 所以不能选择
+                                        return {
+                                            key: index,
+                                            label: item.Maccount,
+                                            disabled: true
+                                        }
+                                    } else if ( item.manualState == 1 && item.taskId == 10001) {
+                                        thatcheckedTransferData.push(index);                                // 员工在工作，并且在当前这个任务中。所以显示在右侧
+                                    } 
+                                    return {
+                                        key: index,                                                         // 自增, 所有员工(空闲员工)
+                                        label: item.Maccount,
+                                        disabled: false
+                                    }
+
+                                } else {
+                                    console.log("==============================================================================创建任务");
+                                    
+                                    if ( item.manualState == 1) {                                           // 员工在工作，所以不能选择
+                                        return {
+                                            key: index,
+                                            label: item.Maccount,
+                                            disabled: true
+                                        }
+                                    } 
+                                    return {
+                                        key: index,                                                         // 自增, 所有员工(空闲员工)
+                                        label: item.Maccount + "("+item.manualState+")",
+                                        disabled: false
+                                    }
+                                }
+                            })()
+                        );
+                    });
+
                 }
-            });
-            */
-
-        },
-
-        handleCurrentChange() {
-
-        },
-
-        initsmsTemplate() {
-            this.templateList = smsTemplate.data.list; 
-            console.log(this.templateList+ "-----------------------------------------------");
+            });            
+             
         },
 
         /*
@@ -441,35 +358,38 @@ export default {
             }else {
                 this.input2 = this.radio;
             }
-
         },
         */
-        confirmCreate() {
-            // 创建任务
-            let taskName = this.input1;                                 // 任务名称
-            // let robotSeat = this.checkedTransferData;                   // 选择机器人
-            let robotSeat = this.workRobotId;                           
-            // let manualSeat = this.checkedTransferData1;                 // 选择员工
-            let manualSeat = this.workLaborId;
-            console.log(manualSeat + "-------------------------------");
-            // let smsTemplate = this.input2;                           // 短信模板
+        confirmCreate() {                                                           // 创建任务
+            let taskName = this.taskName;                                             // 任务名称
+              
+            let robotSeat = [];                                                     // 机器人坐席
+            this.checkedTransferData.forEach(item => {
+                robotSeat.push(this.transferData[item].label);
+            });
+
+            let manualSeat = [];                                                     // 员工坐席
+            this.checkedTransferData1.forEach(item => {
+                manualSeat.push(this.transferData1[item].label);
+            });
+
+            // let smsTemplate = this.input2;                                        // 短信模板
             let formData = new FormData();
-            console.log(robotSeat);
-            // 当然如果是多个文件就要采用这样的遍历方式
+            // 多个文件就要采用这样的遍历方式
             // for(let key in this.formfile) {
             //     formData.append(key, this.formfile);
             // }
-            formData.append("file", this.formfile.raw);
+            formData.append("file", this.formfile.raw);                              // 单文件formdata
             let obj = {
                 taskName: taskName,
                 publisher: "mangoyi",
                 robotSeat: robotSeat,
                 manualSeat: manualSeat
             };  
-            // console.log(taskName + robotSeat + manualSeat);
             for(let key in obj){
                 formData.append(key, obj[key]);
             };
+
             if ( !!taskName && !!this.formfile && robotSeat.length > 0 && manualSeat.length > 0 ) {
                 axios({
                     url: "/api/api/task/addNewTask",
@@ -484,6 +404,8 @@ export default {
                         this.$message.error("任务创建失败！请重试")
                     }
                 });
+            } else {
+                this.$message.error("请填写所有内容！");
             }
         }
     }
@@ -500,7 +422,6 @@ export default {
     }
     .callaudio{
         width: 100%;
-        // height: 33px;
     }
     .info {
         padding-top: 14px;

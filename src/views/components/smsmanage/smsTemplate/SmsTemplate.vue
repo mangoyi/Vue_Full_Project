@@ -7,7 +7,7 @@
             <div class="row list-search">
                 <div class="col-md-3 search-field">
                     <div class="label" style="left:0px;">模板内容：</div>
-                    <el-input v-model="input" placeholder="请输入内容"></el-input>
+                    <el-input v-model.trim="templateContent" placeholder="请输入内容"></el-input>
                 </div>
                 <div class="col-md-1 search-field search-field_controls">
                     <button class="btn btn-primary search-btn" v-on:click.stop="searchSmsTemplate">搜索</button>
@@ -31,17 +31,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in cartList" :key="item.id">
+                            <tr v-for="item in tempList" :key="item.id">
                                 <td>{{item.sequence}}</td>
                                 <td>{{item.smsTempLateId}}</td>
                                 <td>{{item.smsTempLateName}}</td>
                                 <td>{{item.smsTemplateText}}</td>
                                 <td>
-                                    <!-- <router-link :to="{path: '/horse/updateTreatment',       
-                                                 query: { disable: 1,}}"> 查看</router-link> -->
                                     <router-link :to="{path: '/smsmanage/updateSmsTemplate',
-                                                query: {smsTemplateId: 10001}}">修改</router-link>
-                                    <a @click="Del(item.smsTemplateId)">删除</a>
+                                                query: {smsTempLateId: 10001}}">修改</router-link>
+                                    <a @click="Del(item.smsTempLateId)">删除</a>
                                 </td>
                             </tr>                                          
                         </tbody>
@@ -82,12 +80,11 @@ import searchData from "@/../mock/mock-searchSmsTemplate.json";
 export default {
     data() {
         return {
-            value1:'',
             centerDialogVisible: false,
             currentPage: 1,
             pageSize: 10,
-            input: '',
-            cartList: [],
+            templateContent: '',
+            tempList: [],
             delsmsTemplateId: ''
         };
     },
@@ -97,22 +94,18 @@ export default {
     methods: {
         searchSmsTemplate() {
             let _this = this;
-            let templateContent = this.input;
-            if (templateContent == "") {
-                alert("请输入内容");
+            let templateContent = this.templateContent;
+            if (!templateContent) {
+                this.$message.info("请输入搜索的模块内容");
+                this.init();
                 return;
             } 
-            alert(this.input + "搜索成功");
-           
             axios.post("/api/api/sms/searchSmsTemplate", {
                 templateContent: "真是银行"
             }).then((response) => {
                 let res = response.data;
-                this.cartList = res.data.list;
+                _this.tempList = res.data.list;
             });
-           
-            this.cartList = searchData.data.list;
-            console.log(this.cartList);
         },
         handleCurrentChange(val) {
             alert("当前页:"+`${val}`+", 当前页个数:"+this.pageSize )
@@ -130,7 +123,7 @@ export default {
             }).then(function(response) {
                 let res = response.data;
                 if (res.status == 0) {
-                    _this.cartList = res.data.list;    
+                    _this.tempList = res.data.list;    
                 }
             }).catch(function(error) {
                 alert(error);

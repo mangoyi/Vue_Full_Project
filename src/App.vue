@@ -320,5 +320,11 @@ input:focus {
   max-height: 600px;
   overflow: auto;
 }
+
+// 重写进度条样式
+// .content-show .el-progress-bar__inner:nth-child(1){
+//   background: red;
+// }
+
 </style>
 

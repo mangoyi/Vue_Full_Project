@@ -5,19 +5,9 @@
         </div>
         <div class="content-show">
             <div class="row list-search">
-                <!-- <div class="col-md-3 search-field">
-                    <div style="left:0px" class="label">开始日期：</div>
-                    <el-date-picker size="large" v-model="startDate" type="date" placeholder="选择日期时间" value-format="yyyy-MM-dd">
-                    </el-date-picker>
-                </div>
-                <div class="col-md-3 search-field">
-                    <div style="left: 0px" class="label">结束日期：</div>
-                    <el-date-picker size="large" v-model="endDate" type="date" placeholder="选择日期时间" value-format="yyyy-MM-dd">
-                    </el-date-picker>
-                </div> -->
                 <div class="col-md-3 search-field">
                     <div class="label" style="left:0px;">机器人ID：</div>
-                    <el-input v-model="input" placeholder="请输入机器人ID"></el-input>
+                    <el-input v-model="robotId" placeholder="请输入机器人ID"></el-input>
                 </div>
 
                 <div class="col-md-1 search-field search-field_controls">
@@ -65,16 +55,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- <el-dialog title="提示" :modal-append-to-body="false" :visible.sync="centerDialogVisible" width="20%" center>
-            <div class="text-center">
-                <span>确定要暂停任务吗?</span>
-            </div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="centerDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="confirmStop">确 定</el-button>
-            </span>
-        </el-dialog> -->
     </div>
 </template>
 
@@ -87,14 +67,9 @@ import data from "@/../mock/mock-robotList.json";                               
 export default {
     data() {
         return {
-            startDate: "",
-            endDate: "",
-            number: "",
-            stopTaskid: "",            
-            centerDialogVisible: false,
             currentPage: 1,
             pageSize: 10,
-            input: "",
+            robotId: "",
             cartList: []
         };
     },
@@ -103,13 +78,20 @@ export default {
     },
     methods: {
         searchList() {
-            let startDate = this.startDate;
-            let endDate   = this.endDate;
-            if(startDate == false && endDate == false) {
-                alert('请填写至少一个搜索条件');
-                return;
+            if (this.robotId) {
+                /*
+                axios.post('/api/api/account/searchManual', {
+                    robotId: this.robotId
+                }).then((response) => {
+                    let res = response.data;
+                    if (res.status == 0) {
+                        let data = res.data.list;
+                    }
+                });
+                */
+            } else {
+                this.init();
             }
-            this.cartList = data.data.list;
         },
         handleCurrentChange(val) {
             alert("当前页:"+`${val}`+", 当前页个数:"+this.pageSize )

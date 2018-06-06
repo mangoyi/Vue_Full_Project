@@ -3,25 +3,13 @@
     <p class="title">任务进度</p>
     <div class="content-show" style="padding-left: 0px;">
       <div class="row list-search">
-        <div class="col-md-4 search-field">
-            <div style="left:0px;top:-2px" class="label">上海移动：</div>
-            <el-progress :percentage="80" :color="acd" :stroke-width="14"></el-progress>
-        </div>
-        <div class="col-md-4 search-field">
-            <div style="left:0px;top:-2px" class="label">北京联通：</div>
-            <el-progress :percentage="40" color="#2f4554" :stroke-width="14"></el-progress>
-        </div>
-        <div class="col-md-4 search-field">
-            <div style="left:0px;top:-2px" class="label">合肥银行：</div>
-            <el-progress :percentage="90" color="#61a0a8" :stroke-width="14"></el-progress>
-        </div>
-        <div class="col-md-4 search-field">
-            <div style="left:0px;top:-2px" class="label">南京银行：</div>
-            <el-progress :percentage="10" color="#d48265" :stroke-width="14"></el-progress>
-        </div>
-        <div class="col-md-4 search-field">
-            <div style="left:0px;top:-2px" class="label">中兴银行：</div>
-            <el-progress :percentage="20" color="#91c7ae" :stroke-width="14"></el-progress>
+        <div class="col-md-4 search-field well" v-for="item in percentlist" :key="item.id">
+            <!-- <div style="left:0px;top:-2px" class="label">{{item.taskName}}</div> -->
+            <p class="taskName">{{item.taskName}}</p>
+            <p class="taskAmount">{{item.complete}}/{{item.total}}</p>
+            <div>
+              <el-progress :percentage="item.taskPercent" :color="item.color" :stroke-width="14"></el-progress>
+            </div>
         </div>
       </div>
     </div>
@@ -33,6 +21,7 @@
 
 <script>
   import axios from "axios";
+  import data1 from "@/../mock/mock-dashTaskpercent.json";
 
   export default {
     name: 'hello',
@@ -40,9 +29,12 @@
       return {
         msg: "Welcom to Your Vue.js App",
 
+        // percentlist
+        percentlist: [],
+
         // canvasdata
         taskArr: ['上海移动','北京联通','合肥银行','南京银行','中兴银行'],
-        acd: "#c23531",
+        recent:  ['周一','周二','周三','周四','周五','周六','周日'],
         seriesArr: [
               {
                   name:'上海移动',
@@ -82,18 +74,32 @@
     }, 
     methods: {
       initdata() {
-        
-        /*
-        axios.post("/api/api/console/lineChart", {
-        }).then((response) => {
-          let res = response.data;
-          console.log(请求成功);
-        })
-        */
+        this.percentlist = data1.data.list;
+        this.drawTaksPercent();
         this.drawTaskLine();
-        
+      },
+      drawTaksPercent() {
+        /* 
+          let _this = this;
+          axios.post("/api/api/task/taskPercent", {
+          }).then((response) => {
+            let res = response.data;
+            if (res.status == 0) {
+              _this.percentlist = res.data.list;
+            }
+          });
+        */
       },
       drawTaskLine() {
+        // axios.post("/api/api/task/taskChart", {
+        // }).then((response) => {
+        //   let res = response.data;
+        //   if (res.status == 0) {
+        //     let data = res.data;
+        //   }
+        // })
+        
+        
         // 基于DOM，初始化echarts实例
         let taskChart = this.$echarts.init(document.getElementById('taskChart'));
 
@@ -109,7 +115,7 @@
               trigger: 'axis'
           },
           legend: {
-              data: this.taskArr
+              data: this.taskArr                                        // 任务名
           },
           grid: {
               left: '3%',
@@ -125,12 +131,12 @@
           xAxis: {
               type: 'category',
               boundaryGap: false,
-              data: ['周一','周二','周三','周四','周五','周六','周日']
+              data: this.recent                                         // 日期
           },
           yAxis: {
               type: 'value'
           },
-          series: this.seriesArr 
+          series: this.seriesArr                                        // 详细信息
           };
         if (option && typeof option === "object") {
           myChart.setOption(option, true);
@@ -143,6 +149,7 @@
   }
 </script>
 <style scoped>
+
   .fluid {
     width: 100%;
     padding: 0 2% 100px 2%; 
@@ -159,5 +166,15 @@
     width: 100%;
     height: 300px;
     text-align: center;
-  }  
+  }
+  .well {
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color: #f5f5f5;
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+  }
 </style>

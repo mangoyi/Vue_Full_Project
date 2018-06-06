@@ -10,10 +10,6 @@
                     <el-date-picker size="large" v-model="startDate" type="date" placeholder="选择日期时间" value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </div>
-                <!-- <div class="col-md-3 search-field">
-                    <div class="label" style="left:0px;">模板名称：</div>
-                    <el-input v-model="input" placeholder="请输入内容"></el-input>
-                </div> -->
                 <div class="col-md-3 search-field">
                     <div style="left: 0px" class="label">结束日期：</div>
                     <el-date-picker size="large" v-model="endDate" type="date" placeholder="选择日期时间" value-format="yyyy-MM-dd">
@@ -31,11 +27,6 @@
                         Your browser does not support the audio element.
                     </audio>
                 </div>
-                <!-- <div class="col-md-1 search-field search-field_controls">
-                    <router-link class="btn btn-success" :to="'/message/addModal'">
-                        新增
-                    </router-link>
-                </div> -->
             </div>
             <div class="row">
                 <div class="col-lg-12">
@@ -55,7 +46,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in cartList" :key="item.id">
+                            <tr v-for="item in recordList" :key="item.id">
                                 <td>{{item.sequence}}</td>
                                 <td>{{item.line}}</td>
                                 <td>{{item.callStatus}}</td>
@@ -73,7 +64,7 @@
                             </tr>                                          
                         </tbody>
                     </table>
-                    <div class="page" v-show="cartList.length > 0">
+                    <div class="page" v-show="recordList.length > 0">
                         <el-pagination 
                             background 
                             @current-change="handleCurrentChange"
@@ -84,7 +75,7 @@
                         >
                         </el-pagination>
                     </div>
-                    <div class="info" v-show="cartList.length == 0">
+                    <div class="info" v-show="recordList.length == 0">
                         请根据条件搜索通话记录
                     </div>
                 </div>
@@ -115,14 +106,12 @@ export default {
             startDate: "",
             endDate: "",
             number: "",
-            // [false, false, false, false, false, false, false, false, false, false],
             listenFlag: false,
             recordSrc: "",
             centerDialogVisible: false,
             currentPage: 1,
             pageSize: 10,
-            // input: '',
-            cartList: []
+            recordList: []
         };
     },
     methods: {
@@ -145,7 +134,7 @@ export default {
                     if (data.length == 0) {
                         _this.$message.success("当前无通话记录");
                     } else {
-                        _this.cartList = data;
+                        _this.recordList = data;
                     }
                 }
             }).catch(function(error) {
@@ -183,7 +172,6 @@ export default {
     }
     .callaudio{
         width: 100%;
-        // height: 33px;
     }
     .info {
         padding-top: 14px;

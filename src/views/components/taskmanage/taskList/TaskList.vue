@@ -37,7 +37,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in cartList" :key="item.id">
+                            <tr v-for="item in taskList" :key="item.id">
                                 <td>{{item.Id}}</td>
                                 <td>{{item.taskName}}</td>
                                 <td>{{item.taskStatus}}</td>
@@ -61,7 +61,7 @@
                             </tr>                                          
                         </tbody>
                     </table>
-                    <div class="page" v-show="cartList.length > 0">
+                    <div class="page" v-show="taskList.length > 0">
                         <el-pagination 
                             background 
                             @current-change="handleCurrentChange"
@@ -72,7 +72,7 @@
                         >
                         </el-pagination>
                     </div>
-                    <div class="info" v-show="cartList.length == 0">
+                    <div class="info" v-show="taskList.length == 0">
                         请根据条件搜索任务列表  
                     </div>
                 </div>
@@ -101,14 +101,12 @@ export default {
         return {
             startDate: "",
             endDate: "",
-            number: "",
             stopTaskid: "",            
             centerDialogVisible: false,
             currentPage: 1,
             pageSize: 10,
-            totalPage: 1,
-
-            cartList: []
+            totalPage: 3,
+            taskList: []                                                    // json数据
         };
     },
     mounted() {
@@ -128,10 +126,10 @@ export default {
                 endTime  : endDate
             }).then((response) => {
                 let res = response.data;
-                _this.cartList = res.data.list;
+                _this.taskList = res.data.list;
             });
         },
-        handleCurrentChange(val) {
+        handleCurrentChange(val) {                                            // 分页
             alert("当前页:"+`${val}`+", 当前页个数:"+this.pageSize )
             let currentPage = `${val}`;
             let pageSize = this.pageSize;
@@ -146,7 +144,7 @@ export default {
                console.log(response);
                let res = response.data;
                if (res.status == 0) {
-                    _this.cartList  =  res.data.list;
+                    _this.taskList  =  res.data.list;
                     _this.totalPage =  res.data.totalPageNum;
                }
            }).catch(function(error) {
