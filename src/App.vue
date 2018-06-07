@@ -96,8 +96,10 @@ export default {
 }
 
 .align-items-center {
-  background-image: url(/static/img/admin-bg2.png);
-  background-size: 100% 100%,
+  // background-image: url(/static/img/admin-bg2.png);
+  background-image: url(/static/img/admin_bg.jpg);
+  background-size: 100% 100%;
+  filter:blur(5px);
 }
 
 .el-button.is-plain:hover,
@@ -325,6 +327,10 @@ input:focus {
 // .content-show .el-progress-bar__inner:nth-child(1){
 //   background: red;
 // }
+.el-progress__text {
+  margin-left: 8px;
+}
+
 
 </style>
 

@@ -15,8 +15,8 @@
                         <el-upload
                             class="upload-file"
                             ref="upload"
-                            action="https://jsonplaceholder.typicode.com/posts/"                                        
                             :before-upload = "beforeAvatarUpload"
+                            action="https://jsonplaceholder.typicode.com/posts/"
                             :on-remove="handleRemove"
                             :on-change = "handleFileChange"
                             :limit = 1
@@ -27,6 +27,7 @@
                             <div slot="tip" class="el-upload__tip">只能上传单个zip文件，且不超过2MB</div>
                         </el-upload>
                     </div>
+                    <a style="margin-left: 10px; color: rgb(0,192,239)" :href="Url" download="tel.txt" v-if="checkTaskflag">点击下载文件>>></a>
                 </div>
                 <div class="col-md-12 search-field" style="margin-bottom: 40px;">
                     <div class="label" style="left: -11px;">机器人坐席：</div>
@@ -152,6 +153,8 @@ export default {
             // templateList: [],
             // radio: '',
 
+            // 服务器地址
+            Url: "http://www.baidu.com"
         };
     },
     mounted() {
@@ -361,6 +364,8 @@ export default {
         },
         */
         confirmCreate() {                                                           // 创建任务
+            let taskId = this.$route.query.taskId;                                  // 任务ID
+            
             let taskName = this.taskName;                                             // 任务名称
               
             let robotSeat = [];                                                     // 机器人坐席
@@ -381,6 +386,7 @@ export default {
             // }
             formData.append("file", this.formfile.raw);                              // 单文件formdata
             let obj = {
+                taskId: taskId == undefined ? -1 : taskId,                          // 如果是新增任务是-1，如果是修改任务是任务ID
                 taskName: taskName,
                 publisher: "mangoyi",
                 robotSeat: robotSeat,
@@ -390,20 +396,36 @@ export default {
                 formData.append(key, obj[key]);
             };
 
-            if ( !!taskName && !!this.formfile && robotSeat.length > 0 && manualSeat.length > 0 ) {
-                axios({
-                    url: "/api/api/task/addNewTask",
-                    method: "post",
-                    data: formData,
-                    headers: {"Content-Type": "multipart/form-data"}
-                }).then((response) => {
-                    let res = response.data;
-                    if (res.status == 0) {
-                        this.$message.success("任务创建成功！");
-                    } else if (res.status == 1) {
-                        this.$message.error("任务创建失败！请重试")
-                    }
-                });
+            if ( !!taskName && !!this.formfile && robotSeat.length > 0 && manualSeat.length > 0) {
+                if (!this.checkTaskflag) {                                                          // 新增任务
+                    axios({
+                        url: "/api/api/task/addNewTask",
+                        method: "post",
+                        data: formData,
+                        headers: {"Content-Type": "multipart/form-data"}
+                    }).then((response) => {
+                        let res = response.data;
+                        if (res.status == 0) {
+                            this.$message.success("任务创建成功！");
+                        } else if (res.status == 1) {
+                            this.$message.error("任务创建失败！请重试")
+                        }
+                    });
+                } else {
+                    axios({
+                        url: "/api/api/task/updateTask",
+                        method: "post",
+                        data: formData,
+                        headers: {"Content-Type": "multipart/form-data"}
+                    }).then((response) => {
+                        let res = response.data;
+                        if (res.status == 0) {
+                            this.$message.success("任务修改成功！");
+                        } else if (res.status == 1) {
+                            this.$message.error("任务修改失败！请重试")
+                        }
+                    });
+                }
             } else {
                 this.$message.error("请填写所有内容！");
             }

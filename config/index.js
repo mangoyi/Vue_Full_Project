@@ -28,6 +28,7 @@ module.exports = {
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         proxyTable: {
+
             '/api': {
                 target: 'http://www.zzbn.cn:8090/',
                 changeOrigin: true,

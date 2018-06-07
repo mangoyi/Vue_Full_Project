@@ -10,13 +10,13 @@
       <div class="row list-search">
         <div class="col-md-4 search-field">
           <div class="label">模板名称：</div>
-          <input type="text" v-model.trim="appointTitle" class="form-control input-field" placeholder="请输入模板标题" />
+          <input type="text" v-model.trim="smsTitle" class="form-control input-field" placeholder="请输入模板标题" />
         </div>
       </div>
       <div class="row list-search">
         <div class="col-md-12 search-field">
           <div class="label">模板内容：</div>
-          <input type="text" v-model.trim="appointText" class="form-control input-field" placeholder="请输入短信内容" />
+          <input type="text" v-model.trim="smsText" class="form-control input-field" placeholder="请输入短信内容" />
         </div>
       </div>
     </div>
@@ -26,52 +26,58 @@
   </div>
 </template>
 <script>
-import { DatePicker, Button } from "element-ui";
+import {Button } from "element-ui";
 import axios from 'axios';
 /* eslint-disable */
 export default {
   data() {
     return {
-     appointTitle:'',
-     appointText:'',
-     url: ''
+     smsTitle:'',
+     smsText:'',
+     queryId: ''
     };
   },
   components: {
-    "el-date-picker": DatePicker,
-    "el-button": Button,
+    "el-button": Button
   },
   mounted() {
       this.init();
   },
   methods: {
     open() {
-      if(this.appointTitle != "" && this.appointText != "") {
-        
-        /*
-        axios.post("/api/home/addSmsTemplate", {
-            "appointTitle": this.appointTitle,
-            "appointText": this.appointText
-        }).then((response) => {
-            let res = response.data;
-            console.log(res);
-        });
-        */  
-        this.$message.success("修改成功");
+      alert(!this.smsTitle && !this.smsText);
+      if(!this.smsTitle && !this.smsText) {
+        this.$message.error("请填写所有的内容!");
       } else {
-          this.$message.error("请填写所有的内容!");
+        this.$message.success("修改成功");
+          /*
+          axios.post("/api/api/sms/updateSmsTemplate", {
+              "smsTemplateId": smsTempLateId
+              "smsTitle": this.smsTitle,
+              "smsText" : this.smsText
+          }).then((response) => {
+              let res = response.data;
+              if (res.status == 0) {
+                this.$message.success("修改成功");
+              }
+          });
+          */  
       }
     },
 
     init() {
         let smsTempLateId = this.$route.query.smsTempLateId;
-        
-        /* 
-        axios.post("/api/home/updateSmsTemplate", {
-            smsTemplateId: smsTemplateId
+        let _this = this;
+        /*
+        axios.post("/api/api/sms/getSmsTemplate", {
+            smsTemplateId: smsTempLateId
         }).then((response) => {
             let res = response.data;
-            console.log("获取数据成功！");
+            if (res.status == 0) {
+              let data = res.data;
+              _this.smsTitle == data.smsTemplateTitle;
+              _this.smsText == data.smsTemplateText;
+            }
         });
         */
     }

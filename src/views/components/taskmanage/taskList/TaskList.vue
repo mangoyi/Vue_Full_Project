@@ -54,7 +54,7 @@
                                 <td>
                                     <button class="btn btn-primary" style="color: #fff;" @click="stop(item.taskID)">暂停</button>
                                     <router-link class="btn btn-warning" :to="{path: '/taskmanage/TaskRelease', query: {
-                                        taskId: item.taskID
+                                        taskId: '20180529123701'
                                     }}" style="color: #fff;">修改</router-link>
                                     <button class="btn btn-danger" style="color: #fff;" @click="over(item.taskID)">结束</button>
                                 </td>

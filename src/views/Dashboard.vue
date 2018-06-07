@@ -4,11 +4,10 @@
     <div class="content-show" style="padding-left: 0px;">
       <div class="row list-search">
         <div class="col-md-4 search-field well" v-for="item in percentlist" :key="item.id">
-            <!-- <div style="left:0px;top:-2px" class="label">{{item.taskName}}</div> -->
             <p class="taskName">{{item.taskName}}</p>
             <p class="taskAmount">{{item.complete}}/{{item.total}}</p>
             <div>
-              <el-progress :percentage="item.taskPercent" :color="item.color" :stroke-width="14"></el-progress>
+              <el-progress :percentage="Number(item.taskPercent)" :color="item.color" :stroke-width="14"></el-progress>
             </div>
         </div>
       </div>
@@ -21,52 +20,19 @@
 
 <script>
   import axios from "axios";
-  import data1 from "@/../mock/mock-dashTaskpercent.json";
+  import {Progress } from "element-ui";
 
   export default {
     name: 'hello',
     data() {
       return {
-        msg: "Welcom to Your Vue.js App",
-
         // percentlist
         percentlist: [],
 
         // canvasdata
-        taskArr: ['上海移动','北京联通','合肥银行','南京银行','中兴银行'],
-        recent:  ['周一','周二','周三','周四','周五','周六','周日'],
-        seriesArr: [
-              {
-                  name:'上海移动',
-                  type:'line',
-                  stack: '总量',
-                  data:[120, 132, 101, 134, 90, 230, 210]
-              },
-              {
-                  name:'北京联通',
-                  type:'line',
-                  stack: '总量',
-                  data:[220, 182, 191, 234, 290, 330, 310]
-              },
-              {
-                  name:'合肥银行',
-                  type:'line',
-                  stack: '总量',
-                  data:[150, 232, 201, 154, 190, 330, 410]
-              },
-              {
-                  name:'南京银行',
-                  type:'line',
-                  stack: '总量',
-                  data:[320, 332, 301, 334, 390, 330, 320]
-              },
-              {
-                  name:'中兴银行',
-                  type:'line',
-                  stack: '总量',
-                  data:[820, 932, 901, 934, 1290, 1330, 1320]
-              }
-          ]
+        taskArr: [],
+        taskRecent:[],
+        seriesArr: []
       }
     },
     mounted() {
@@ -74,12 +40,10 @@
     }, 
     methods: {
       initdata() {
-        this.percentlist = data1.data.list;
-        this.drawTaksPercent();
+        this.drawTaskPercent();
         this.drawTaskLine();
       },
-      drawTaksPercent() {
-        /* 
+      drawTaskPercent() {
           let _this = this;
           axios.post("/api/api/task/taskPercent", {
           }).then((response) => {
@@ -88,18 +52,25 @@
               _this.percentlist = res.data.list;
             }
           });
-        */
       },
       drawTaskLine() {
-        // axios.post("/api/api/task/taskChart", {
-        // }).then((response) => {
-        //   let res = response.data;
-        //   if (res.status == 0) {
-        //     let data = res.data;
-        //   }
-        // })
-        
-        
+        let _this = this;
+
+        axios.post("/api/api/task/taskChart", {
+        }).then((response) => {
+          let res = response.data;
+          if (res.status == 0) {
+            let data = res.data.list[0];
+            _this.taskArr = data.taskName;
+            _this.taskRecent = data.taskRecent;
+            _this.taskSeries = data.taskSeries;
+            this.drawCanvas(_this.taskArr, _this.taskRecent, _this.taskSeries);
+          }
+        })
+
+      },
+
+      drawCanvas(taskArr, taskRecent, seriesArr) {
         // 基于DOM，初始化echarts实例
         let taskChart = this.$echarts.init(document.getElementById('taskChart'));
 
@@ -115,7 +86,7 @@
               trigger: 'axis'
           },
           legend: {
-              data: this.taskArr                                        // 任务名
+              data: taskArr                                        // 任务名
           },
           grid: {
               left: '3%',
@@ -131,12 +102,12 @@
           xAxis: {
               type: 'category',
               boundaryGap: false,
-              data: this.recent                                         // 日期
+              data: taskRecent                                         // 日期
           },
           yAxis: {
               type: 'value'
           },
-          series: this.seriesArr                                        // 详细信息
+          series: seriesArr                                        // 详细信息
           };
         if (option && typeof option === "object") {
           myChart.setOption(option, true);
@@ -164,7 +135,7 @@
   #taskChart {
     margin-top: 30px;
     width: 100%;
-    height: 300px;
+    height: 400px;
     text-align: center;
   }
   .well {

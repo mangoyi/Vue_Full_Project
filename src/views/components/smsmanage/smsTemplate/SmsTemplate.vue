@@ -38,7 +38,7 @@
                                 <td>{{item.smsTemplateText}}</td>
                                 <td>
                                     <router-link :to="{path: '/smsmanage/updateSmsTemplate',
-                                                query: {smsTempLateId: 10001}}">修改</router-link>
+                                                query: {smsTempLateId: item.smsTempLateId}}">修改</router-link>
                                     <a @click="Del(item.smsTempLateId)">删除</a>
                                 </td>
                             </tr>                                          
@@ -136,17 +136,15 @@ export default {
         },
         confirmDel() {
             this.centerDialogVisible = false;
-
-            /* 
-            axios.post("/api/home/delSmsTemplate", {
+            axios.post("/api//api/sms/delSmsTemplate", {
                 smsTemplateId: this.delsmsTemplateId
             }).then((response) => {
                 let res = response.data;
                 console.log("删除成功!");
                 this.$message.success("删除成功！");
+            }).catch((error) => {
+                this.$message.error("删除失败，请重试!");
             });
-            */
-           this.$message.error("删除失败，请重试!");
         }
     }
 };

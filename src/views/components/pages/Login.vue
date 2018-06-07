@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-md-8">
-          <h1 class="title">短信发送系统</h1>
+          <h1 class="title">银行外呼系统</h1>
           <div class="card-group mb-0">
             <form class="card p-4" name="loginForm" novalidate>
               <div class="card-block">
@@ -27,6 +27,7 @@
               </div>
             </form>
           </div>
+          <p class="cp">©2018 CengMei 上海澄美信息服务有限公司</p>
         </div>
       </div>
     </div>
@@ -106,5 +107,8 @@ input:-webkit-autofill {
 
 .card {
   border-radius: 8px;
+}
+.cp {
+  text-align: center;
 }
 </style>

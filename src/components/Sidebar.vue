@@ -4,11 +4,8 @@
       <ul class="nav">
         <li class="nav-item">
           <router-link :to="'/dashboard'" class="nav-link">
-            <i class="fa fa-bar-chart fa-lg"></i> 控制台 </router-link>
+            <i class="fa fa-bar-chart fa-lg"></i> 首页 </router-link>
         </li>
-        <!-- <li class="nav-title">
-            UI Elements
-          </li> -->
         <router-link tag="li" class="nav-item nav-dropdown" :to="{ path: '/horse'}" disabled>
           <div class="nav-link nav-dropdown-toggle" @click="handleClick">
             <i class="fa fa-hand-lizard-o fa-lg"></i> 马匹信息管理</div>
@@ -183,7 +180,7 @@
         <!-- 任务管理 -->
         <router-link tag="li" class="nav-item nav-dropdown" :to="{ path: '/taskManage'}" disabled>
           <div class="nav-link nav-dropdown-toggle" @click="handleClick">
-            <i class="fa fa-jpy fa-lg"></i>任务管理</div>
+            <i class="fa fa-tasks fa-lg"></i>任务管理</div>
           <ul class="nav-dropdown-items">
             <li class="nav-item">
               <router-link :to="'/taskManage/TaskList'" class="nav-padding nav-link" exact>
@@ -203,7 +200,7 @@
         <!-- 通话记录 -->
         <router-link tag="li" class="nav-item nav-dropdown" :to="{ path: '/callrecords'}" disabled>
           <div class="nav-link nav-dropdown-toggle" @click="handleClick">
-            <i class="fa fa-jpy fa-lg"></i>通话管理</div>
+            <i class="fa fa-volume-control-phone fa-lg"></i>通话管理</div>
           <ul class="nav-dropdown-items">
             <li class="nav-item">
               <router-link :to="'/callRecords/CallRecords'" class="nav-padding nav-link" exact>
@@ -215,7 +212,7 @@
         <!-- 坐席管理 -->
         <router-link tag="li" class="nav-item nav-dropdown" :to="{ path: '/seatmanage'}" disabled>
           <div class="nav-link nav-dropdown-toggle" @click="handleClick">
-            <i class="fa fa-jpy fa-lg"></i>坐席管理</div>
+            <i class="fa fa-television fa-lg"></i>坐席管理</div>
           <ul class="nav-dropdown-items">
             <li class="nav-item">
               <router-link :to="'/seatmanage/LaborSeat'" class="nav-padding nav-link" exact>
@@ -231,7 +228,7 @@
         <!-- 短信管理 -->
         <router-link tag="li" class="nav-item nav-dropdown" :to="{ path: '/smsmanage'}" disabled>
           <div class="nav-link nav-dropdown-toggle" @click="handleClick">
-            <i class="fa fa-jpy fa-lg"></i>短信管理</div>
+            <i class="fa fa-envelope fa-lg"></i>短信管理</div>
           <ul class="nav-dropdown-items">
             <li class="nav-item">
               <router-link :to="'/smsmanage/SmsTemplate'" class="nav-padding nav-link" exact>
@@ -244,27 +241,6 @@
           </ul>
         </router-link>
 
-        <!-- <li class="divider"></li>
-          <li class="nav-title">
-            Extras
-          </li>
-          <li class="nav-item nav-dropdown">
-            <a class="nav-link nav-dropdown-toggle" href="#" @click="handleClick"><i class="icon-star"></i> Pages</a>
-            <ul class="nav-dropdown-items">
-              <li class="nav-item">
-                <router-link :to="'/pages/login'" class="nav-link" exact><i class="icon-star"></i> 登录</router-link>
-              </li>
-              <li class="nav-item">
-                  <router-link :to="'/pages/register'" class="nav-link" exact><i class="icon-star"></i> Register</router-link>
-              </li> 
-              <li class="nav-item">
-                  <router-link :to="'/pages/404'" class="nav-link" exact><i class="icon-star"></i> Error 404</router-link>
-              </li>
-              <li class="nav-item">
-                <router-link :to="'/pages/500'" class="nav-link" exact><i class="icon-star"></i> Error 500</router-link>
-              </li>
-            </ul>
-          </li> -->
       </ul>
     </nav>
   </div>
