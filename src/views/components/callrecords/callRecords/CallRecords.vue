@@ -17,7 +17,7 @@
                 </div>
                 <div class="col-md-3 search-field">
                     <div style="left: 0px" class="label">查询号码：</div>
-                    <input type="text" class="form-control input-field" placeholder="请输入电话号码" v-model="number" />
+                    <input type="text" class="form-control input-field" placeholder="请输入电话号码" v-model.trim="phone" />
                 </div>
                 <div class="col-md-1 search-field search-field_controls">
                     <button class="btn btn-primary search-btn" v-on:click.stop="searchList">搜索</button>
@@ -47,31 +47,31 @@
                         </thead>
                         <tbody>
                             <tr v-for="item in recordList" :key="item.id">
-                                <td>{{item.sequence}}</td>
+                                <td>{{item.Id}}</td>
                                 <td>{{item.line}}</td>
-                                <td>{{item.callStatus}}</td>
+                                <td>{{item.callState}}</td>
                                 <td>{{item.inCall}}</td>
                                 <td>{{item.outCall}}</td>
                                 <td>{{item.startTime}}</td>
                                 <td>{{item.duration}}</td>
-                                <td>{{item.RobotId}}</td>
-                                <td>{{item.LaborId}}{{item.recordSrc}}</td>
+                                <td>{{item.robotId}}</td>
+                                <td>{{item.manualId}}{{item.recordSrc}}</td>
                                 <td>
                                     <a class="i-wrap" @click="listen(item)" style="color: black">
-                                        <i class="fa fa-microphone"  v-bind:class="{'text-success': item.recordFlag }"></i>
+                                        <i class="fa fa-microphone"  v-bind:class="{'text-success': item.recordPlayState }"></i>
                                     </a>
                                 </td>
                             </tr>                                          
                         </tbody>
                     </table>
-                    <div class="page" v-show="recordList.length > 0">
+                    <div class="page" v-show="(recordList.length > 0 && totalPageNum > 10)">
                         <el-pagination 
                             background 
                             @current-change="handleCurrentChange"
                             :current-page.sync="currentPage"
                             :page-size="10"
                             layout="total, prev, pager, next"
-                            :total="1000"
+                            :total="totalPageNum"
                         >
                         </el-pagination>
                     </div>
@@ -95,7 +95,7 @@
 </template>
 
 <script>
-import { Pagination, DatePicker, Button, Input} from "element-ui";
+import { Pagination, DatePicker, Button, Input, Message} from "element-ui";
 import axios from 'axios';
 import data from "@/../mock/mock-callRecords.json";                             // mock json
 
@@ -105,58 +105,61 @@ export default {
         return {
             startDate: "",
             endDate: "",
-            number: "",
+            phone: "",
             listenFlag: false,
             recordSrc: "",
             centerDialogVisible: false,
             currentPage: 1,
             pageSize: 10,
+            totalPageNum: 1,
             recordList: []
         };
     },
     methods: {
         searchList(currentPage, pageSize) {
-            let number    = this.number;
+            let phone    = this.phone;
             let startDate = this.startDate;
             let endDate   = this.endDate;
             let _this     = this;
-            if(!number && !startDate && !endDate) {
+            if(!phone && !startDate && !endDate) {
                 alert('请填写至少一个搜索条件');
                 return;
             }
             axios.post("/api/api/callLog/searchCallRecord", {
+                startTime: startDate,
+                endTime: endDate,
+                phone: phone,
                 currentPage: currentPage == undefined ? 1 : currentPage,
                 pageSize: pageSize == undefined ? 10 : pageSize
             }).then(function(response) {
                 let res = response.data;
                 if (res.status == 0) {
-                    let data = res.data.list;
-                    if (data.length == 0) {
-                        _this.$message.success("当前无通话记录");
-                    } else {
-                        _this.recordList = data;
-                    }
+                    let data = res.data;
+                    data.length == 0 ? _this.$message.success("当前无通话记录") : _this.recordList = data.list;
+                    _this.totalPageNum = data.totalPageNum;
+                } else {
+                    _this.$message.error(res.msg);
                 }
             }).catch(function(error) {
                 alert(error);
             });
         },
         handleCurrentChange(val) {
-            alert("当前页:"+`${val}`+", 当前页个数:"+this.pageSize )
             let currentPage = `${val}`;
             let pageSize = this.pageSize;
-            this.init(currentPage, pageSize);           
+            this.searchList(currentPage, pageSize);           
         },
         // 录音
         listen(item) {
-            if (!item.recordFlag) {                 // 说明是播放
-                this.recordSrc = item.recordSrc;
+            console.log(!item.recordPlayState);
+            if (!item.recordPlayState) {                                                     // 播放
+                this.recordSrc ="http://www.zzbn.cn:8090"+item.recordSrc;
                 console.log(this.recordSrc + "-----------------------播放--------------------------");
-            } else {
-                // 暂停
+            } else {                                                                    // 暂停     
                 document.getElementsByClassName('callaudio')[0].pause();
+                console.log("---------------------暂停=---------------------------------------");
             }
-            item.recordFlag = !item.recordFlag;
+            item.recordPlayState = !item.recordPlayState;
         }
     }
 };

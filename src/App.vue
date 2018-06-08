@@ -99,7 +99,7 @@ export default {
   // background-image: url(/static/img/admin-bg2.png);
   background-image: url(/static/img/admin_bg.jpg);
   background-size: 100% 100%;
-  filter:blur(5px);
+  // filter:blur(5px);
 }
 
 .el-button.is-plain:hover,

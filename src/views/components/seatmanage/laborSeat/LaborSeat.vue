@@ -6,8 +6,8 @@
         <div class="content-show">
             <div class="row list-search">
                 <div class="col-md-3 search-field">
-                    <div class="label" style="left:0px;">员工ID：</div>
-                    <el-input v-model.trim="laborId" placeholder="请输入员工ID"></el-input>
+                    <div class="label" style="left:0px;">关键词：</div>
+                    <el-input v-model.trim="keyWord" placeholder="请输入员工ID"></el-input>
                 </div>
 
                 <div class="col-md-1 search-field search-field_controls">
@@ -19,33 +19,35 @@
                     <table class="table table-bordered table-striped table-sm">
                         <thead>
                             <tr>
-                                <th>编号</th>
+                                <th>员工姓名</th>
                                 <th>员工ID</th>
                                 <th>工作状态</th>
                                 <th>任务ID</th>
+                                <th>在线状态</th>
                             </tr>
                         </thead>
                         <tbody >
-                            <tr v-for="(item, index) in testList" :key="index" v-if="testList">
+                            <tr v-for="(item, index) in laborList" :key="index">
                                 <td>{{item.accountName}}</td>
                                 <td>{{item.accountUser}}</td>
-                                <td>
-                                    <i class="fa fa-lg" :class="{'fa-phone': item.onLineState == '未知' ? true : false}"></i>
+                                <td>{{item.taskState == 0 ? "空闲中" : "工作中"}}
+                                    <!-- <i class="fa fa-lg" :class="{'fa-phone': item.onLineState == '未知' ? true : false}"></i> -->
                                 </td>
                                 <td>
                                     <span v-for="info in item.taskInfo" :key="info.id">{{info.taskName}} ,</span>
                                 </td>
+                                <td>{{item.onLineState}}</td>
                             </tr>                                          
                         </tbody>
                     </table>
-                    <div class="page" v-show="laborList.length > 0">
+                    <div class="page" v-show="(laborList.length > 0 && totalPageNum > 10)">
                         <el-pagination 
                             background 
                             @current-change="handleCurrentChange"
                             :current-page.sync="currentPage"
                             :page-size="10"
                             layout="total, prev, pager, next"
-                            :total="20"
+                            :total="totalPageNum"
                         >
                         </el-pagination>
                     </div>
@@ -69,9 +71,9 @@ export default {
         return {
             currentPage: 1,
             pageSize: 10,
-            laborId: "",
+            keyWord: "",
             laborList: [],
-            testList: []
+            totalPageNum: 1
         };
     },
     mounted() {
@@ -79,17 +81,17 @@ export default {
     },
     methods: {
         searchList() {
-            if (this.laborId) {
-                /*
-                axios.post('/api/api/account/searchManual', {
-                    manualId: this.laborId
+            let _this = this;
+            if (this.keyWord) {
+                axios.post('/api/api/account/searchSeat', {
+                    keyWord: this.keyWord
                 }).then((response) => {
                     let res = response.data;
                     if (res.status == 0) {
-                        let data = res.data.list;
+                        _this.laborList = res.data.list;
+                        _this.totalPageNum = res.data.totalPageNum;
                     }
                 });
-                */
             } else {
                 this.init();
             }
@@ -108,8 +110,8 @@ export default {
                 let res = response.data;
                 if(res.status == 0) {
                     _this.laborList = res.data.list;
-                    // console.log(this.laborList[0])
-                    _this.testList = [_this.laborList[0]];
+                    // _this.testList = [_this.laborList[0]];
+                    _this.totalPageNum = res.data.totalPageNum;
                 }
             });
         }

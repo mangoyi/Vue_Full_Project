@@ -40,7 +40,7 @@
                             <tr v-for="item in taskList" :key="item.id">
                                 <td>{{item.Id}}</td>
                                 <td>{{item.taskName}}</td>
-                                <td>{{item.taskStatus}}</td>
+                                <td>{{objStatus[item.taskStatus]}}</td>
                                 <td>{{item.publisher}}</td>
                                 <td>{{item.startTime}}</td>
                                 <td>{{item.zipUpdateTime}}</td>
@@ -61,7 +61,7 @@
                             </tr>                                          
                         </tbody>
                     </table>
-                    <div class="page" v-show="taskList.length > 0">
+                    <div class="page" v-show="(taskList.length > 0 && totalPage > 10)">
                         <el-pagination 
                             background 
                             @current-change="handleCurrentChange"
@@ -101,11 +101,16 @@ export default {
         return {
             startDate: "",
             endDate: "",
-            stopTaskid: "",            
+            stopTaskid: "",       
+            objStatus: {
+                "0": "进行中",
+                "1": "已暂停",
+                "2": "已结束"
+            },     
             centerDialogVisible: false,
             currentPage: 1,
             pageSize: 10,
-            totalPage: 3,
+            totalPage: 1,
             taskList: []                                                    // json数据
         };
     },
@@ -127,10 +132,10 @@ export default {
             }).then((response) => {
                 let res = response.data;
                 _this.taskList = res.data.list;
+                _this.totalPage = res.data.totalPageNum;
             });
         },
         handleCurrentChange(val) {                                            // 分页
-            alert("当前页:"+`${val}`+", 当前页个数:"+this.pageSize )
             let currentPage = `${val}`;
             let pageSize = this.pageSize;
             this.init(currentPage, pageSize);           

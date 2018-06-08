@@ -9,8 +9,12 @@
     <div class="content-show">
       <div class="row list-search">
         <div class="col-md-4 search-field">
+          <div class="label">模板ID：</div>
+          <input type="text" v-model.trim="smsId" class="form-control input-field" placeholder="请输入模板ID" disabled />
+        </div>
+        <div class="col-md-4 search-field">
           <div class="label">模板名称：</div>
-          <input type="text" v-model.trim="smsTitle" class="form-control input-field" placeholder="请输入模板标题" />
+          <input type="text" v-model.trim="smsName" class="form-control input-field" placeholder="请输入模板标题" />
         </div>
       </div>
       <div class="row list-search">
@@ -21,65 +25,55 @@
       </div>
     </div>
     <div class="content-footer row">
-      <el-button class="col-md-1 btn btn-primary makesure" :plain="true" @click="open">提交</el-button>
+      <el-button class="col-md-1 btn btn-primary makesure" :plain="true" @click="update">提交</el-button>
     </div>
   </div>
 </template>
 <script>
 import {Button } from "element-ui";
 import axios from 'axios';
+import smsTemplateSrv from "@/../src/views/services/smsTemplate.service.js";
+
 /* eslint-disable */
 export default {
   data() {
     return {
-     smsTitle:'',
-     smsText:'',
-     queryId: ''
+     smsId: '',
+     smsName:'',
+     smsText:''
     };
   },
   components: {
     "el-button": Button
   },
-  mounted() {
-      this.init();
+  beforeRouteEnter:(to, from, next) => {
+      next(vm => {
+        smsTemplateSrv.getTemplate(vm.$route.query.smsTempLateId).then(resp => {
+          let data = resp.data.list[0];
+          vm.smsId = data.smsTempLateId;
+          vm.smsName = data.smsTempLateName;
+          vm.smsText = data.smsTemplateText;
+        }, error => {
+          vm.$message.error(err.msg);
+        })
+      });
   },
   methods: {
-    open() {
-      alert(!this.smsTitle && !this.smsText);
-      if(!this.smsTitle && !this.smsText) {
-        this.$message.error("请填写所有的内容!");
+    update() {
+      let smsName = this.smsName; 
+      let smsText = this.smsText;
+      let smsId = this.smsId;
+      if (smsName && smsText) {
+        smsTemplateSrv.updateTemplate(smsId, smsName, smsText).then(resp => {
+          console.log(resp);
+          this.$message.success("更新成功");
+        }, err => {
+          this.$message.error(err.msg);
+        })
       } else {
-        this.$message.success("修改成功");
-          /*
-          axios.post("/api/api/sms/updateSmsTemplate", {
-              "smsTemplateId": smsTempLateId
-              "smsTitle": this.smsTitle,
-              "smsText" : this.smsText
-          }).then((response) => {
-              let res = response.data;
-              if (res.status == 0) {
-                this.$message.success("修改成功");
-              }
-          });
-          */  
+          this.$message.error("请填写所有的内容!");
       }
-    },
 
-    init() {
-        let smsTempLateId = this.$route.query.smsTempLateId;
-        let _this = this;
-        /*
-        axios.post("/api/api/sms/getSmsTemplate", {
-            smsTemplateId: smsTempLateId
-        }).then((response) => {
-            let res = response.data;
-            if (res.status == 0) {
-              let data = res.data;
-              _this.smsTitle == data.smsTemplateTitle;
-              _this.smsText == data.smsTemplateText;
-            }
-        });
-        */
     }
 
   }
