@@ -167,6 +167,14 @@ export default {
         },
         confirmDel() {
             this.centerDialogVisible = false;
+            smsTemplateSrv.delTemplate(this.delsmsTemplateId).then(resp => {
+                this.$message.success("模板删除成功！");
+            }, err => {
+                this.$message.error("删除失败，请重试！");
+            });
+
+
+            /*
             axios.post("/api//api/sms/delSmsTemplate", {
                 smsTemplateId: this.delsmsTemplateId
             }).then((response) => {
@@ -176,6 +184,7 @@ export default {
             }).catch((error) => {
                 this.$message.error("删除失败，请重试!");
             });
+            */
         }
     }
 };

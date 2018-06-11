@@ -20,7 +20,7 @@
                     <input type="text" class="form-control input-field" placeholder="请输入电话号码" v-model.trim="phone" />
                 </div>
                 <div class="col-md-1 search-field search-field_controls">
-                    <button class="btn btn-primary search-btn" v-on:click.stop="searchList">搜索</button>
+                    <button class="btn btn-primary search-btn" v-on:click.stop="searchList(1)">搜索</button>
                 </div>
                 <div class="audio-wrap col-md-2">
                     <audio :src="recordSrc" controls="controls" class="callaudio" autoplay>
@@ -116,7 +116,7 @@ export default {
         };
     },
     methods: {
-        searchList(currentPage, pageSize) {
+        searchList(currentPage=this.currentPage, pageSize) {
             let phone    = this.phone;
             let startDate = this.startDate;
             let endDate   = this.endDate;
@@ -135,7 +135,7 @@ export default {
                 let res = response.data;
                 if (res.status == 0) {
                     let data = res.data;
-                    data.length == 0 ? _this.$message.success("当前无通话记录") : _this.recordList = data.list;
+                    data.list.length == 0 ? _this.$message.success("当前无通话记录") : _this.recordList = data.list;
                     _this.totalPageNum = data.totalPageNum;
                 } else {
                     _this.$message.error(res.msg);

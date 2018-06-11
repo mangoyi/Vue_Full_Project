@@ -11,7 +11,7 @@
                 </div>
 
                 <div class="col-md-1 search-field search-field_controls">
-                    <button class="btn btn-primary search-btn" v-on:click.stop="searchList">搜索</button>
+                    <button class="btn btn-primary search-btn" v-on:click.stop="searchList(1)">搜索</button>
                 </div>
             </div>
             <div class="row">
@@ -19,6 +19,7 @@
                     <table class="table table-bordered table-striped table-sm">
                         <thead>
                             <tr>
+                                <th>序列</th>
                                 <th>员工姓名</th>
                                 <th>员工ID</th>
                                 <th>工作状态</th>
@@ -28,6 +29,7 @@
                         </thead>
                         <tbody >
                             <tr v-for="(item, index) in laborList" :key="index">
+                                <td>{{index + (currentPage - 1)*10}}</td>
                                 <td>{{item.accountName}}</td>
                                 <td>{{item.accountUser}}</td>
                                 <td>{{item.taskState == 0 ? "空闲中" : "工作中"}}
@@ -64,6 +66,7 @@
 import { Pagination, DatePicker, Button, Input} from "element-ui";
 import axios from 'axios';
 import data from "@/../mock/mock-laborList.json";                                   // mock json
+import seatSrv from "@/../src/views/services/seat.service.js";
 
 /* eslint-disable */
 export default {
@@ -76,47 +79,72 @@ export default {
             totalPageNum: 1
         };
     },
-    mounted() {
-        this.init();
-    },
-    methods: {
-        searchList() {
-            let _this = this;
-            if (this.keyWord) {
-                axios.post('/api/api/account/searchSeat', {
-                    keyWord: this.keyWord
-                }).then((response) => {
-                    let res = response.data;
-                    if (res.status == 0) {
-                        _this.laborList = res.data.list;
-                        _this.totalPageNum = res.data.totalPageNum;
-                    }
-                });
-            } else {
-                this.init();
-            }
-        },
-        handleCurrentChange(val) {
-            let currentPage = `${val}`;
-            let pageSize = this.pageSize;
-            this.init(currentPage, pageSize);           
-        },
-        init(currentPage, pageSize) {
-            let _this = this;
-            axios.post("/api/api/account/manualWorkState ", {
-                currentPage: currentPage == undefined ? 1 : currentPage,
-                pageSize   : pageSize    == undefined ? 10: pageSize
-            }).then((response) => {
-                let res = response.data;
-                if(res.status == 0) {
-                    _this.laborList = res.data.list;
-                    // _this.testList = [_this.laborList[0]];
-                    _this.totalPageNum = res.data.totalPageNum;
-                }
+    // mounted() {
+    //     this.init();
+    // },
+    beforeRouteEnter: (to, from, next) => {
+        next(vm => {
+            seatSrv.laborSeat(vm.keyWord, this.currentPage, this.pageSize).then(resp => {
+                vm.laborList = resp.data.list
+                vm.totalPageNum = resp.data.totalPageNum
+            }, err => {
+                vm.$message.err(err.msg);
             });
+        })
+    },
+
+    methods: {
+
+        searchList(currentPage = this.currentPage) {
+            seatSrv.laborSeat(this.keyWord, currentPage, this.pageSize).then(resp => {
+                this.laborList = resp.data.list;
+                this.currentPage = currentPage;
+                this.totalPageNum = resp.data.totalPageNum;
+            }, err => {
+                this.$message.err(err.msg);
+            })
+
         }
     }
-};
+}
+
+    //     searchList() {
+    //         let _this = this;
+    //         if (this.keyWord) { 
+    //             axios.post('/api/api/account/searchSeat', {
+    //                 keyWord: this.keyWord
+    //             }).then((response) => {
+    //                 let res = response.data;
+    //                 if (res.status == 0) {
+    //                     _this.laborList = res.data.list;
+    //                     _this.totalPageNum = res.data.totalPageNum;
+    //                 }
+    //             });
+    //         } else {
+    //             this.init();
+    //         }
+    //     },
+    //     handleCurrentChange(val) {
+    //         let currentPage = `${val}`;
+    //         let pageSize = this.pageSize;
+    //         this.init(currentPage, pageSize);           
+    //     },
+    //     init(currentPage, pageSize) {
+    //         let _this = this;
+    //         axios.post("/api/api/account/manualWorkState ", {
+    //             currentPage: currentPage == undefined ? 1 : currentPage,
+    //             pageSize   : pageSize    == undefined ? 10: pageSize
+    //         }).then((response) => {
+    //             let res = response.data;
+    //             if(res.status == 0) {
+    //                 _this.laborList = res.data.list;
+    //                 // _this.testList = [_this.laborList[0]];
+    //                 _this.totalPageNum = res.data.totalPageNum;
+    //             }
+    //         });
+    //     }
+    // }
+// }
 </script>
 
 <style lang="scss" scoped>

@@ -45,6 +45,28 @@ export default {
             }
         );
     },
+    // 删除模板
+    delTemplate(smsTemplateId) {
+        return axios({
+            url: "/api/api/sms/delSmsTemplate",
+            method: "post",
+            data: { smsTemplateId }
+        }).then(
+            resp => {
+                if (resp.data.status == 0) {
+                    return Promise.resolve(resp.data);
+                } else {
+                    return Promise.reject(resp.data);
+                }
+            },
+            err => {
+                if (!err.msg) {
+                    err.msg = "网络故障";
+                }
+                return Promise.reject(err);
+            }
+        )
+    },
     // 获取模板
     getTemplate(smsTemplateId) {
         return axios({
@@ -68,11 +90,11 @@ export default {
         );
     },
     // 更新模板
-    updateTemplate(smsTemplateId, smsTemplateName, smsTemplateContent) {
+    updateTemplate(smsTemplateId, smsTitle, smsText) {
         return axios({
             url: "/api/api/sms/updateSmsTemplate",
             method: "post",
-            data: { smsTemplateId, smsTemplateName, smsTemplateContent }
+            data: { smsTemplateId, smsTitle, smsText }
         }).then(
             resp => {
                 if (resp.data.status == 0) {
@@ -89,8 +111,4 @@ export default {
             }
         );
     },
-
-
-
-
 };

@@ -16,7 +16,7 @@
                     </el-date-picker>
                 </div>
                 <div class="col-md-1 search-field search-field_controls">
-                    <button class="btn btn-primary search-btn" v-on:click.stop="searchList">搜索</button>
+                    <button class="btn btn-primary search-btn" v-on:click.stop="searchList(1)">搜索</button>
                 </div>
             </div>
             <div class="row">
@@ -42,8 +42,8 @@
                                 <td>{{item.taskName}}</td>
                                 <td>{{objStatus[item.taskStatus]}}</td>
                                 <td>{{item.publisher}}</td>
-                                <td>{{item.startTime}}</td>
-                                <td>{{item.zipUpdateTime}}</td>
+                                <td>{{item.startTime.substring(0, 16).replace("T", " ")}}</td>
+                                <td>{{item.zipUpdateTime.substring(0, 16).replace("T", " ")}}</td>
                                 <td>{{item.speed}}</td>
                                 <td>{{item.robotNum}}</td>
                                 <td>
@@ -52,23 +52,24 @@
                                     }}">查看明细</router-link>
                                 </td>
                                 <td>
-                                    <button class="btn btn-primary" style="color: #fff;" @click="stop(item.taskID)">暂停</button>
+                                    <button class="btn btn-primary" style="color: #fff;" @click="pause(item.taskID)">暂停</button>
                                     <router-link class="btn btn-warning" :to="{path: '/taskmanage/TaskRelease', query: {
-                                        taskId: '20180529123701'
+                                        taskId: '20180529123701',
+                                        currentPage: currentPage
                                     }}" style="color: #fff;">修改</router-link>
                                     <button class="btn btn-danger" style="color: #fff;" @click="over(item.taskID)">结束</button>
                                 </td>
                             </tr>                                          
                         </tbody>
                     </table>
-                    <div class="page" v-show="(taskList.length > 0 && totalPage > 10)">
+                    <div class="page" v-show="(taskList.length > 0 && totalPageNum > 10)">
                         <el-pagination 
                             background 
-                            @current-change="handleCurrentChange"
+                            @current-change="searchList"
                             :current-page.sync="currentPage"
-                            :page-size="10"
+                            :page-size="pageSize"
                             layout="total, prev, pager, next"
-                            :total="totalPage"
+                            :total="totalPageNum"
                         >
                         </el-pagination>
                     </div>
@@ -94,6 +95,7 @@
 import { Pagination, DatePicker, Button, Input, Message} from "element-ui";
 import axios from 'axios';
 import data from "@/../mock/mock-taskList.json";                                                                        // mock json
+import taskListSrv from "@/../src/views/services/taskList.service.js";
 
 /* eslint-disable */
 export default {
@@ -101,98 +103,80 @@ export default {
         return {
             startDate: "",
             endDate: "",
-            stopTaskid: "",       
+            pauseTaskId: "",       
             objStatus: {
                 "0": "进行中",
                 "1": "已暂停",
                 "2": "已结束"
-            },     
+            },
             centerDialogVisible: false,
             currentPage: 1,
             pageSize: 10,
-            totalPage: 1,
+            totalPageNum: 1,
             taskList: []                                                    // json数据
         };
     },
-    mounted() {
-        this.init();
+    beforeRouteEnter: (to, from, next) => {
+        next(vm => {
+            taskListSrv.taskList(vm.startDate, vm.endDate, vm.currentPage, vm.pageSize).then(resp => {    
+                vm.taskList = resp.data.list;
+                vm.totalPageNum = resp.data.totalPageNum;
+            }, err => {
+                vm.$message.error(err.msg);
+            });
+        })
     },
     methods: {
-        searchList() {
-            let startDate = this.startDate;
-            let endDate   = this.endDate;
-            let _this     = this;
-            if(startDate == false && endDate == false) {
-                this.init();
-                return;
-            }
-            axios.post("/api/api/task/searchTaskList", {                        // 查询任务列表
-                startTime: startDate,
-                endTime  : endDate
-            }).then((response) => {
-                let res = response.data;
-                _this.taskList = res.data.list;
-                _this.totalPage = res.data.totalPageNum;
+        searchList(currentPage = this.currentPage) {
+            taskListSrv.taskList(this.startDate, this.endDate, currentPage, this.pageSize).then(resp => {
+                this.taskList = resp.data.list;
+                this.totalPageNum = resp.data.totalPageNum;
+                this.currentPage = currentPage; 
+            }, err => {
+                this.$message.error(err.msg);
             });
         },
-        handleCurrentChange(val) {                                            // 分页
-            let currentPage = `${val}`;
-            let pageSize = this.pageSize;
-            this.init(currentPage, pageSize);           
-        },
-        init(currentPage, pageSize) {
-           let _this = this;
-           axios.post("/api/api/task/taskList", {
-               currentPage: currentPage == undefined ? 1 : currentPage,
-               pageSize: pageSize == undefined ? 10 : pageSize
-           }).then(function(response) {
-               console.log(response);
-               let res = response.data;
-               if (res.status == 0) {
-                    _this.taskList  =  res.data.list;
-                    _this.totalPage =  res.data.totalPageNum;
-               }
-           }).catch(function(error) {
-               alert(error);
-           });
-        },
-        stop(taskId) {
+
+        // 暂停任务
+        pause(taskId) {
             this.centerDialogVisible = true;
-            this.stopTaskid = taskId;
-            console.log(this.stopTaskid);
+            this.pauseTaskId = taskId;
+            console.log(this.pauseTaskId);
         },
         confirmStop() {
-            let _this = this;
             this.centerDialogVisible = false;
-            
-            axios.post("/api/api/task/pauseTask", {                                                  // 暂停任务
-                taskId: this.stopTaskid
-            }).then(function(response) {
-                let res = response.data;
-                if (res.status == 0) {
-                    _this.$message.success("任务暂停成功!");
-                    _this.init();
-                }
-            });
-        },
-        over(taskID) {
-            let _this = this;
 
+            taskListSrv.pauseTask(this.pauseTaskId).then(resp => {
+                this.searchList(this.currentPage);
+                this.$message.success("任务已暂停!");
+            }, err => {
+                this.$message.error(err.msg);
+            })
+
+        },
+        over(taskId) {
             this.$confirm('此操作将永久结束该任务, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning',
                 center: 'true'
             }).then(() => {
-                axios.post("/api/api/task/overTask", {                                              //  结束任务
-                    taskId: taskID
-                }).then((response ) => {
-                    let res = response.data;
-                    if (res.status == 0) {
-                        this.$message.success("任务结束");
-                        _this.init();
-                    }
-                })
+                
+                taskListSrv.overTask(taskId).then(resp => {
+                    this.searchList(this.currentPage);
+                }, err => {
+                    this.$message.error(err.msg);
+                });
+
+                // axios.post("/api/api/task/overTask", {                                              //  结束任务
+                //     taskId: taskID
+                // }).then((response ) => {
+                //     let res = response.data;
+                //     if (res.status == 0) {
+                //         this.$message.success("任务结束");
+                //         _this.init();
+                //     }
+                // })
             }).catch(() => {
                 this.$message({
                     type: 'info',

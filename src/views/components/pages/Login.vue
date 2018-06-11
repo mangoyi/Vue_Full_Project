@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-md-8">
-          <h1 class="title">银行外呼系统</h1>
+          <h1 class="title">智能外呼系统</h1>
           <div class="card-group mb-0">
             <form class="card p-4" name="loginForm" novalidate>
               <div class="card-block">
@@ -50,6 +50,7 @@ export default {
   },
   methods: {
     login() {
+      let _this = this;
       if (!(this.username && this.password)) {
         this.login_err = true;
         this.info = '请输入用户信息';
@@ -62,11 +63,17 @@ export default {
           let res = response.data;
           console.log(res);
           if(res.status == 0) {
-            console.log("success");
+            this.$router.push("/dashboard");
+          } else if (res.status == 1) {   // 密码错误
+            _this.$message.error(res.msg);
+          } else if (res.status == 2){
+            _this.$confirm(res.msg, '提示', {
+                confirmButtonText: '确定',
+                type: 'warning'
+            });
           }
         });
 
-        this.$router.push("/dashboard");
       }
     }
   }

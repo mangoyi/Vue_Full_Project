@@ -5,13 +5,6 @@
         </div>
         <div class="content-show">
             <div class="row list-search" style="margin-bottom: 20px;">
-                <!-- <div class="col-md-3 search-field">
-                    <div class="label" style="left:0px;">充值金额：</div>
-                    <el-input v-model="input" placeholder="请输入内容"></el-input>
-                </div>
-                <div class="col-md-1 search-field search-field_controls">
-                    <button class="btn btn-primary search-btn">搜索</button>
-                </div> -->
                 <div class="col-md-3 search-field">
                     <div style="left:0px" class="label">开始日期：</div>
                     <el-date-picker size="large" v-model="startDate" type="date" placeholder="选择日期时间" value-format="yyyy-MM-dd">
@@ -27,7 +20,7 @@
                     <input type="text" class="form-control input-field" placeholder="请输入电话号码" v-model="number" />
                 </div>
                 <div class="col-md-1 search-field search-field_controls">
-                    <button class="btn btn-primary search-btn" v-on:click.stop="searchList">搜索</button>
+                    <button class="btn btn-primary search-btn" v-on:click.stop="searchList(1)">搜索</button>
                 </div>
             </div>
             <div class="row">
@@ -59,7 +52,7 @@
                             :current-page.sync="currentPage"
                             :page-size="10"
                             layout="total, prev, pager, next"
-                            :total="100"
+                            :total="totalPageNum"
                         >
                         </el-pagination>
                     </div>
@@ -82,6 +75,7 @@
 import { Pagination, DatePicker, Button, Input} from "element-ui";
 import axios from "axios";
 import data from "@/../mock/mock-smsRecords.json";
+import smsRecordSrv from "@/../src/views/services/smsRecord.service.js";
 
 /* eslint-disable */
 export default {
@@ -91,6 +85,7 @@ export default {
             centerDialogVisible: false,
             currentPage: 1,
             pageSize: 10,
+            totalPageNum: 1,
             input: '',
             startDate: '',
             endDate: '',
@@ -98,50 +93,71 @@ export default {
             cartList: []
         };
     },
-    mounted() {
-        let currentPage;
-        let pageSize;
-        this.initSmsRecords(currentPage, pageSize);
-    },
-    methods: {
-        handleCurrentChange(val) {
-            alert("当前页:"+`${val}`+", 当前页个数:"+this.pageSize )
-            let currentPage = `${val}`;
-            let pageSize = this.pageSize;
-            this.init(currentPage, pageSize);           
-        },
-        initSmsRecords(currentPage, pageSize) {
-            this.cartList = data.data.list;
-            /*
-            axios.post('/api/home/initSmsRecords', {
-               currentPage: currentPage == undefined ? 1 : this.currentPage,
-               pageSize: pageSize == undefined ? 10 : this.pageSize 
-            }).then((response) => {
-                let res = response.data;
-                console.log(res);
-            })
-            */
-        },
-        searchList() {
-            
-            if (this.startDate != "" && this.endDate != "" && this.number != "") {
-                
-                /*
-                axios.post('/api/home/searchSmsRecord', {
-                    startDate: this.startDate,
-                    endDate: this.endDate,
-                    number : this.number
-                }).then((response) => {
-                    let res = response.data;
-                    console.log(res);
-                })
-                */
-                
-            } else {
-                this.$message.error("请填写完信息在搜索");
-            }
+    // mounted() {
+    //     let currentPage;
+    //     let pageSize;
+    //     this.initSmsRecords(currentPage, pageSize);
+    // },
+    beforeRouteEnter: (to, from, next) => {
+        next(vm => {
+            smsRecordSrv.smsRecord("", "", "", vm.currentPage, vm.pageSize).then(resp => {
+                let data = resp.data.list;
+                console.log(data);
+            }, err => {
 
+            });
+        })
+    },
+
+    methods: {
+
+        searchList(currentPage = this.currentPage) {
+            smsRecordSrv.smsRecord(this.startDate, this.endDate, this.number, currentPage, this.pageSize).then(resp => {
+                this.cartList = resp.data.list;
+            }, err => {
+                this.$message.error(err.msg);
+            });
         }
+
+
+        // handleCurrentChange(val) {
+        //     alert("当前页:"+`${val}`+", 当前页个数:"+this.pageSize )
+        //     let currentPage = `${val}`;
+        //     let pageSize = this.pageSize;
+        //     this.init(currentPage, pageSize);           
+        // },
+        // initSmsRecords(currentPage, pageSize) {
+        //     this.cartList = data.data.list;
+
+        //     // smsRecordSrv.smsRecordSrv("", "", "", )
+        //     axios.post('/api/home/initSmsRecords', {
+        //        currentPage: currentPage == undefined ? 1 : this.currentPage,
+        //        pageSize: pageSize == undefined ? 10 : this.pageSize 
+        //     }).then((response) => {
+        //         let res = response.data;
+        //         console.log(res);
+        //     })
+        // },
+        // searchList() {
+            
+        //     if (this.startDate != "" && this.endDate != "" && this.number != "") {
+                
+        //         /*
+        //         axios.post('/api/home/searchSmsRecord', {
+        //             startDate: this.startDate,
+        //             endDate: this.endDate,
+        //             number : this.number
+        //         }).then((response) => {
+        //             let res = response.data;
+        //             console.log(res);
+        //         })
+        //         */
+                
+        //     } else {
+        //         this.$message.error("请填写完信息在搜索");
+        //     }
+
+        // }
 
     }
 };

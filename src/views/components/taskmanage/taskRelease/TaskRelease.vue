@@ -212,20 +212,18 @@ export default {
         },
         initZipfile() {
             if (this.checkTaskflag) {
-                this.fileList.push({
-                    name: "something.zip",
-                    url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
-                });
+                // this.fileList.push({
+                //     name: "something.zip",
+                //     url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
+                // });
 
                 // 初始化 当前任务zip文件
-                /*
-                    axios.post('/home/taskZipfile', {
-                        taskId: "10001"
-                    }).then((response) => {
-                        let res = response.data;
-                        console.log('获取压缩文件成功');
-                    });
-                */
+                axios.get('/api/api/task/searchTask', {
+                    params: {taskId: this.$route.query.taskId}
+                }).then((response) => {
+                    let res = response.data;
+                    console.log(res+"////////////////////");
+                });
 
             }
         },
