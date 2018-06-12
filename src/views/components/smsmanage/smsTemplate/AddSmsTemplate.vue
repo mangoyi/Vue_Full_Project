@@ -20,7 +20,7 @@
       <div class="row list-search">
         <div class="col-md-12 search-field">
           <div class="label">模板内容：</div>
-          <input type="text" v-model.trim="smsTemplateText" class="form-control input-field" placeholder="请输入短信内容" />
+          <input type="text" v-model.trim="smsTemplateContent" class="form-control input-field" placeholder="请输入短信内容" />
         </div>
       </div>
     </div>
@@ -40,7 +40,7 @@ export default {
     return {
      smsTemplateId: '',
      smsTemplateName:'',
-     smsTemplateText:''
+     smsTemplateContent:''
     };
   },
   components: {
@@ -50,14 +50,11 @@ export default {
     conTemplate() {
       let smsTemplateId = this.smsTemplateId;
       let smsTemplateName = this.smsTemplateName;
-      let smsTemplateText = this.smsTemplateText;
-      if( !!smsTemplateId && !!smsTemplateName && !!smsTemplateText) {
-        smsTemplateSrv.addTemplate( smsTemplateId , smsTemplateName, smsTemplateText).then(resp => {
-            console.log(resp);
+      let smsTemplateContent = this.smsTemplateContent;
+      if( !!smsTemplateId && !!smsTemplateName && !!smsTemplateContent) {
+        smsTemplateSrv.addTemplate( smsTemplateId , smsTemplateName, smsTemplateContent).then(resp => {
             this.$message.success("新增模板成功!");
-            this.smsTemplateId = "";
-            this.smsTemplateName = "";
-            this.smsTemplateText = "";
+            this.$router.push("/smsmanage/SmsTemplate");
         }, err => {
             this.$message.error(err.msg);
         });

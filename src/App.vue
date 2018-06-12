@@ -331,6 +331,13 @@ input:focus {
   margin-left: 8px;
 }
 
+// 重写穿梭框样式
+.el-transfer {
+  height: 360px;
+}
+.el-transfer-panel ,.el-transfer-panel__body, .el-checkbox-group{
+  height: inherit;
+}
 
 </style>
 

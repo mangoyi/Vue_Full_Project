@@ -2,7 +2,10 @@
   <div class="content_page animated zoomIn">
     <div class="content-title">
       <div class="title">修改模板</div>
-      <router-link class="btn btn-info back" :to="'/smsmanage/SmsTemplate'">
+      <router-link class="btn btn-info back" :to="{
+          path: '/smsmanage/SmsTemplate',
+          query: {currentPage: currentPage}
+        }">
         返回
       </router-link>
     </div>
@@ -40,7 +43,10 @@ export default {
     return {
      smsId: '',
      smsName:'',
-     smsText:''
+     smsText:'',
+
+     // 在模板页面中的页数
+     currentPage: 1
     };
   },
   components: {
@@ -56,6 +62,8 @@ export default {
         }, error => {
           vm.$message.error(err.msg);
         })
+
+        vm.currentPage = vm.$route.query.currentPage;                             // 模板列表当前页
       });
   },
   methods: {
@@ -67,6 +75,7 @@ export default {
         smsTemplateSrv.updateTemplate(smsId, smsName, smsText).then(resp => {
           console.log(resp);
           this.$message.success("更新成功");
+          this.$router.push({path: "/smsmanage/SmsTemplate", query:{currentPage: this.$route.query.currentPage}});          // 跳回模板列表所在当前页
         }, err => {
           this.$message.error(err.msg);
         })

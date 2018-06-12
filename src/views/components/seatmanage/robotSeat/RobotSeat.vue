@@ -29,7 +29,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="(item, index) in robotList" :key="index">
-                                <td>{{index+((sequence - 1)*10)}}</td>
+                                <td>{{index+(currentPage - 1)*10}}</td>
                                 <td>{{item.accountName}}</td>
                                 <td>{{item.accountUser}}</td>
                                 <td>
@@ -46,9 +46,9 @@
                     <div class="page" v-show="(robotList.length > 0 && totalPageNum > 10)">
                         <el-pagination 
                             background 
-                            @current-change="handleCurrentChange"
+                            @current-change="searchList"
                             :current-page.sync="currentPage"
-                            :page-size="10"
+                            :page-size="pageSize"
                             layout="total, prev, pager, next"
                             :total="totalPageNum"
                         >
@@ -65,8 +65,6 @@
 
 <script>
 import { Pagination, Input} from "element-ui";
-import axios from 'axios';
-import data from "@/../mock/mock-robotList.json";                                   // mock json
 import seatSrv from "@/../src/views/services/seat.service.js";
 
 /* eslint-disable */
@@ -81,16 +79,13 @@ export default {
             sequence: 1
         };
     },
-    // mounted() {
-    //     this.init();
-    // },
     beforeRouteEnter: (to, from, next) => {
         next(vm => {
             seatSrv.robotSeat(vm.keyWord, vm.currentPage, vm.pageSize).then(resp => {
                 vm.robotList = resp.data.list;
                 vm.totalPageNum = resp.data.totalPageNum
             }, err => { 
-                vm.$message.err(err.msg);
+                vm.$message.error(err.msg);
             })
         });
     },
@@ -102,46 +97,10 @@ export default {
                 this.totalPageNum = resp.data.totalPageNum;
                 this.currentPage = currentPage;
             }, err => {
-                this.$message.err(err.msg);
+                this.$message.error(err.msg);
             })
 
         }
-
-        // searchList() {
-        //     let _this = this;
-        //     if (this.keyWord) {
-        //         axios.post('/api/api/account/searchSeat', {
-        //             keyWord: this.keyWord
-        //         }).then((response) => {
-        //             let res = response.data;
-        //             if (res.status == 0) {
-        //                 _this.robotList = res.data.list;
-        //                 _this.totalPageNum = res.data.totalPageNum;
-        //             }
-        //         });
-        //     } else {
-        //         this.init();
-        //     }
-        // },
-        // handleCurrentChange(val) {
-        //     let currentPage = `${val}`;
-        //     this.sequence = currentPage;
-        //     let pageSize = this.pageSize;
-        //     this.init(currentPage, pageSize);           
-        // },
-        // init(currentPage, pageSize) {
-        //     let _this = this;
-        //     axios.post("/api/api/account/robotWorkState", {
-        //         currentPage: currentPage == undefined ? 1 : currentPage,
-        //         pageSize   : pageSize    == undefined ? 10: pageSize
-        //     }).then((response) => {
-        //         let res = response.data;
-        //         if(res.status == 0) {
-        //             _this.robotList = res.data.list;
-        //             _this.totalPageNum = res.data.totalPageNum;
-        //         }
-        //     });
-        // }
     }
 };
 </script>

@@ -17,7 +17,7 @@
                 </div>
                 <div class="col-md-3 search-field">
                     <div style="left: 0px" class="label">查询号码：</div>
-                    <input type="text" class="form-control input-field" placeholder="请输入电话号码" v-model="number" />
+                    <input type="text" class="form-control input-field" placeholder="请输入电话号码" v-model="phone" />
                 </div>
                 <div class="col-md-1 search-field search-field_controls">
                     <button class="btn btn-primary search-btn" v-on:click.stop="searchList(1)">搜索</button>
@@ -36,21 +36,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in cartList" :key="item.id">
-                                <td>{{item.sequence}}</td>
+                            <tr v-for="(item, index) in recordList" :key="index">
+                                <td>{{index + (currentPage - 1)*10}}</td>
                                 <td>{{item.taskId}}</td>
-                                <td>{{item.number}}</td>
-                                <td>{{item.sendTime}}</td>
-                                <td>{{item.sendText}}</td>
+                                <td>{{item.phone}}</td>
+                                <td>{{item.sendTime.replace("T"," ")}}</td>
+                                <td>{{item.smsTemplateText}}</td>
                             </tr>
                         </tbody>
                     </table>
-                    <div class="page" v-show="cartList.length > 0">
+                    <div class="page" v-show="totalPageNum >= 10">
                         <el-pagination 
                             background 
-                            @current-change="handleCurrentChange"
+                            @current-change="searchList"
                             :current-page.sync="currentPage"
-                            :page-size="10"
+                            :page-size="pageSize"
                             layout="total, prev, pager, next"
                             :total="totalPageNum"
                         >
@@ -89,76 +89,30 @@ export default {
             input: '',
             startDate: '',
             endDate: '',
-            number: '',
-            cartList: []
+            phone: '',
+            recordList: []
         };
     },
-    // mounted() {
-    //     let currentPage;
-    //     let pageSize;
-    //     this.initSmsRecords(currentPage, pageSize);
-    // },
     beforeRouteEnter: (to, from, next) => {
         next(vm => {
-            smsRecordSrv.smsRecord("", "", "", vm.currentPage, vm.pageSize).then(resp => {
-                let data = resp.data.list;
-                console.log(data);
+            smsRecordSrv.smsRecord(vm.startDate, vm.endDate, vm.phone, vm.currentPage, vm.pageSize).then(resp => {
+                vm.recordList = resp.data.list;
+                vm.totalPageNum = resp.data.totalPageNum;
             }, err => {
-
+                vm.$message.error(err.msg);
             });
         })
     },
-
     methods: {
-
         searchList(currentPage = this.currentPage) {
-            smsRecordSrv.smsRecord(this.startDate, this.endDate, this.number, currentPage, this.pageSize).then(resp => {
-                this.cartList = resp.data.list;
+            smsRecordSrv.smsRecord(this.startDate, this.endDate, this.phone, currentPage, this.pageSize).then(resp => {
+                this.recordList = resp.data.list;
+                this.totalPageNum = resp.data.totalPageNum;
+                this.currentPage = currentPage;
             }, err => {
                 this.$message.error(err.msg);
             });
         }
-
-
-        // handleCurrentChange(val) {
-        //     alert("当前页:"+`${val}`+", 当前页个数:"+this.pageSize )
-        //     let currentPage = `${val}`;
-        //     let pageSize = this.pageSize;
-        //     this.init(currentPage, pageSize);           
-        // },
-        // initSmsRecords(currentPage, pageSize) {
-        //     this.cartList = data.data.list;
-
-        //     // smsRecordSrv.smsRecordSrv("", "", "", )
-        //     axios.post('/api/home/initSmsRecords', {
-        //        currentPage: currentPage == undefined ? 1 : this.currentPage,
-        //        pageSize: pageSize == undefined ? 10 : this.pageSize 
-        //     }).then((response) => {
-        //         let res = response.data;
-        //         console.log(res);
-        //     })
-        // },
-        // searchList() {
-            
-        //     if (this.startDate != "" && this.endDate != "" && this.number != "") {
-                
-        //         /*
-        //         axios.post('/api/home/searchSmsRecord', {
-        //             startDate: this.startDate,
-        //             endDate: this.endDate,
-        //             number : this.number
-        //         }).then((response) => {
-        //             let res = response.data;
-        //             console.log(res);
-        //         })
-        //         */
-                
-        //     } else {
-        //         this.$message.error("请填写完信息在搜索");
-        //     }
-
-        // }
-
     }
 };
 </script>

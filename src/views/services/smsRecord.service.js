@@ -2,11 +2,11 @@ import axios from "axios";
 
 export default {
     // 短信记录
-    smsRecord(startDate, endDate, number, currentPage, pageSize) {
+    smsRecord(startDate, endDate, phone, currentPage, pageSize) {
         return axios({
-            url: "/api/api/sms/searchSmsRecord",
+            url: "/api/api/sms/searchSmsLog",
             method: "post",
-            data: { startDate, endDate, number, currentPage, pageSize }
+            data: { startDate, endDate, phone, currentPage, pageSize }
         }).then(
             resp => {
                 if (resp.data.status == 0) {

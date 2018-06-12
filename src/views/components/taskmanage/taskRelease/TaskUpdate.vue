@@ -1,13 +1,19 @@
 <template>
     <div class="animated fadeIn content_page">
         <div class="content-title">
-            <div class="title">任务发布</div>
+            <div class="title">任务修改</div>
+            <router-link class="btn btn-info back" :to="{
+                path: '/taskManage/TaskList',
+                query: {currentPage: currentPage}
+            }">
+                返回
+            </router-link>
         </div>
         <div class="content-show">
             <div class="row list-search">
                 <div class="search-field">
                     <div class="label" style="left:0px;top: 4px;">任务名称：</div>
-                    <el-input v-model.trim="taskName" placeholder="请输入内容" ></el-input>
+                    <el-input v-model.trim="taskName" placeholder="请输入内容"  disabled></el-input>
                 </div>
                 <div class="col-md-12 search-field">
                     <div class="label" style="left:0px;top: 24px;">选择文件：</div>
@@ -27,6 +33,7 @@
                             <div slot="tip" class="el-upload__tip">只能上传单个zip文件，且不超过2MB</div>
                         </el-upload>
                     </div>
+                    <a style="margin-left: 10px; color: rgb(0,192,239)" :href="zipFileUrl" download="tel.txt">点击下载任务文件>>></a>
                 </div>
                 <div class="col-md-12 search-field" style="margin-bottom: 40px;">
                     <div class="yi-transferWrap yi-transferWrapL">
@@ -42,8 +49,6 @@
                             </template>                        
                         </div>
                     </div>
-                <!-- </div> -->
-                <!-- <div class="col-md-12 search-field" style="margin-bottom: 40px;"> -->
                     <div class="yi-transferWrap yi-transferWrapR">
                         <div class="label" style="left: -88px">人工座席：</div>
                         <div class="transfer-wrap">
@@ -57,7 +62,7 @@
                     </div>
                 </div>
                 <div class="col-md-12 search-field">
-                    <el-button type="primary" class="col-md-2" @click="confirmCreate">确认创建</el-button>
+                    <el-button type="primary" class="col-md-2" @click="confirmUpdate">确认修改</el-button>
                 </div>
             </div>
         </div>
@@ -83,6 +88,7 @@ import laborList from "@/../mock/mock-laborList.json";                          
 import smsTemplate from "@/../mock/mock-smsTemplate.json";                     // mock json
 import taskSrv from "@/../src/views/services/task.service.js";
 
+
 /* eslint-disable */
 export default {
     data() {
@@ -100,10 +106,14 @@ export default {
             checkedTransferData1: [],                           // 工作的员工坐席
 
             // 服务器地址
-            Url: "http://www.baidu.com"
+            zipFileUrl: "",
+
+            // 在任务列表中的页数
+            currentPage: 1
         };
     },
     mounted() {
+        // this.checkTaskid();
         // this.initRobot();
         // this.initLabor();
     },
@@ -114,21 +124,25 @@ export default {
                 data.forEach((item, index) => {
                     vm.transferData.push(
                         (function() {
-                            if ( item.robotState == 1) {                                           // 机器人在工作 所以不能选择
+                            if ( item.robotState == 1 && item.robotTask != 10001) {                    // 机器人在工作，并且不是在当前这个任务中。 所以不能选择
                                 return {
                                     key: index,
                                     label: item.Raccount + "("+item.Rname+")",
                                     disabled: true
                                 }
-                            }
+                            } else if ( item.robotState == 1 && item.robotTask == 10001) {
+                                thatcheckedTransferData.push(index);                                // 机器人在工作，并且在当前这个任务中。所以显示在右侧
+                            } 
                             return {
                                 key: index,                                                         // 自增, 所有机器人(空闲机器人)
-                                label: item.Raccount + "(" + item.Rname + ")",
+                                label: item.Raccount + "("+item.Rname+")",
                                 disabled: false
                             }
                         })()
                     );
-                })
+                });
+            }, err => {
+                vm.$message.error(err.msg);
             });
 
             taskSrv.getManual().then(resp => {
@@ -136,26 +150,42 @@ export default {
                 data.forEach((item, index) => {
                     vm.transferData1.push(
                         (function() {
-                            if ( item.manualState == 1) {                                           // 员工在工作，所以不能选择
+                            if ( item.manualState == 1 && item.taskId != 10001) {                    // 员工在工作，并且不是在当前这个任务中。 所以不能选择
                                 return {
                                     key: index,
-                                    label: item.Maccount + "(" + item.Mname +")",
+                                    label: item.Maccount + "("+item.Mname+")",
                                     disabled: true
                                 }
+                            } else if ( item.manualState == 1 && item.taskId == 10001) {
+                                thatcheckedTransferData.push(index);                                // 员工在工作，并且在当前这个任务中。所以显示在右侧
                             } 
                             return {
                                 key: index,                                                         // 自增, 所有员工(空闲员工)
-                                label: item.Maccount + "("+ item.Mname +")",
+                                label: item.Maccount + "("+item.Mname+")",
                                 disabled: false
                             }
                         })()
                     );
-                })
-            })
-        })
-    },
+                });
+            }, err => {
+                vm.$message.error(err.msg);
+            });
 
+            taskSrv.getZip(vm.$route.query.taskId).then(resp => {
+                let zipUrl = resp.msg;
+                vm.zipFileUrl = zipUrl;
+            }, err => {
+                vm.$message.error(err.msg);
+            });
+
+            vm.currentPage = vm.$route.query.currentPage;                    
+        });
+    },
     methods: {
+        // checkTaskid() {
+        //     // 初始化当前任务已上传的zip文件
+        //     this.initZipfile();
+        // },
         beforeAvatarUpload(file){
             const testmsg=file.name.substring(file.name.lastIndexOf('.')+1);  
             const extention = testmsg === 'zip';
@@ -195,6 +225,23 @@ export default {
                 this.formfile = file;
             }
         },
+        // initZipfile() {
+        //     // if (this.checkTaskflag) {
+        //         // this.fileList.push({
+        //         //     name: "something.zip",
+        //         //     url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
+        //         // });
+
+        //         // 初始化 当前任务zip文件
+        //         axios.get('/api/api/task/searchTask', {
+        //             params: {taskId: this.$route.query.taskId}
+        //         }).then((response) => {
+        //             let res = response.data;
+        //             console.log(res+"////////////////////");
+        //         });
+
+        //     // }
+        // },
         handleRemove(file, fileList) {
             this.$message.success("已成功移除了" + file.name + "文件");
         },
@@ -215,26 +262,25 @@ export default {
         //         let res = response.data;
         //         if (res.status == 0) {
         //             data = res.data.list;
-
-
         //             data.forEach((item, index) => {
         //                 this.transferData.push(
         //                     (function() {
-
-        //                         console.log("==============================================================================创建任务");
-        //                         if ( item.robotState == 1) {                                           // 机器人在工作 所以不能选择
+        //                         console.log("==============================================================================修改任务");
+                            
+        //                         if ( item.robotState == 1 && item.robotTask != 10001) {                    // 机器人在工作，并且不是在当前这个任务中。 所以不能选择
         //                             return {
         //                                 key: index,
-        //                                 label: item.Raccount,
+        //                                 label: item.Raccount + "("+item.Rname+")",
         //                                 disabled: true
         //                             }
-        //                         }
+        //                         } else if ( item.robotState == 1 && item.robotTask == 10001) {
+        //                             thatcheckedTransferData.push(index);                                // 机器人在工作，并且在当前这个任务中。所以显示在右侧
+        //                         } 
         //                         return {
         //                             key: index,                                                         // 自增, 所有机器人(空闲机器人)
-        //                             label: item.Raccount,
+        //                             label: item.Raccount + "("+item.Rname+")",
         //                             disabled: false
         //                         }
-
         //                     })()
         //                 );
         //             });
@@ -242,7 +288,7 @@ export default {
         //     });
         // },
 
-        // labor
+        // // labor
         // initLabor() {
         //     // 员工坐席
         //     let _this = this;
@@ -256,21 +302,21 @@ export default {
         //             data.forEach((item, index) => {
         //                 this.transferData1.push(
         //                     (function() {
-        //                         console.log("==============================================================================创建任务");
-                                
-        //                         if ( item.manualState == 1) {                                           // 员工在工作，所以不能选择
+        //                         console.log("==============================================================================修改任务");
+        //                         if ( item.manualState == 1 && item.taskId != 10001) {                    // 员工在工作，并且不是在当前这个任务中。 所以不能选择
         //                             return {
         //                                 key: index,
         //                                 label: item.Maccount,
         //                                 disabled: true
         //                             }
+        //                         } else if ( item.manualState == 1 && item.taskId == 10001) {
+        //                             thatcheckedTransferData.push(index);                                // 员工在工作，并且在当前这个任务中。所以显示在右侧
         //                         } 
         //                         return {
         //                             key: index,                                                         // 自增, 所有员工(空闲员工)
-        //                             label: item.Maccount + "("+item.manualState+")",
+        //                             label: item.Maccount,
         //                             disabled: false
         //                         }
-                                
         //                     })()
         //                 );
         //             });
@@ -280,7 +326,9 @@ export default {
              
         // },
 
-        confirmCreate() {                                                           // 创建任务
+        confirmUpdate() {                                                           // 创建任务
+            let taskId = this.$route.query.taskId;                                  // 任务ID
+            
             let taskName = this.taskName;                                             // 任务名称
               
             let robotSeat = [];                                                     // 机器人坐席
@@ -300,7 +348,7 @@ export default {
             // }
             formData.append("file", this.formfile.raw);                              // 单文件formdata
             let obj = {
-                taskId: -1,                                                          // 新增任务是-1
+                taskId: taskId,                                                     
                 taskName: taskName,
                 publisher: "mangoyi",
                 robotSeat: robotSeat,
@@ -309,32 +357,38 @@ export default {
             for(let key in obj){
                 formData.append(key, obj[key]);
             };
-
+            
             if ( !!taskName && !!this.formfile && robotSeat.length > 0 && manualSeat.length > 0) {
-                taskSrv.taskRelease(formData).then(resp => {
-                    this.$message.success("任务创建成功！");
+
+                taskSrv.updateTask(formData).then(resp => {
+                    this.$message.success("任务创建成功");
+                    this.$router.push({path: "/taskManage/TaskList", query:{currentPage: this.$route.query.currentPage}});          // 跳回任务列表所在当前页
                 }, err => {
-                    this.$message.error("任务创建失败！请重试");
-                })
-                
-                // // 任务发布
+                    this.$message.error(err.msg);
+                });
+
                 // axios({
-                //     url: "/api/api/task/addNewTask",
+                //     url: "/api/api/task/updateTask",
                 //     method: "post",
                 //     data: formData,
                 //     headers: {"Content-Type": "multipart/form-data"}
                 // }).then((response) => {
                 //     let res = response.data;
                 //     if (res.status == 0) {
-                //         this.$message.success("任务创建成功！");
+                //         this.$message.success("任务修改成功！");
                 //     } else if (res.status == 1) {
-                //         this.$message.error("任务创建失败！请重试")
+                //         this.$message.error("任务修改失败！请重试")
                 //     }
                 // });
             } else {
                 this.$message.error("请填写所有内容！");
             }
+        },
+
+        globalPage() {
+            
         }
+
     }
 };
 </script>
@@ -372,5 +426,4 @@ export default {
         margin-right: 130px;
         margin-bottom: 20px;
     }
-    
 </style>

@@ -4,7 +4,7 @@ export default {
     // 员工坐席
     laborSeat(keyword, currentPage, pageSize) {
         return axios({
-            url: "/api/api/account/searchSeat",
+            url: "/api/api/account/searchManualSeat",
             method: "post",
             data: { keyword, currentPage, pageSize }
         }).then(
@@ -31,7 +31,7 @@ export default {
             data: { keyword, currentPage, pageSize }
         }).then(
             resp => {
-                if (resp.data.statsu == 0) {
+                if (resp.data.status == 0) {
                     return Promise.resolve(resp.data);
                 } else {
                     return Promise.reject(resp.data)

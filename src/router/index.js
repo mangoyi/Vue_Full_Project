@@ -99,6 +99,7 @@ import CallRecords from "@/views/components/callrecords/callRecords/CallRecords"
 // 任务管理
 import TaskList from "@/views/components/taskmanage/taskList/TaskList";
 import TaskRelease from "@/views/components/taskmanage/taskRelease/TaskRelease";
+import TaskUpdate from "@/views/components/taskmanage/taskRelease/TaskUpdate";
 import TaskDetails from "@/views/components/taskmanage/taskDetails/TaskDetails";
 
 // 坐席管理
@@ -622,6 +623,11 @@ export default new Router({
                             path: "taskRelease",
                             name: "任务发布",
                             component: TaskRelease
+                        },
+                        {
+                            path: "taskUpdate",
+                            name: "任务修改",
+                            component: TaskUpdate
                         },
                         {
                             path: "taskDetails",

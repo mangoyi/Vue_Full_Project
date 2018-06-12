@@ -31,14 +31,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in tempList" :key="item.id">
-                                <td>{{item.Id}}</td>
+                            <tr v-for="(item, index) in tempList" :key="index">
+                                <td>{{index + (currentPage - 1)*10}}</td>
                                 <td>{{item.smsTempLateId}}</td>
                                 <td>{{item.smsTempLateName}}</td>
                                 <td>{{item.smsTemplateText}}</td>
                                 <td>
                                     <router-link :to="{path: '/smsmanage/updateSmsTemplate',
-                                                        query: {smsTempLateId: item.smsTempLateId}}">修改</router-link>
+                                                        query: {
+                                                            smsTempLateId: item.smsTempLateId,
+                                                            currentPage: currentPage
+                                                            }
+                                                        }">修改</router-link>
                                     <a @click="Del(item.smsTempLateId)">删除</a>
                                 </td>
                             </tr>
@@ -78,89 +82,41 @@ export default {
         return {
             centerDialogVisible: false,
             currentPage: 1,
-            pageSize: 10,//放在统一的变量中去更改展示的条数
+            pageSize: 10,
             totalPageNum: 1,
             templateContent: '',
             tempList: [],
             delsmsTemplateId: ''
         };
     },
-    // mounted() {
-    //     this.init();
-    // },
-    //这里是页面初始化渲染，使用mouted时候页面有时候会渲染不了的
     beforeRouteEnter: (to, from, next) => {
         next(vm => {
-            //这里调sevrices里面定义的方法 需要传刚才的三个参数
-            smsTemplateSrv.messageTemplateList(vm.templateContent, vm.currentPage, vm.pageSize).then(resp => {
-                console.log(resp) //这里看一下返回值
-                vm.tempList = resp.data.list
-                vm.totalPageNum = resp.data.totalPageNum
+            let temCurrentPage = 1;
+
+            if (vm.$route.query.currentPage) {
+                // 说明是从修改模板路由过来的
+                temCurrentPage = vm.$route.query.currentPage;
+            }
+
+            smsTemplateSrv.messageTemplateList(vm.templateContent, temCurrentPage, vm.pageSize).then(resp => {
+                vm.tempList = resp.data.list;
+                vm.totalPageNum = resp.data.totalPageNum;
+                vm.currentPage = temCurrentPage;
             }, err => {
-                vm.$message.error(err.msg) //这个是错误提示用的，element里面的
+                vm.$message.error(err.msg); 
             })
         })
     },
     methods: {
-        //这个方法和上面的beforeRouteEnter基本一样就是上面绑在vm上面，下面是在this上面 
         searchSmsTemplate(currentPage = this.currentPage) {
              smsTemplateSrv.messageTemplateList(this.templateContent, currentPage, this.pageSize).then(resp => {
                 this.tempList = resp.data.list
-                this.currentPage = currentPage //这里注意一下，需要把当前点击的页数再告诉分页插件让他去显示数据
+                this.currentPage = currentPage                                                      //这里注意一下，需要把当前点击的页数再告诉分页插件让他去显示数据
                 this.totalPageNum = resp.data.totalPageNum
             }, err => {
                 this.$message.error(err.msg)
             })
         },
-
-
-
-
-        // searchSmsTemplate(currentPage) {
-        //     let _this = this;
-        //     let templateContent = this.templateContent;
-        //     if (!templateContent) {
-        //         this.$message.info("请输入搜索的模块内容");
-        //         this.init(1, 10);
-        //         return;
-        //     };
-        //     axios.post("/api/api/sms/searchSmsTemplate", {
-        //         templateContent: templateContent,
-        //         currentPage: currentPage,
-        //         pageSize: this.pageSize
-        //     }).then((response) => {
-        //         let res = response.data;
-        //         if (res.status == 0) {
-        //             let data = res.data;
-        //             _this.tempList = data.list;
-        //             _this.totalPageNum = data.totalPageNum;
-        //         }
-
-        //     });
-        // },
-        // handleCurrentChange(val) {
-        //     let currentPage = `${val}`;
-        //     let pageSize = this.pageSize;
-        //     let e = '';
-        //     this.templateContent ? this.searchSmsTemplate(e, currentPage, pageSize) : this.init(currentPage, pageSize);
-        // },
-        // init(currentPage, pageSize) {
-        //     let _this = this;
-        //     axios.get("/api/api/sms/smsTempList", {                                                     // 短信模板
-        //         params: {
-        //             currentPage: currentPage == undefined ? 1 : currentPage,
-        //             pageSize: pageSize == undefined ? 10 : pageSize
-        //         }
-        //     }).then(function(response) {
-        //         let res = response.data;
-        //         if (res.status == 0) {
-        //             _this.tempList = res.data.list;
-        //             _this.totalPageNum = res.data.totalPageNum;
-        //         }
-        //     }).catch(function(error) {
-        //         alert(error);
-        //     });
-        // },
         Del(templateId) {
             this.centerDialogVisible = true;
             this.delsmsTemplateId = templateId;
@@ -169,22 +125,10 @@ export default {
             this.centerDialogVisible = false;
             smsTemplateSrv.delTemplate(this.delsmsTemplateId).then(resp => {
                 this.$message.success("模板删除成功！");
+                location.reload();
             }, err => {
                 this.$message.error("删除失败，请重试！");
             });
-
-
-            /*
-            axios.post("/api//api/sms/delSmsTemplate", {
-                smsTemplateId: this.delsmsTemplateId
-            }).then((response) => {
-                let res = response.data;
-                console.log("删除成功!");
-                this.$message.success("删除成功！");
-            }).catch((error) => {
-                this.$message.error("删除失败，请重试!");
-            });
-            */
         }
     }
 };

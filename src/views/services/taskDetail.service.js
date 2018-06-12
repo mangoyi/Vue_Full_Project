@@ -1,12 +1,12 @@
 import axios from "axios";
 
 export default {
-    // 任务列表
-    taskList(startTime, endTime, currentPage, pageSize) {
+    // 任务明细
+    taskDetail(taskId, startDate, endDate, number, currentPage, pageSize) {
         return axios({
-            url: "/api/api/task/searchTaskList",
+            url: "/api/api/task/taskDetail",
             method: "post",
-            data: { startTime, endTime, currentPage, pageSize }
+            data: { taskId, startDate, endDate, number, currentPage, pageSize }
         }).then(
             resp => {
                 if (resp.data.status == 0) {
@@ -23,34 +23,13 @@ export default {
             }
         );
     },
-    // 暂停任务
-    pauseTask(taskId) {
+
+    // 聊天对话
+    dialog(Id) {
         return axios({
-            url: "/api/api/task/pauseTask",
+            url: "/api/api/task/searchDialog",
             method: "post",
-            data: { taskId }
-        }).then(
-            resp => {
-                if (resp.data.status == 0) {
-                    return Promise.resolve(resp.data);
-                } else {
-                    return Promise.reject(resp.data);
-                }
-            },
-            err => {
-                if (!err.msg) {
-                    err.msg = "网络故障";
-                }
-                return Promise.reject(err);
-            }
-        );
-    },
-    // 结束任务
-    overTask(taskId) {
-        return axios({
-            url: "/api/api/task/overTask",
-            method: "post",
-            data: { taskId }
+            data: { Id }
         }).then(
             resp => {
                 if (resp.data.status == 0) {

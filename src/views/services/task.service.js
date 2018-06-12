@@ -1,12 +1,14 @@
 import axios from "axios";
 
 export default {
-    // 模板列表
-    messageTemplateList(templateContent, currentPage, pageSize) {
+
+    // 任务发布
+    taskRelease(formData) {
         return axios({
-            url: "/api/api/sms/searchSmsTemplate",
+            url: "/api/api/task/addNewTask",
             method: "post",
-            data: { templateContent, currentPage, pageSize }
+            data: formData,
+            headers: { "Content-Type": "multipart/form-data" }
         }).then(
             resp => {
                 if (resp.data.status == 0) {
@@ -23,12 +25,13 @@ export default {
             }
         );
     },
-    // 新增模板
-    addTemplate(smsTemplateId, smsTemplateName, smsTemplateContent) {
+
+    // 机器人
+    getRobot() {
         return axios({
-            url: "/api/api/sms/addSmsTemplate",
+            url: "/api/api/account/getFreeRobotList",
             method: "post",
-            data: { smsTemplateId, smsTemplateName, smsTemplateContent }
+            data: {}
         }).then(
             resp => {
                 if (resp.data.status == 0) {
@@ -45,12 +48,13 @@ export default {
             }
         );
     },
-    // 删除模板
-    delTemplate(smsTemplateId) {
+
+    // 员工
+    getManual() {
         return axios({
-            url: "/api/api/sms/delSmsTemplate",
+            url: "/api/api/account/getFreeManualList",
             method: "post",
-            data: { smsTemplateId }
+            data: {}
         }).then(
             resp => {
                 if (resp.data.status == 0) {
@@ -67,12 +71,13 @@ export default {
             }
         )
     },
-    // 获取模板
-    getTemplate(smsTemplateId) {
+
+    // zip文件
+    getZip(taskId) {
         return axios({
-            url: "/api/api/sms/getSmsTemplate",
-            method: "post",
-            data: { smsTemplateId }
+            url: "/api/api/task/searchTask",
+            method: "get",
+            params: { taskId }
         }).then(
             resp => {
                 if (resp.data.status == 0) {
@@ -87,14 +92,16 @@ export default {
                 }
                 return Promise.reject(err);
             }
-        );
+        )
     },
-    // 更新模板
-    updateTemplate(smsTemplateId, smsTitle, smsContent) {
+
+    // 修改任务
+    updateTask(formData) {
         return axios({
-            url: "/api/api/sms/updateSmsTemplate",
+            url: "/api/api/task/updateTask",
             method: "post",
-            data: { smsTemplateId, smsTitle, smsContent }
+            data: formData,
+            headers: { "Content-Type": "multipart/form-data" }
         }).then(
             resp => {
                 if (resp.data.status == 0) {
@@ -109,6 +116,7 @@ export default {
                 }
                 return Promise.reject(err);
             }
-        );
-    },
+        )
+    }
+
 };

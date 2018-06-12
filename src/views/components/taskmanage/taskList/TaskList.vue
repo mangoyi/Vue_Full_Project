@@ -53,7 +53,7 @@
                                 </td>
                                 <td>
                                     <button class="btn btn-primary" style="color: #fff;" @click="pause(item.taskID)">暂停</button>
-                                    <router-link class="btn btn-warning" :to="{path: '/taskmanage/TaskRelease', query: {
+                                    <router-link class="btn btn-warning" :to="{path: '/taskmanage/TaskUpdate', query: {
                                         taskId: '20180529123701',
                                         currentPage: currentPage
                                     }}" style="color: #fff;">修改</router-link>
@@ -117,10 +117,19 @@ export default {
         };
     },
     beforeRouteEnter: (to, from, next) => {
+        console.log(to);
         next(vm => {
-            taskListSrv.taskList(vm.startDate, vm.endDate, vm.currentPage, vm.pageSize).then(resp => {    
+            let temCurrentPage = 1;
+
+            if (Number(vm.$route.query.currentPage) !== 1) {
+                // 说明从任务修改中跳转过来: 确保第几页修改，修改完成（返回）就回到第几页。
+                temCurrentPage = vm.$route.query.currentPage;
+            }
+
+            taskListSrv.taskList(vm.startDate, vm.endDate, temCurrentPage, vm.pageSize).then(resp => {    
                 vm.taskList = resp.data.list;
                 vm.totalPageNum = resp.data.totalPageNum;
+                vm.currentPage = temCurrentPage;
             }, err => {
                 vm.$message.error(err.msg);
             });
