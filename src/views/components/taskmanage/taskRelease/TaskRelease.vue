@@ -201,96 +201,27 @@ export default {
         handleLimit(file, fileList) {                                                   // 超出文件个数的钩子
             this.$message.warning('只能上传单个zip文件！');
         },
-
-        // initRobot() {
-        //     let data = "";
-
-        //     // let data = robotList.data.list;                      // 所有机器人
-        //     let thatcheckedTransferData = this.checkedTransferData;
-
-        //     let _this = this;
-        //     // 请求所有机器人
-
-        //     axios.post("/api/api/account/getFreeRobotList",{}).then((response) => {
-        //         let res = response.data;
-        //         if (res.status == 0) {
-        //             data = res.data.list;
-
-
-        //             data.forEach((item, index) => {
-        //                 this.transferData.push(
-        //                     (function() {
-
-        //                         console.log("==============================================================================创建任务");
-        //                         if ( item.robotState == 1) {                                           // 机器人在工作 所以不能选择
-        //                             return {
-        //                                 key: index,
-        //                                 label: item.Raccount,
-        //                                 disabled: true
-        //                             }
-        //                         }
-        //                         return {
-        //                             key: index,                                                         // 自增, 所有机器人(空闲机器人)
-        //                             label: item.Raccount,
-        //                             disabled: false
-        //                         }
-
-        //                     })()
-        //                 );
-        //             });
-        //         }
-        //     });
-        // },
-
-        // labor
-        // initLabor() {
-        //     // 员工坐席
-        //     let _this = this;
-        //     let thatcheckedTransferData = this.checkedTransferData1;
-
-        //     axios.post("/api/api/account/getFreeManualList",{}).then((response) => {
-        //         let res = response.data;
-        //         if (res.status == 0) {
-        //             let data = res.data.list;
-        //             console.log(data);
-        //             data.forEach((item, index) => {
-        //                 this.transferData1.push(
-        //                     (function() {
-        //                         console.log("==============================================================================创建任务");
-                                
-        //                         if ( item.manualState == 1) {                                           // 员工在工作，所以不能选择
-        //                             return {
-        //                                 key: index,
-        //                                 label: item.Maccount,
-        //                                 disabled: true
-        //                             }
-        //                         } 
-        //                         return {
-        //                             key: index,                                                         // 自增, 所有员工(空闲员工)
-        //                             label: item.Maccount + "("+item.manualState+")",
-        //                             disabled: false
-        //                         }
-                                
-        //                     })()
-        //                 );
-        //             });
-
-        //         }
-        //     });            
-             
-        // },
-
         confirmCreate() {                                                           // 创建任务
             let taskName = this.taskName;                                             // 任务名称
               
-            let robotSeat = [];                                                     // 机器人坐席
+            let temrobotSeat = [];                                                     // 机器人坐席
             this.checkedTransferData.forEach(item => {
-                robotSeat.push(this.transferData[item].label);
+                temrobotSeat.push(this.transferData[item].label);
+            });
+            
+            // 拆分
+            let robotSeat = temrobotSeat.map((item) => {
+                return item.substring(0,4);
+            })
+            
+            let temmanualSeat = [];                                                     // 员工坐席
+            this.checkedTransferData1.forEach(item => {
+                temmanualSeat.push(this.transferData1[item].label);
             });
 
-            let manualSeat = [];                                                     // 员工坐席
-            this.checkedTransferData1.forEach(item => {
-                manualSeat.push(this.transferData1[item].label);
+            // 拆分
+            let manualSeat = temmanualSeat.map((item) => {
+                return item.substring(0, 4);
             });
 
             let formData = new FormData();
@@ -313,24 +244,10 @@ export default {
             if ( !!taskName && !!this.formfile && robotSeat.length > 0 && manualSeat.length > 0) {
                 taskSrv.taskRelease(formData).then(resp => {
                     this.$message.success("任务创建成功！");
+                    this.$router.push("/taskManage/TaskList");
                 }, err => {
                     this.$message.error("任务创建失败！请重试");
                 })
-                
-                // // 任务发布
-                // axios({
-                //     url: "/api/api/task/addNewTask",
-                //     method: "post",
-                //     data: formData,
-                //     headers: {"Content-Type": "multipart/form-data"}
-                // }).then((response) => {
-                //     let res = response.data;
-                //     if (res.status == 0) {
-                //         this.$message.success("任务创建成功！");
-                //     } else if (res.status == 1) {
-                //         this.$message.error("任务创建失败！请重试")
-                //     }
-                // });
             } else {
                 this.$message.error("请填写所有内容！");
             }

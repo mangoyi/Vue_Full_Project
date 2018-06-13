@@ -36,7 +36,9 @@
 
 <script>
 // import axios from "@/components/axios/index.js"
-import axios from 'axios'
+// import axios from 'axios'
+import loginSrv from "@/../src/views/services/login.service.js";
+
 /* eslint-disable */
 export default {
   name: 'Login',
@@ -56,23 +58,33 @@ export default {
         this.info = '请输入用户信息';
       } else {
         this.login_err = false;
-        axios.post("api/api/home/loginUser", {
-          "username": this.username,
-          "password": this.password
-        }).then((response) => {
-          let res = response.data;
-          console.log(res);
-          if(res.status == 0) {
-            this.$router.push("/dashboard");
-          } else if (res.status == 1) {   // 密码错误
-            _this.$message.error(res.msg);
-          } else if (res.status == 2){
-            _this.$confirm(res.msg, '提示', {
-                confirmButtonText: '确定',
-                type: 'warning'
-            });
-          }
-        });
+        loginSrv.login(this.username, this.password).then(resp => {
+          let username = resp.data.userName;
+          window.sessionStorage.setItem("username", username)
+          this.$router.push("/dashboard");
+        }, err => {
+          this.$message.error(err.msg);
+        })
+        
+        
+        // axios.post("api/api/home/loginUser", {
+        //   "username": this.username,
+        //   "password": this.password
+        // }).then((response) => {
+        //   let res = response.data;
+        //   console.log(res);
+        //   if(res.status == 0) {
+        //     window.sessionStorage.setItem("token", "123hsfha612h36d31237bafyayf7113123");
+        //     // this.$router.push("/dashboard");
+        //   } else if (res.status == 1) {   // 密码错误
+        //     _this.$message.error(res.msg);
+        //   } else if (res.status == 2){
+        //     _this.$confirm(res.msg, '提示', {
+        //         confirmButtonText: '确定',
+        //         type: 'warning'
+        //     });
+        //   }
+        // });
 
       }
     }

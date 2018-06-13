@@ -22,11 +22,11 @@
                 <div class="col-md-1 search-field search-field_controls">
                     <button class="btn btn-primary search-btn" v-on:click.stop="searchList(1)">搜索</button>
                 </div>
-                <div class="audio-wrap col-md-2">
+                <!-- <div class="audio-wrap col-md-2">
                     <audio :src="recordSrc" controls="controls" class="callaudio" autoplay>
                         Your browser does not support the audio element.
                     </audio>
-                </div>
+                </div> -->
             </div>
             <div class="row">
                 <div class="col-lg-12">
@@ -39,7 +39,7 @@
                                 <th>呼叫时长</th>
                                 <th>机器人工号</th>
                                 <th>人工工号</th>
-                                <th>录音</th>
+                                <!-- <th>录音</th> -->
                                 <th>操作</th>
                                 <th>标记</th>
                             </tr>
@@ -52,11 +52,11 @@
                                 <td>{{item.duration}}</td>
                                 <td>{{item.robotId}}</td>
                                 <td>{{item.manualId}}</td>
-                                <td>
+                                <!-- <td>
                                     <a class="i-wrap" @click="listen(item)" style="color: black">
                                         <i class="fa fa-microphone"  v-bind:class="{'text-success': !!item.recordPlayState }"></i>
                                     </a>
-                                </td>
+                                </td> -->
                                 <td>
                                     <!-- <el-button class="btn btn-primary" plain @click="openDialog(item.Id)" >查看聊天对话</el-button> -->
                                     <el-button class="btn btn-primary" plain @click="openDialog(item.Id)" >查看聊天对话</el-button>
@@ -186,17 +186,17 @@ export default {
         },
 
         // 录音
-        listen(item) {
-            if (!item.recordPlayState) {                                                // 说明是播放
-                this.recordSrc = "http://www.zzbn.cn:8090"+item.recordSrc;
-                console.log(this.recordSrc + "-----------------------播放--------------------------");
-            } else {
-                // 暂停
-                document.getElementsByClassName('callaudio')[0].pause();
-            }
-            item.recordPlayState = !item.recordPlayState;
-            console.log(item.recordPlayState);
-        },
+        // listen(item) {
+        //     if (!item.recordPlayState) {                                                // 说明是播放
+        //         this.recordSrc = "http://www.zzbn.cn:8090"+item.recordSrc;
+        //         console.log(this.recordSrc + "-----------------------播放--------------------------");
+        //     } else {
+        //         // 暂停
+        //         document.getElementsByClassName('callaudio')[0].pause();
+        //     }
+        //     item.recordPlayState = !item.recordPlayState;
+        //     console.log(item.recordPlayState);
+        // },
 
         // open 对话
         openDialog(id) {
