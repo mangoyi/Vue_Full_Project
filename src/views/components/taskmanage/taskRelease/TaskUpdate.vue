@@ -81,11 +81,6 @@
 
 <script>
 import { Pagination, DatePicker, Button, Input} from "element-ui";
-import axios from 'axios';
-import data from "@/../mock/mock-callRecords.json";                             // mock json
-import robotList from "@/../mock/mock-robotList.json";                          // mock json
-import laborList from "@/../mock/mock-laborList.json";                          // mock json
-import smsTemplate from "@/../mock/mock-smsTemplate.json";                     // mock json
 import taskSrv from "@/../src/views/services/task.service.js";
 
 
@@ -174,7 +169,7 @@ export default {
             taskSrv.getZip(vm.$route.query.taskId).then(resp => {
                 let zipUrl = resp.msg;
                 vm.zipFileUrl = zipUrl;
-
+                
                 vm.taskName = resp.data.list[0].taskName;
             }, err => {
                 vm.$message.error(err.msg);

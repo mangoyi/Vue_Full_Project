@@ -35,6 +35,7 @@
                             <tr>
                                 <th>编号</th>
                                 <th>电话号码</th>
+                                <th>应答状态</th>
                                 <th>开始时间</th>
                                 <th>呼叫时长</th>
                                 <th>机器人工号</th>
@@ -45,9 +46,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in detailList" :key="item.id">
-                                <td>{{item.Id}}</td>
+                            <tr v-for="(item,index) in detailList" :key="index">
+                                <td>{{index + (currentPage -1)*10}}</td>
                                 <td>{{item.phone}}</td>
+                                <td>{{item.answerState}}</td>
                                 <td>{{item.startTime}}</td>
                                 <td>{{item.duration}}</td>
                                 <td>{{item.robotId}}</td>
@@ -131,9 +133,6 @@
 
 <script>
 import { Pagination, DatePicker, Button, Input, Notification, MessageBox} from "element-ui";
-import axios from 'axios';
-import data from "@/../mock/mock-taskDetails.json";                             // mock json
-// import chatdata from "@/../mock/mock-chatDialog.json";                          // mock json
 import taskDetailSrv from "@/../src/views/services/taskDetail.service.js";           
 
 
@@ -159,9 +158,6 @@ export default {
             recordList: []
         };
     },
-    // mounted() {
-    //     this.init();
-    // },
     beforeRouteEnter: (to, from, next) => {
         next(vm => {
             taskDetailSrv.taskDetail(vm.$route.query.taskId, vm.startDate, vm.endDate, vm.number, vm.currentPage, vm.pageSize).then(resp => {
@@ -184,20 +180,6 @@ export default {
             });
 
         },
-
-        // 录音
-        // listen(item) {
-        //     if (!item.recordPlayState) {                                                // 说明是播放
-        //         this.recordSrc = "http://www.zzbn.cn:8090"+item.recordSrc;
-        //         console.log(this.recordSrc + "-----------------------播放--------------------------");
-        //     } else {
-        //         // 暂停
-        //         document.getElementsByClassName('callaudio')[0].pause();
-        //     }
-        //     item.recordPlayState = !item.recordPlayState;
-        //     console.log(item.recordPlayState);
-        // },
-
         // open 对话
         openDialog(id) {
             this.recordDialog = true;

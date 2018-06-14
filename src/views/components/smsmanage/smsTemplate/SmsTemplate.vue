@@ -69,11 +69,6 @@
 
 <script>
 import { Pagination, DatePicker, Button, Input, Message } from "element-ui";
-import axios from 'axios';
-
-import data from "@/../mock/mock-smsTemplate.json";                         // mock json
-import searchData from "@/../mock/mock-searchSmsTemplate.json";
-
 import smsTemplateSrv from "@/../src/views/services/smsTemplate.service.js";
 
 /* eslint-disable */

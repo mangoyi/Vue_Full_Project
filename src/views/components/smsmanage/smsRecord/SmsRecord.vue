@@ -73,8 +73,6 @@
 
 <script>
 import { Pagination, DatePicker, Button, Input} from "element-ui";
-import axios from "axios";
-import data from "@/../mock/mock-smsRecords.json";
 import smsRecordSrv from "@/../src/views/services/smsRecord.service.js";
 
 /* eslint-disable */

@@ -76,11 +76,6 @@
 
 <script>
 import { Pagination, DatePicker, Button, Input} from "element-ui";
-import axios from 'axios';
-import data from "@/../mock/mock-callRecords.json";                             // mock json
-import robotList from "@/../mock/mock-robotList.json";                          // mock json
-import laborList from "@/../mock/mock-laborList.json";                          // mock json
-import smsTemplate from "@/../mock/mock-smsTemplate.json";                     // mock json
 import taskSrv from "@/../src/views/services/task.service.js";
 
 /* eslint-disable */
@@ -204,16 +199,18 @@ export default {
         confirmCreate() {                                                           // 创建任务
             let taskName = this.taskName;                                             // 任务名称
               
+            let publisher = window.sessionStorage.getItem("username");                // 发布者
+
             let temrobotSeat = [];                                                     // 机器人坐席
             this.checkedTransferData.forEach(item => {
                 temrobotSeat.push(this.transferData[item].label);
             });
-            
+
             // 拆分
             let robotSeat = temrobotSeat.map((item) => {
                 return item.substring(0,4);
             })
-            
+
             let temmanualSeat = [];                                                     // 员工坐席
             this.checkedTransferData1.forEach(item => {
                 temmanualSeat.push(this.transferData1[item].label);
@@ -231,9 +228,8 @@ export default {
             // }
             formData.append("file", this.formfile.raw);                              // 单文件formdata
             let obj = {
-                taskId: -1,                                                          // 新增任务是-1
                 taskName: taskName,
-                publisher: "mangoyi",
+                publisher: publisher,
                 robotSeat: robotSeat,
                 manualSeat: manualSeat
             };  

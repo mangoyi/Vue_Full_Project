@@ -23,7 +23,7 @@
                     <button class="btn btn-primary search-btn" v-on:click.stop="searchList(1)">搜索</button>
                 </div>
                 <div class="audio-wrap col-md-2">
-                    <audio :src="recordSrc" controls="controls" class="callaudio" autoplay>
+                    <audio :src="recordSrc" controls="controls" class="callaudio" autoplay ref="audio_ref">
                         Your browser does not support the audio element.
                     </audio>
                 </div>
@@ -46,8 +46,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in recordList" :key="item.id">
-                                <td>{{item.Id}}</td>
+                            <tr v-for="(item, index) in recordList" :key="index">
+                                <td>{{index + (currentPage - 1)*10}}</td>
                                 <td>{{item.line}}</td>
                                 <td>{{item.callState}}</td>
                                 <td>{{item.inCall}}</td>
@@ -55,7 +55,7 @@
                                 <td>{{item.startTime}}</td>
                                 <td>{{item.duration}}</td>
                                 <td>{{item.robotId}}</td>
-                                <td>{{item.manualId}}{{item.recordSrc}}</td>
+                                <td>{{item.manualId}}</td>
                                 <td>
                                     <a class="i-wrap" @click="listen(item)" style="color: black">
                                         <i class="fa fa-microphone"  v-bind:class="{'text-success': item.recordPlayState }"></i>
@@ -67,9 +67,9 @@
                     <div class="page" v-show="(recordList.length > 0 && totalPageNum > 10)">
                         <el-pagination 
                             background 
-                            @current-change="handleCurrentChange"
+                            @current-change="searchList"
                             :current-page.sync="currentPage"
-                            :page-size="10"
+                            :page-size="pageSize"
                             layout="total, prev, pager, next"
                             :total="totalPageNum"
                         >
@@ -96,8 +96,7 @@
 
 <script>
 import { Pagination, DatePicker, Button, Input, Message} from "element-ui";
-import axios from 'axios';
-import data from "@/../mock/mock-callRecords.json";                             // mock json
+import callRecordSrv from "@/../src/views/services/callRecord.service.js"
 
 /* eslint-disable */
 export default {
@@ -116,47 +115,35 @@ export default {
         };
     },
     methods: {
-        searchList(currentPage=this.currentPage, pageSize) {
-            let phone    = this.phone;
-            let startDate = this.startDate;
-            let endDate   = this.endDate;
-            let _this     = this;
-            if(!phone && !startDate && !endDate) {
-                alert('请填写至少一个搜索条件');
-                return;
-            }
-            axios.post("/api/api/callLog/searchCallRecord", {
-                startTime: startDate,
-                endTime: endDate,
-                phone: phone,
-                currentPage: currentPage == undefined ? 1 : currentPage,
-                pageSize: pageSize == undefined ? 10 : pageSize
-            }).then(function(response) {
-                let res = response.data;
-                if (res.status == 0) {
-                    let data = res.data;
-                    data.list.length == 0 ? _this.$message.success("当前无通话记录") : _this.recordList = data.list;
-                    _this.totalPageNum = data.totalPageNum;
+        searchList(currentPage = this.currentPage) {
+            callRecordSrv.callRecord(this.startDate, this.endDate, this.phone, currentPage, this.pageSize).then(resp => {
+                this.recordList = resp.data.list;
+                if (this.recordList.length == 0) {
+                    this.$message.success("当前无通话记录");
                 } else {
-                    _this.$message.error(res.msg);
+                    this.totalPageNum = resp.data.totalPageNum;
+                    this.currentPage = currentPage;
+                    this.recordPlayStateArr = resp.data.list.map((item, index) => {
+                        return item.recordPlayState;
+                    });
                 }
-            }).catch(function(error) {
-                alert(error);
-            });
+
+            }, err => {
+                this.$message.error(err.msg);
+            })
         },
-        handleCurrentChange(val) {
-            let currentPage = `${val}`;
-            let pageSize = this.pageSize;
-            this.searchList(currentPage, pageSize);           
-        },
+
         // 录音
         listen(item) {
-            console.log(!item.recordPlayState);
             if (!item.recordPlayState) {                                                     // 播放
                 this.recordSrc ="http://www.zzbn.cn:8090"+item.recordSrc;
                 console.log(this.recordSrc + "-----------------------播放--------------------------");
-            } else {                                                                    // 暂停     
-                document.getElementsByClassName('callaudio')[0].pause();
+                let len = this.recordList.length;
+                for(let i=0; i<len; i++) {
+                    this.recordList[i].flag = false;
+                }
+            } else {                                                                         // 暂停     
+                this.$refs["audio_ref"][0].pause();
                 console.log("---------------------暂停=---------------------------------------");
             }
             item.recordPlayState = !item.recordPlayState;

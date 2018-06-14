@@ -35,8 +35,6 @@
 </template>
 
 <script>
-// import axios from "@/components/axios/index.js"
-// import axios from 'axios'
 import loginSrv from "@/../src/views/services/login.service.js";
 
 /* eslint-disable */

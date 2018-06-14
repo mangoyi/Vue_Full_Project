@@ -64,8 +64,6 @@
 
 <script>
 import { Pagination, DatePicker, Button, Input} from "element-ui";
-import axios from 'axios';
-import data from "@/../mock/mock-laborList.json";                                   // mock json
 import seatSrv from "@/../src/views/services/seat.service.js";
 
 /* eslint-disable */

@@ -37,7 +37,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in taskList" :key="item.id">
+                            <tr v-for="(item,index) in taskList" :key="index">
                                 <td>{{item.Id}}</td>
                                 <td>{{item.taskName}}</td>
                                 <td>{{objStatus[item.taskStatus]}}</td>
@@ -54,7 +54,7 @@
                                 <td>
                                     <button class="btn btn-primary" style="color: #fff;" @click="pause(item.taskID)">暂停</button>
                                     <router-link class="btn btn-warning" :to="{path: '/taskmanage/TaskUpdate', query: {
-                                        taskId: '20180529123701',
+                                        taskId: item.taskID,
                                         currentPage: currentPage
                                     }}" style="color: #fff;">修改</router-link>
                                     <button class="btn btn-danger" style="color: #fff;" @click="over(item.taskID)">结束</button>
@@ -93,8 +93,6 @@
 
 <script>
 import { Pagination, DatePicker, Button, Input, Message} from "element-ui";
-import axios from 'axios';
-import data from "@/../mock/mock-taskList.json";                                                                        // mock json
 import taskListSrv from "@/../src/views/services/taskList.service.js";
 
 /* eslint-disable */

@@ -34,7 +34,6 @@
 </template>
 <script>
 import {Button } from "element-ui";
-import axios from 'axios';
 import smsTemplateSrv from "@/../src/views/services/smsTemplate.service.js";
 
 /* eslint-disable */
