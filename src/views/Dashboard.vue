@@ -13,14 +13,15 @@
       </div>
     </div>
     <hr />
-    <div id="taskChart">
+    <div id="taskChart" ref="chart">
     </div>
   </div>
 </template>
 
 <script>
-  import axios from "axios";
   import {Progress } from "element-ui";
+  import axios from "axios";
+  import dashBoardSrv from "@/../src/views/services/dashBoard.service.js";
 
   export default {
     name: 'hello',
@@ -35,46 +36,27 @@
         seriesArr: []
       }
     },
-    mounted() {
-      this.initdata();    
-    }, 
-    methods: {
-      initdata() {
-        this.drawTaskPercent();
-        this.drawTaskLine();
-      },
-      drawTaskPercent() {
-          let _this = this;
-          axios.post("/api/api/task/taskPercent", {
-          }).then((response) => {
-            let res = response.data;
-            if (res.status == 0) {
-              _this.percentlist = res.data.list;
-            }
-          });
-      },
-      drawTaskLine() {
-        let _this = this;
+    beforeRouteEnter (to, from, next) {
+      next( vm => {
+        dashBoardSrv.taskPercent().then(resp => {
+          vm.percentlist = resp.data.list;
+        }, err => {
+          vm.$message.error(err.msg);
+        });
 
-        axios.post("/api/api/task/taskChart", {
-        }).then((response) => {
-          let res = response.data;
-          if (res.status == 0) {
-            let data = res.data.list[0];
-            _this.taskArr = data.taskName;
-            _this.taskRecent = data.taskRecent;
-            _this.taskSeries = data.taskSeries;
-            this.drawCanvas(_this.taskArr, _this.taskRecent, _this.taskSeries);
-          }
+        dashBoardSrv.taskLine().then(resp => {
+          let data = resp.data.list[0];
+          vm.taskArr = data.taskName;
+          vm.taskRecent = data.taskRecent;
+          vm.taskSeries = data.taskSeries;
+          vm.drawCanvas(vm.taskArr, vm.taskRecent, vm.taskSeries);
         })
-
-      },
-
+      });
+    },
+    methods: {
       drawCanvas(taskArr, taskRecent, seriesArr) {
         // 基于DOM，初始化echarts实例
-        let taskChart = this.$echarts.init(document.getElementById('taskChart'));
-
-        let dom = document.getElementById("taskChart");
+        let dom = this.$refs["chart"];
         let myChart = this.$echarts.init(dom);
         let app = {};
         let option = null;

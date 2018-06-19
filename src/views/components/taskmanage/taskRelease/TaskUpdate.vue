@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import { Pagination, DatePicker, Button, Input} from "element-ui";
+import { Pagination, DatePicker, Button, Input, Message, Loading} from "element-ui";
 import taskSrv from "@/../src/views/services/task.service.js";
 
 
@@ -224,7 +224,8 @@ export default {
         handleLimit(file, fileList) {                                                   // 超出文件个数的钩子
             this.$message.warning('只能上传单个zip文件！');
         },
-        confirmUpdate() {                                                          
+        confirmUpdate() {            
+            let loading = {};                                              
             let taskId = this.$route.query.taskId;                                  // 任务ID
             
             let taskName = this.taskName;                                             // 任务名称
@@ -264,22 +265,25 @@ export default {
                 formData.append(key, obj[key]);
             };
             
-            if ( !!taskName && !!this.formfile && robotSeat.length > 0 && manualSeat.length > 0) {
-
+            if ( !!this.formfile || robotSeat.length > 0 || manualSeat.length > 0) {                // zip文件/机器人坐席/人工座席 存在一个即可
+                loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.5)'
+                });
                 taskSrv.updateTask(formData).then(resp => {
-                    this.$message.success("任务创建成功");
+                    loading.close();
+                    this.$message.success("任务修改成功");
                     this.$router.push({path: "/taskManage/TaskList", query:{currentPage: this.$route.query.currentPage}});          // 跳回任务列表所在当前页
                 }, err => {
+                    loading.close();
                     this.$message.error(err.msg);
                 });
 
             } else {
                 this.$message.error("请填写所有内容！");
             }
-        },
-
-        globalPage() {
-            
         }
 
     }

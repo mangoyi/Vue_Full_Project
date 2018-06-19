@@ -41,7 +41,8 @@ module.exports = {
             //     pathRewrite: {
             //         '^/api': ''
             //     }
-            // },
+            // }
+            // ,
             // '/api': {
             //     target: '47.96.0.103:80',
             //     changeOrigin: true,

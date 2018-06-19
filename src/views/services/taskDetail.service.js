@@ -4,7 +4,7 @@ export default {
     // 任务明细
     taskDetail(taskId, startDate, endDate, number, currentPage, pageSize) {
         return axios({
-            url: "/api/api/task/taskDetail",
+            url: "/api/task/taskDetail",
             method: "post",
             data: { taskId, startDate, endDate, number, currentPage, pageSize }
         }).then(
@@ -27,7 +27,7 @@ export default {
     // 聊天对话
     dialog(Id) {
         return axios({
-            url: "/api/api/task/searchDialog",
+            url: "/api/task/searchDialog",
             method: "post",
             data: { Id }
         }).then(

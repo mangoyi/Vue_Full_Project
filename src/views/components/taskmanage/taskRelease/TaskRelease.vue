@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { Pagination, DatePicker, Button, Input} from "element-ui";
+import { Pagination, DatePicker, Button, Input, Loading} from "element-ui";
 import taskSrv from "@/../src/views/services/task.service.js";
 
 /* eslint-disable */
@@ -197,6 +197,7 @@ export default {
             this.$message.warning('只能上传单个zip文件！');
         },
         confirmCreate() {                                                           // 创建任务
+            let loading = {};
             let taskName = this.taskName;                                             // 任务名称
               
             let publisher = window.sessionStorage.getItem("username");                // 发布者
@@ -237,11 +238,20 @@ export default {
                 formData.append(key, obj[key]);
             };
 
-            if ( !!taskName && !!this.formfile && robotSeat.length > 0 && manualSeat.length > 0) {
+            if ( !!taskName && !!this.formfile && robotSeat.length > 0) {
+                loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.5)'
+                });
+
                 taskSrv.taskRelease(formData).then(resp => {
+                    loading.close();
                     this.$message.success("任务创建成功！");
                     this.$router.push("/taskManage/TaskList");
                 }, err => {
+                    loading.close();
                     this.$message.error("任务创建失败！请重试");
                 })
             } else {

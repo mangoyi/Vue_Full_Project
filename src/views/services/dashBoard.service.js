@@ -1,12 +1,12 @@
 import axios from "axios";
 
 export default {
-    // 员工坐席
-    laborSeat(keyword, currentPage, pageSize) {
+    // 任务进度
+    taskPercent() {
         return axios({
-            url: "/api/account/searchManualSeat",
+            url: "/api/task/taskPercent",
             method: "post",
-            data: { keyword, currentPage, pageSize }
+            data: {}
         }).then(
             resp => {
                 if (resp.data.status == 0) {
@@ -23,18 +23,18 @@ export default {
             }
         );
     },
-    // 机器人坐席
-    robotSeat(keyword, currentPage, pageSize) {
+    // 任务折线图
+    taskLine() {
         return axios({
-            url: "/api/account/searchRobotSeat",
+            url: "/api/task/taskChart",
             method: "post",
-            data: { keyword, currentPage, pageSize }
+            data: {}
         }).then(
             resp => {
                 if (resp.data.status == 0) {
                     return Promise.resolve(resp.data);
                 } else {
-                    return Promise.reject(resp.data)
+                    return Promise.reject(resp.data);
                 }
             },
             err => {
@@ -45,5 +45,4 @@ export default {
             }
         )
     }
-
 };

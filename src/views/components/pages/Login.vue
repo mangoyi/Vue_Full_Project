@@ -7,7 +7,6 @@
           <div class="card-group mb-0">
             <form class="card p-4" name="loginForm" novalidate>
               <div class="card-block">
-                <!-- <h1>登录</h1> -->
                 <p :class="{'login-info-error animated shake':login_err}" v-show="login_err">{{info}}</p>
                 <div class="input-group mb-3">
                   <span class="input-group-addon input-group-bg">
@@ -63,27 +62,6 @@ export default {
         }, err => {
           this.$message.error(err.msg);
         })
-        
-        
-        // axios.post("api/api/home/loginUser", {
-        //   "username": this.username,
-        //   "password": this.password
-        // }).then((response) => {
-        //   let res = response.data;
-        //   console.log(res);
-        //   if(res.status == 0) {
-        //     window.sessionStorage.setItem("token", "123hsfha612h36d31237bafyayf7113123");
-        //     // this.$router.push("/dashboard");
-        //   } else if (res.status == 1) {   // 密码错误
-        //     _this.$message.error(res.msg);
-        //   } else if (res.status == 2){
-        //     _this.$confirm(res.msg, '提示', {
-        //         confirmButtonText: '确定',
-        //         type: 'warning'
-        //     });
-        //   }
-        // });
-
       }
     }
   }
@@ -103,9 +81,6 @@ form{
 input {
   border-radius: 5px;
   height: 40px;
-}
-.input-group-bg{
-  /* background: */
 }
 input:-webkit-autofill {
   background-color: #ffffff;

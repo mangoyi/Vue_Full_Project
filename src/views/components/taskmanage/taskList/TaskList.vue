@@ -52,12 +52,15 @@
                                     }}">查看明细</router-link>
                                 </td>
                                 <td>
-                                    <button class="btn btn-primary" style="color: #fff;" @click="pause(item.taskID)">暂停</button>
-                                    <router-link class="btn btn-warning" :to="{path: '/taskmanage/TaskUpdate', query: {
-                                        taskId: item.taskID,
-                                        currentPage: currentPage
-                                    }}" style="color: #fff;">修改</router-link>
-                                    <button class="btn btn-danger" style="color: #fff;" @click="over(item.taskID)">结束</button>
+                                    <button class="btn btn-primary" style="color: #fff;" @click="togglePause(item)" :disabled="item.taskStatus === 2 ? true : false" >{{item.taskStatus == 1 ? '开启' : '暂停'}}</button>
+                                    <button class="btn btn-warning"  :disabled="item.taskStatus === 2 ? true : false" @click="taskUpdate(item.taskID)">
+                                        <!-- <router-link  :to="{path: '/taskmanage/TaskUpdate', query: {
+                                            taskId: item.taskID,
+                                            currentPage: currentPage
+                                        }}" style="color: #fff;">修改</router-link> -->
+                                        修改
+                                    </button>
+                                    <button class="btn btn-danger" style="color: #fff;" @click="over(item.taskID)" :disabled="item.taskStatus === 2 ? true : false">结束</button>
                                 </td>
                             </tr>                                          
                         </tbody>
@@ -88,6 +91,15 @@
                 <el-button type="primary" @click="confirmStop">确 定</el-button>
             </span>
         </el-dialog>
+
+        <el-dialog title="提示" :modal-append-to-body="false" :visible.sync="centerDialogVisible2" width="20%" center>
+            <div class="text-center">
+                <span>确定要开启任务吗?</span>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="confirmOpen">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -102,12 +114,14 @@ export default {
             startDate: "",
             endDate: "",
             pauseTaskId: "",       
+            openTaskId: "",
             objStatus: {
                 "0": "进行中",
                 "1": "已暂停",
                 "2": "已结束"
             },
             centerDialogVisible: false,
+            centerDialogVisible2: false,
             currentPage: 1,
             pageSize: 10,
             totalPageNum: 1,
@@ -143,13 +157,16 @@ export default {
                 this.$message.error(err.msg);
             });
         },
-
-        // 暂停任务
-        pause(taskId) {
-            this.centerDialogVisible = true;
-            this.pauseTaskId = taskId;
-            console.log(this.pauseTaskId);
+        togglePause(item) {
+            if (item.taskStatus === 0) {            // 暂停
+                this.centerDialogVisible = true;
+                this.pauseTaskId = item.taskID;
+            } else if (item.taskStatus === 1) {     // 开启
+                this.centerDialogVisible2 = true;
+                this.openTaskId = item.taskID;
+            }
         },
+
         confirmStop() {
             this.centerDialogVisible = false;
 
@@ -159,7 +176,17 @@ export default {
             }, err => {
                 this.$message.error(err.msg);
             })
+        },
 
+        confirmOpen() {
+            this.centerDialogVisible2 = false;
+
+            taskListSrv.openTask(this.openTaskId).then(resp => {
+                this.searchList(this.currentPage);
+                this.$message.success("任务已开启!");
+            }, err => {
+                this.$message.error(err.msg);
+            })
         },
         over(taskId) {
             this.$confirm('此操作将永久结束该任务, 是否继续?', '提示', {
@@ -190,6 +217,15 @@ export default {
                     message: '取消结束'
                 });          
             }); 
+        },
+        taskUpdate(taskID) {
+            this.$router.push({
+                path: '/taskmanage/TaskUpdate',
+                query: {
+                    taskId: taskID,
+                    currentPage: this.currentPage
+                }
+            })
         }
     }
 };

@@ -4,7 +4,7 @@ export default {
     // 模板列表
     messageTemplateList(templateContent, currentPage, pageSize) {
         return axios({
-            url: "/api/api/sms/searchSmsTemplate",
+            url: "/api/sms/searchSmsTemplate",
             method: "post",
             data: { templateContent, currentPage, pageSize }
         }).then(
@@ -26,7 +26,7 @@ export default {
     // 新增模板
     addTemplate(smsTemplateId, smsTemplateName, smsTemplateContent) {
         return axios({
-            url: "/api/api/sms/addSmsTemplate",
+            url: "/api/sms/addSmsTemplate",
             method: "post",
             data: { smsTemplateId, smsTemplateName, smsTemplateContent }
         }).then(
@@ -48,7 +48,7 @@ export default {
     // 删除模板
     delTemplate(smsTemplateId) {
         return axios({
-            url: "/api/api/sms/delSmsTemplate",
+            url: "/api/sms/delSmsTemplate",
             method: "post",
             data: { smsTemplateId }
         }).then(
@@ -70,7 +70,7 @@ export default {
     // 获取模板
     getTemplate(smsTemplateId) {
         return axios({
-            url: "/api/api/sms/getSmsTemplate",
+            url: "/api/sms/getSmsTemplate",
             method: "post",
             data: { smsTemplateId }
         }).then(
@@ -92,7 +92,7 @@ export default {
     // 更新模板
     updateTemplate(smsTemplateId, smsTitle, smsContent) {
         return axios({
-            url: "/api/api/sms/updateSmsTemplate",
+            url: "/api/sms/updateSmsTemplate",
             method: "post",
             data: { smsTemplateId, smsTitle, smsContent }
         }).then(

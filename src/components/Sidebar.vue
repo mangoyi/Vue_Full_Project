@@ -6,30 +6,6 @@
           <router-link :to="'/dashboard'" class="nav-link">
             <i class="fa fa-bar-chart fa-lg"></i> 首页 </router-link>
         </li>
-      <!-- yichao  4.11 -->
-        <router-link tag="li" class="nav-item nav-dropdown" :to="{ path: '/message'}" disabled>
-          <div class="nav-link nav-dropdown-toggle" @click="handleClick">
-            <i class="fa fa-jpy fa-lg"></i>短信系统</div>
-          <ul class="nav-dropdown-items">
-            <li class="nav-item">
-              <router-link :to="'/message/messModal'" class="nav-padding nav-link" exact>
-                <i class="icon-star"></i>短信模板</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link :to="'/message/sendMess'" class="nav-padding nav-link" exact>
-                <i class="icon-star"></i>短信发送</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link :to="'/message/messTask'" class="nav-padding nav-link" exact>
-                <i class="icon-star"></i>短信任务</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link :to="'/message/rechargeRecord'" class="nav-padding nav-link" exact>
-                <i class="icon-star"></i>充值记录</router-link>
-            </li>
-          </ul>
-        </router-link>
-
         <!-- 任务管理 -->
         <router-link tag="li" class="nav-item nav-dropdown" :to="{ path: '/taskManage'}" disabled>
           <div class="nav-link nav-dropdown-toggle" @click="handleClick">

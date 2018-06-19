@@ -183,7 +183,7 @@ export default {
         // open 对话
         openDialog(id) {
             this.recordDialog = true;
-            taskDetailSrv.dialog("1").then(resp => {
+            taskDetailSrv.dialog(id).then(resp => {
                 let data = resp.data.list;
                 data.forEach((item) => {
                     item["imgFlag"] = false;

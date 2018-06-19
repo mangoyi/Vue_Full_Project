@@ -5,7 +5,7 @@ export default {
     // 任务发布
     taskRelease(formData) {
         return axios({
-            url: "/api/api/task/addNewTask",
+            url: "/api/task/addNewTask",
             method: "post",
             data: formData,
             headers: { "Content-Type": "multipart/form-data" }
@@ -29,7 +29,7 @@ export default {
     // 机器人
     getRobot() {
         return axios({
-            url: "/api/api/account/getFreeRobotList",
+            url: "/api/account/getFreeRobotList",
             method: "post",
             data: {}
         }).then(
@@ -52,7 +52,7 @@ export default {
     // 员工
     getManual() {
         return axios({
-            url: "/api/api/account/getFreeManualList",
+            url: "/api/account/getFreeManualList",
             method: "post",
             data: {}
         }).then(
@@ -75,7 +75,7 @@ export default {
     // zip文件
     getZip(taskId) {
         return axios({
-            url: "/api/api/task/searchTask",
+            url: "/api/task/searchTask",
             method: "get",
             params: { taskId }
         }).then(
@@ -98,7 +98,7 @@ export default {
     // 修改任务
     updateTask(formData) {
         return axios({
-            url: "/api/api/task/updateTask",
+            url: "/api/task/updateTask",
             method: "post",
             data: formData,
             headers: { "Content-Type": "multipart/form-data" }
