@@ -141,7 +141,7 @@ export default {
 
             taskSrv.getManual().then(resp => {
                 let data = resp.data.list;
-                let thatcheckedTransferData = vm.checkedTransferData1;
+                let thatcheckedTransferData1 = [];
                 data.forEach((item, index) => {
                     vm.transferData1.push(
                         (function() {
@@ -152,7 +152,7 @@ export default {
                                     disabled: true
                                 }
                             } else if ( item.manualState == 1 && item.taskId == vm.$route.query.taskId) {
-                                thatcheckedTransferData.push(index);                                                    // 员工在工作，并且在当前这个任务中。所以显示在右侧
+                                thatcheckedTransferData1.push(index);                                                    // 员工在工作，并且在当前这个任务中。所以显示在右侧
                             } 
                             return {
                                 key: index,                                                                              // 自增, 所有员工(空闲员工)
@@ -162,6 +162,7 @@ export default {
                         })()
                     );
                 });
+                vm.checkedTransferData1 = thatcheckedTransferData1;
             }, err => {
                 vm.$message.error(err.msg);
             });

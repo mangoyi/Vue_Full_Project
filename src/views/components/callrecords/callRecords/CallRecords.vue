@@ -4,29 +4,32 @@
             <div class="title">通话记录</div>
         </div>
         <div class="content-show">
+            <div class="row">
+                <div class="audio-wrap col-md-3">
+                    <audio :src="recordSrc" controls="controls" class="callaudio" autoplay ref="audio_ref">
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
+            </div>
             <div class="row list-search">
-                <div class="col-md-3 search-field">
+                <div class="col-md-3 col-ms-4 search-field">
                     <div style="left:0px" class="label">开始日期：</div>
                     <el-date-picker size="large" v-model="startDate" type="date" placeholder="选择日期时间" value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </div>
-                <div class="col-md-3 search-field">
+                <div class="col-md-3 col-ms-4 search-field">
                     <div style="left: 0px" class="label">结束日期：</div>
                     <el-date-picker size="large" v-model="endDate" type="date" placeholder="选择日期时间" value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </div>
                 <div class="col-md-3 search-field">
                     <div style="left: 0px" class="label">查询号码：</div>
-                    <input type="text" class="form-control input-field" placeholder="请输入电话号码" v-model.trim="phone" />
+                    <input type="text" class="form-control input-field" placeholder="请输入电话号码" v-model.trim="phone" style="font-size: 12px;"/>
                 </div>
                 <div class="col-md-1 search-field search-field_controls">
                     <button class="btn btn-primary search-btn" v-on:click.stop="searchList(1)">搜索</button>
                 </div>
-                <div class="audio-wrap col-md-2">
-                    <audio :src="recordSrc" controls="controls" class="callaudio" autoplay ref="audio_ref">
-                        Your browser does not support the audio element.
-                    </audio>
-                </div>
+
             </div>
             <div class="row">
                 <div class="col-lg-12">
@@ -39,7 +42,7 @@
                                 <th>呼入号码</th>
                                 <th>拨出号码</th>
                                 <th>开始时间</th>
-                                <th>通话时长</th>
+                                <th>通话时长(秒)</th>
                                 <th>机器人工号</th>
                                 <th>人工工号</th>
                                 <th>录音</th>
@@ -52,8 +55,8 @@
                                 <td>{{item.callState}}</td>
                                 <td>{{item.inCall}}</td>
                                 <td>{{item.outCall}}</td>
-                                <td>{{item.startTime}}</td>
-                                <td>{{item.duration}}</td>
+                                <td>{{item.startTime.substring(0, 19).replace("T"," ")}}</td>
+                                <td>{{item.duration + 's'}}</td>
                                 <td>{{item.robotId}}</td>
                                 <td>{{item.manualId}}</td>
                                 <td>
@@ -167,5 +170,8 @@ export default {
         padding-top: 14px;
         text-align: center;
         color: #666;
+    }
+    .audio-wrap {
+        margin: -10px auto 10px 0;
     }
 </style>

@@ -5,12 +5,12 @@
         </div>
         <div class="content-show">
             <div class="row list-search">
-                <div class="col-md-3 search-field">
+                <div class="col-md-4 search-field">
                     <div style="left:0px" class="label">开始日期：</div>
                     <el-date-picker size="large" v-model="startDate" type="date" placeholder="选择日期时间" value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </div>
-                <div class="col-md-3 search-field">
+                <div class="col-md-4 search-field">
                     <div style="left: 0px" class="label">结束日期：</div>
                     <el-date-picker size="large" v-model="endDate" type="date" placeholder="选择日期时间" value-format="yyyy-MM-dd">
                     </el-date-picker>

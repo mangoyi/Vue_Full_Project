@@ -61,7 +61,7 @@
                                 </td> -->
                                 <td>
                                     <!-- <el-button class="btn btn-primary" plain @click="openDialog(item.Id)" >查看聊天对话</el-button> -->
-                                    <el-button class="btn btn-primary" plain @click="openDialog(item.Id)" >查看聊天对话</el-button>
+                                    <el-button class="btn btn-primary" plain @click="openDialog(item.Id, item.phone, item.recordSrc)" >查看聊天对话</el-button>
                                 </td>
                                 <td>{{item.flag}}</td>
                             </tr>                                          
@@ -97,9 +97,9 @@
         </el-dialog>
 
         <!-- 聊天对话 -->
-        <el-dialog title="聊天内容" :modal-append-to-body="false" :visible.sync="recordDialog" width="40%" center>
+        <el-dialog :title="dialogNumber" :modal-append-to-body="false" :visible.sync="recordDialog" width="44%" center>
             <div class="yi-wrap">
-                <div class="row mb-4" v-for="(item, index) in recordList" :key="index">
+                <div class="row mb-4" v-for="(item, index) in recordList" :key="index" v-if="recordList.length > 0">
                     <div class="say" v-if="item.infoType == 'R'">
                         <span class="g-time">{{item.startTime}}</span>
                         <div class="say-text common-text">{{item.sayText}}<span style="padding-left: 12px;font-size: 12px;color: #38F;">"匹配规则:"{{item.mathRule}}</span></div>
@@ -112,18 +112,19 @@
                             <audio preload="none" class="wav" :ref="`audio_${index}`" @ended="ended(item)">
                                 <source :src="'http://www.zzbn.cn:8090'+item.voiceSrc">
                             </audio>
-                            <!-- <audio id="audioPlay" :src="isPlay" @canplay="playing()" @ended="ended()" v-el:audio> </audio> -->
                         </div>
                     </div>
                 </div>
             </div>
             
-            <span slot="footer" class="dialog-footer">
+            <span slot="footer" class="dialog-footer" v-if="recordList.length > 0">
                 <!-- <el-button type="primary" @click="recordDialog = false">确 定</el-button> -->
-                    <audio src="http://global.res.btows.com/monitor/2018/05/12/force-13927784678-705-20180512-183058-1526121058.102223_2.wav" controls="controls" class="" preload="none">
+                    <audio :src="completeRecordUrl" controls="controls" class="" preload="none">
                         Your browser does not support the audio element.
                     </audio>
             </span>
+
+            <p v-if="recordList.length == 0" style="text-align: center; margin-top: 10px;">当前通话无聊天内容</p>
         </el-dialog>
 
 
@@ -155,7 +156,9 @@ export default {
 
             // 聊天内容
             showVoice: false,
-            recordList: []
+            recordList: [],
+            dialogNumber: "",
+            completeRecordUrl: ""
         };
     },
     beforeRouteEnter: (to, from, next) => {
@@ -181,8 +184,10 @@ export default {
 
         },
         // open 对话
-        openDialog(id) {
+        openDialog(id, phone, Src) {
             this.recordDialog = true;
+            this.dialogNumber = "聊天内容 ("+ phone +")";
+            this.completeRecordUrl = "http://www.zzbn.cn:8090" + Src;
             taskDetailSrv.dialog(id).then(resp => {
                 let data = resp.data.list;
                 data.forEach((item) => {
@@ -258,7 +263,7 @@ export default {
         padding: 6px;
         border: 1px solid #d9d9d9;
         border-radius: 8px;
-        font-size: 14px;
+        font-size: 12px;
         line-height: 20px;
         color: #333;
     }

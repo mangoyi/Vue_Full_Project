@@ -49,7 +49,7 @@
                         </tbody>
                     </table>
                     <div class="page">
-                        <el-pagination background @current-change="searchSmsTemplate" :current-page.sync="currentPage" :page-size="pageSize" layout="total, prev, pager, next" :total="totalPageNum">
+                        <el-pagination background @current-change="searchSmsTemplate" :current-page.sync="currentPage" :page-size="pageSize" layout="total, prev, pager, next" :total="totalPageNum" v-if="tempList.length > 0">
                         </el-pagination>
                     </div>
                 </div>

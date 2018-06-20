@@ -336,7 +336,25 @@ input:focus {
   height: 360px;
 }
 .el-transfer-panel ,.el-transfer-panel__body, .el-checkbox-group{
-  height: inherit;
+  height: inherit !important;
+}
+
+// 重写input输入框样式
+.el-date-editor.el-input, .el-date-editor.el-input__inner {
+  width: 100% !important;
+}
+
+// 任务列表按钮disabled
+.btn-primary.disabled, .btn-primary:disabled,
+.btn-warning.disabled, .btn-warning:disabled,
+.btn-danger.disabled, .btn-danger:disabled{
+  background-color: #cccccc;
+  border-color: #cccccc;
+}
+
+// 表格中字体
+.content_page .table {
+  font-size: 12px;
 }
 
 </style>
