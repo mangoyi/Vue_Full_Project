@@ -5,7 +5,7 @@
         </div>
         <div class="content-show">
             <div class="row">
-                <div class="audio-wrap col-md-3">
+                <div class="audio-wrap col-md-12">
                     <audio :src="recordSrc" controls="controls" class="callaudio" autoplay ref="audio_ref">
                         Your browser does not support the audio element.
                     </audio>
@@ -61,7 +61,7 @@
                                 <td>{{item.manualId}}</td>
                                 <td>
                                     <a class="i-wrap" @click="listen(item)" style="color: black">
-                                        <i class="fa fa-microphone"  v-bind:class="{'text-success': item.recordPlayState }"></i>
+                                        <i class="fa"  v-bind:class="{'text-success': item.recordPlayState , 'fa-microphone': item.callState === '已接' ? true : false}"></i>
                                     </a>
                                 </td>
                             </tr>                                          
@@ -139,14 +139,15 @@ export default {
         // 录音
         listen(item) {
             if (!item.recordPlayState) {                                                     // 播放
-                this.recordSrc ="http://www.zzbn.cn:8090"+item.recordSrc;
+                this.recordSrc = item.recordSrc;
                 console.log(this.recordSrc + "-----------------------播放--------------------------");
                 let len = this.recordList.length;
                 for(let i=0; i<len; i++) {
-                    this.recordList[i].flag = false;
+                    this.recordList[i].recordPlayState = false;
                 }
             } else {                                                                         // 暂停     
-                this.$refs["audio_ref"][0].pause();
+                console.log(this.$refs["audio_ref"]);
+                this.$refs["audio_ref"].pause();
                 console.log("---------------------暂停=---------------------------------------");
             }
             item.recordPlayState = !item.recordPlayState;

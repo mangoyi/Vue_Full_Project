@@ -11,6 +11,9 @@
         </div>
         <div class="content-show">
             <div class="row list-search">
+                <div class="col-md-12 search-field" style="padding-left: 0px;">
+                    <div class="yi-remarkWrap"><span class="startTime">开始日期： {{remarkStartTime.substring(0, 16).replace("T", " ")}}</span><span class="endTime">结束日期： {{remarkEndTime.substring(0, 16).replace("T", " ")}}</span> <span>任务ID：{{remarkTaskId}}</span></div>
+                </div>
                 <div class="search-field">
                     <div class="label" style="left:0px;top: 4px;">任务名称：</div>
                     <el-input v-model.trim="taskName" placeholder="请输入内容"  disabled class="yi-taskName" style="color: #409EFF;"></el-input>
@@ -104,25 +107,31 @@ export default {
             zipFileUrl: "",
 
             // 在任务列表中的页数
-            currentPage: 1
+            currentPage: 1,
+
+            // 备注信息
+            remarkStartTime: '',
+            remarkEndTime: '',
+            remarkTaskId: ''
         };
     },
     beforeRouteEnter: (to, from, next) => {
         next(vm => {
+            let currentTaskId = vm.$route.query.taskId;
+            
             taskSrv.getRobot().then(resp => {
                 let data = resp.data.list;
                 let thatcheckedTransferData = [];
-                
                 data.forEach((item, index) => {
                     vm.transferData.push(
                         (function() {
-                            if ( item.robotState == 1 && item.taskId != vm.$route.query.taskId) {                    // 机器人在工作，并且不是在当前这个任务中。 所以不能选择
+                            if ( item.robotState == 1 && item.taskId != currentTaskId) {                    // 机器人在工作，并且不是在当前这个任务中。 所以不能选择
                                 return {
                                     key: index,
                                     label: item.Raccount + "("+item.Rname+")",
                                     disabled: true
                                 }
-                            } else if ( item.robotState == 1 && item.taskId == vm.$route.query.taskId) {
+                            } else if ( item.robotState == 1 && item.taskId == currentTaskId) {
                                 thatcheckedTransferData.push(index);                                            // 机器人在工作，并且在当前这个任务中。所以显示在右侧
                             } 
                             return {
@@ -139,19 +148,19 @@ export default {
                 vm.$message.error(err.msg);
             });
 
-            taskSrv.getManual().then(resp => {
+            taskSrv.getManual(currentTaskId).then(resp => {
                 let data = resp.data.list;
                 let thatcheckedTransferData1 = [];
                 data.forEach((item, index) => {
                     vm.transferData1.push(
                         (function() {
-                            if ( item.manualState == 1 && item.taskId != vm.$route.query.taskId) {                    // 员工在工作，并且不是在当前这个任务中。 所以不能选择
+                            if ( item.manualState == 1 && item.taskId != currentTaskId) {                    // 员工在工作，并且不是在当前这个任务中。 所以不能选择
                                 return {
                                     key: index,
                                     label: item.Maccount + "("+item.Mname+")",
                                     disabled: true
                                 }
-                            } else if ( item.manualState == 1 && item.taskId == vm.$route.query.taskId) {
+                            } else if ( item.manualState == 1 && item.taskId == currentTaskId) {
                                 thatcheckedTransferData1.push(index);                                                    // 员工在工作，并且在当前这个任务中。所以显示在右侧
                             } 
                             return {
@@ -167,11 +176,16 @@ export default {
                 vm.$message.error(err.msg);
             });
 
-            taskSrv.getZip(vm.$route.query.taskId).then(resp => {
+            taskSrv.getZip(currentTaskId).then(resp => {
                 let zipUrl = resp.msg;
                 vm.zipFileUrl = zipUrl;
                 
-                vm.taskName = resp.data.list[0].taskName;
+                let data = resp.data.list[0];
+
+                vm.taskName = data.taskName;     // 任务名称
+                vm.remarkStartTime = data.startTime;
+                vm.remarkEndTime = data.endTime;
+                vm.remarkTaskId = data.taskID;
             }, err => {
                 vm.$message.error(err.msg);
             });
@@ -323,5 +337,13 @@ export default {
     .yi-transferWrapL{
         margin-right: 130px;
         margin-bottom: 20px;
+    }
+
+    .yi-remarkWrap {
+        float: right;
+        font-size: 12px;
+    }
+    .endTime {
+        margin: 0 15px;
     }
 </style>

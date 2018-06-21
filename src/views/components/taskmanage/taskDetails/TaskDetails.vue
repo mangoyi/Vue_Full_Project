@@ -97,7 +97,7 @@
         </el-dialog>
 
         <!-- 聊天对话 -->
-        <el-dialog :title="dialogNumber" :modal-append-to-body="false" :visible.sync="recordDialog" width="44%" center>
+        <el-dialog :title="dialogNumber" :modal-append-to-body="false" :visible.sync="recordDialog" width="44%" center @close="closeRecordDialog">
             <div class="yi-wrap">
                 <div class="row mb-4" v-for="(item, index) in recordList" :key="index" v-if="recordList.length > 0">
                     <div class="say" v-if="item.infoType == 'R'">
@@ -110,7 +110,7 @@
                             <img src="../../../../../static/img/voice.png" alt="error" :class="{voice: item.imgFlag}" :ref="`img_${index}`">
                             <span class="replay-text">{{item.sayText}}</span>    
                             <audio preload="none" class="wav" :ref="`audio_${index}`" @ended="ended(item)">
-                                <source :src="'http://www.zzbn.cn:8090'+item.voiceSrc">
+                                <source :src="item.voiceSrc">
                             </audio>
                         </div>
                     </div>
@@ -185,9 +185,12 @@ export default {
         },
         // open 对话
         openDialog(id, phone, Src) {
+            if (this.recordList.length > 0) {
+                this.recordList = [];                                       // 清空上次数据
+            }
             this.recordDialog = true;
             this.dialogNumber = "聊天内容 ("+ phone +")";
-            this.completeRecordUrl = "http://www.zzbn.cn:8090" + Src;
+            this.completeRecordUrl = Src;
             taskDetailSrv.dialog(id).then(resp => {
                 let data = resp.data.list;
                 data.forEach((item) => {
@@ -201,9 +204,14 @@ export default {
         playVoice(refIndex, item) {
             item.imgFlag = true;                                // 当前图片动画
             this.$refs[refIndex][0].play();                     // 当前录音播放
+            console.log(refIndex);
+            console.log(this.$refs[refIndex][0]);
         },
         ended(item) {
             item.imgFlag = false;
+        },
+        closeRecordDialog() {
+            this.recordList = [];
         }
 
     }

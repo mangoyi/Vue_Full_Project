@@ -26,7 +26,7 @@
               </div>
             </form>
           </div>
-          <p class="cp">©2018 CengMei 上海澄美信息服务有限公司</p>
+          <!-- <p class="cp">©2018 CengMei 上海澄美信息服务有限公司</p> -->
         </div>
       </div>
     </div>

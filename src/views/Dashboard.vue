@@ -88,6 +88,12 @@
           },
           yAxis: {
               type: 'value'
+              // axisLabel: {  
+              //     show: true,  
+              //     interval: 'auto',  
+              //     formatter: '{value} %'  
+              //   },  
+              // show: true  
           },
           series: seriesArr                                        // 详细信息
           };

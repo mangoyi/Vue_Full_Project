@@ -53,11 +53,7 @@
                                 </td>
                                 <td>
                                     <button class="btn btn-primary" style="color: #fff;" @click="togglePause(item)" :disabled="item.taskStatus === 2 ? true : false" >{{item.taskStatus == 1 ? '开启' : '暂停'}}</button>
-                                    <button class="btn btn-warning"  :disabled="item.taskStatus === 2 ? true : false" @click="taskUpdate(item.taskID)">
-                                        <!-- <router-link  :to="{path: '/taskmanage/TaskUpdate', query: {
-                                            taskId: item.taskID,
-                                            currentPage: currentPage
-                                        }}" style="color: #fff;">修改</router-link> -->
+                                    <button class="btn btn-warning"  :disabled="item.taskStatus === 2 ? true : false" @click="taskUpdate(item.taskStatus, item.taskID)">
                                         修改
                                     </button>
                                     <button class="btn btn-danger" style="color: #fff;" @click="over(item.taskID)" :disabled="item.taskStatus === 2 ? true : false">结束</button>
@@ -195,22 +191,11 @@ export default {
                 type: 'warning',
                 center: 'true'
             }).then(() => {
-                
                 taskListSrv.overTask(taskId).then(resp => {
                     this.searchList(this.currentPage);
                 }, err => {
                     this.$message.error(err.msg);
                 });
-
-                // axios.post("/api/api/task/overTask", {                                              //  结束任务
-                //     taskId: taskID
-                // }).then((response ) => {
-                //     let res = response.data;
-                //     if (res.status == 0) {
-                //         this.$message.success("任务结束");
-                //         _this.init();
-                //     }
-                // })
             }).catch(() => {
                 this.$message({
                     type: 'info',
@@ -218,14 +203,21 @@ export default {
                 });          
             }); 
         },
-        taskUpdate(taskID) {
-            this.$router.push({
-                path: '/taskmanage/TaskUpdate',
-                query: {
-                    taskId: taskID,
-                    currentPage: this.currentPage
-                }
-            })
+        taskUpdate(taskStatus, taskID) {
+            if (taskStatus === 0) {
+                this.$alert('修改任务之前，请先暂停该任务', '提示', {
+                    confirmButtonText: '确定',
+                    callback: action => {}
+                });
+            } else if (taskStatus === 1) {
+                this.$router.push({
+                    path: '/taskmanage/TaskUpdate',
+                    query: {
+                        taskId: taskID,
+                        currentPage: this.currentPage
+                    }
+                });
+            }
         }
     }
 };
