@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import { Pagination, DatePicker, Button, Input, Message} from "element-ui";
+import { Pagination, DatePicker, Button, Input, Message, Select} from "element-ui";
 import callRecordSrv from "@/../src/views/services/callRecord.service.js"
 
 /* eslint-disable */
@@ -119,7 +119,7 @@ export default {
     },
     methods: {
         searchList(currentPage = this.currentPage) {
-            callRecordSrv.callRecord(this.startDate, this.endDate, this.phone, currentPage, this.pageSize).then(resp => {
+            callRecordSrv.callRecord(this.startDate, this.endDate, this.phone, currentPage, this.pageSize, this.tabValue).then(resp => {
                 this.recordList = resp.data.list;
                 if (this.recordList.length == 0) {
                     this.$message.success("当前无通话记录");
@@ -175,4 +175,6 @@ export default {
     .audio-wrap {
         margin: -10px auto 10px 0;
     }
+
+
 </style>

@@ -28,20 +28,20 @@ module.exports = {
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         proxyTable: {
-            // '/api': {
-            //     target: '47.96.0.103:8090',
-            //     changeOrigin: true,
-            //     pathRewrite: {
-            //         '^/api': ''
-            //     }
-            // }
             '/api': {
-                target: 'http://zzbn.s1.natapp.cc',
+                target: '47.96.0.103:8090',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/api': ''
                 }
             }
+            // '/api': {
+            //     target: 'http://zzbn.s1.natapp.cc',
+            //     changeOrigin: true,
+            //     pathRewrite: {
+            //         '^/api': ''
+            //     }
+            // }
             // ,
             // '/api': {
             //     target: '47.96.0.103:80',

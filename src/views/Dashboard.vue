@@ -3,9 +3,8 @@
     <p class="title">任务进度</p>
     <div class="content-show" style="padding-left: 0px;">
       <div class="row list-search">
-        <div class="col-md-4 search-field well" v-for="item in percentlist" :key="item.id">
-            <p class="taskName">{{item.taskName}}</p>
-            <p class="taskAmount">{{item.complete}}/{{item.total}}</p>
+        <div class="col-md-3 well" v-for="item in percentlist" :key="item.id">
+            <p class="taskName">{{item.taskName}} ({{item.complete}}/{{item.total}})</p>
             <div>
               <el-progress :percentage="Number(item.taskPercent)" :color="item.color" :stroke-width="14"></el-progress>
             </div>
@@ -128,11 +127,12 @@
   }
   .well {
     min-height: 20px;
-    padding: 19px;
-    margin-bottom: 20px;
-    background-color: #f5f5f5;
+    padding: 10px;
+    margin-bottom: 15px;
+    margin-right: 10px;
+    background-color: #f9f9f9;
     border: 1px solid #e3e3e3;
-    border-radius: 4px;
+    border-radius: 2px;
     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
     box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
   }

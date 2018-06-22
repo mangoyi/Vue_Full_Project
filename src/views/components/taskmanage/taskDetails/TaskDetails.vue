@@ -19,6 +19,16 @@
                     <div style="left: 0px" class="label">查询号码：</div>
                     <input type="text" class="form-control input-field" placeholder="请输入电话号码" v-model.trim="number" />
                 </div>
+                <div class="col-md-2 search-field yi-tDetailOption">
+                    <div style="left: 0px" class="label">选择类别：</div>
+                    <el-select v-model="tab" clearable placeholder="请选择标记" size="medium" >
+                        <el-option key="A" label="A类别" value="A" ></el-option>
+                        <el-option key="B" label="B类别" value="B" ></el-option>
+                        <el-option key="C" label="C类别" value="C" ></el-option>
+                        <el-option key="D" label="D类别" value="D" ></el-option>
+                        <el-option key="E" label="E类别" value="E" ></el-option>
+                    </el-select>
+                </div>
                 <div class="col-md-1 search-field search-field_controls">
                     <button class="btn btn-primary search-btn" v-on:click.stop="searchList(1)">搜索</button>
                 </div>
@@ -158,12 +168,14 @@ export default {
             showVoice: false,
             recordList: [],
             dialogNumber: "",
-            completeRecordUrl: ""
+            completeRecordUrl: "",
+
+            tab: ''
         };
     },
     beforeRouteEnter: (to, from, next) => {
         next(vm => {
-            taskDetailSrv.taskDetail(vm.$route.query.taskId, vm.startDate, vm.endDate, vm.number, vm.currentPage, vm.pageSize).then(resp => {
+            taskDetailSrv.taskDetail(vm.$route.query.taskId, vm.startDate, vm.endDate, vm.number, vm.currentPage, vm.pageSize, vm.tab).then(resp => {
                 vm.detailList = resp.data.list;
                 vm.totalPageNum = resp.data.totalPageNum;
             }, err => {
@@ -174,7 +186,7 @@ export default {
     },
     methods: {
         searchList(currentPage = this.currentPage) {
-            taskDetailSrv.taskDetail(this.$route.query.taskId, this.startDate, this.endDate, this.number, currentPage, this.pageSize).then(resp => {
+            taskDetailSrv.taskDetail(this.$route.query.taskId, this.startDate, this.endDate, this.number, currentPage, this.pageSize, this.tab).then(resp => {
                 this.detailList = resp.data.list;
                 this.totalPageNum = resp.data.totalPageNum;
                 this.currentPage = currentPage;
@@ -307,4 +319,6 @@ export default {
         opacity: 0;
         width: 1px;
     }
+
+
 </style>

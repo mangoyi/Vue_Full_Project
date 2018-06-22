@@ -357,5 +357,10 @@ input:focus {
   font-size: 12px;
 }
 
+// taskDetail
+.yi-tDetailOption .el-input--medium .el-input__inner{
+    height: 40px;
+    line-height: 40px;
+}
 </style>
 
