@@ -4,9 +4,14 @@
     <div class="content-show" style="padding-left: 0px;">
       <div class="row list-search">
         <div class="col-md-3 well" v-for="item in percentlist" :key="item.id">
-            <p class="taskName">{{item.taskName}} ({{item.complete}}/{{item.total}})</p>
-            <div>
-              <el-progress :percentage="Number(item.taskPercent)" :color="item.color" :stroke-width="14"></el-progress>
+            <p class="taskName">{{item.taskName}}</p>
+            <div class="yi-taskPercent_wrap">
+              <div class="yi-taskPercent">
+                <el-progress :percentage="Number(item.taskPercent)" :color="item.color" :stroke-width="18" :text-inside="true"></el-progress>
+              </div>
+              <div class="yi-taskComplete">
+                ({{item.complete}}/{{item.total}})
+              </div>
             </div>
         </div>
       </div>
@@ -135,5 +140,16 @@
     border-radius: 2px;
     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
     box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+  }
+  .yi-taskPercent_wrap {
+    display: flex;
+  }
+  .yi-taskPercent {
+    width: 82%;
+  }
+
+  .yi-taskComplete {
+    width: 18%;
+    line-height: 18px;
   }
 </style>

@@ -14,6 +14,9 @@
                 <div class="col-md-12 search-field" style="padding-left: 0px;">
                     <div class="yi-remarkWrap"><span class="startTime">开始日期： {{remarkStartTime.substring(0, 16).replace("T", " ")}}</span><span class="endTime">结束日期： {{remarkEndTime.substring(0, 16).replace("T", " ")}}</span> <span>任务ID：{{remarkTaskId}}</span></div>
                 </div>
+                <div class="search-field col-md-12">
+                    <a style="margin-left: 10px; color: rgb(0,192,239)" :href="zipFileUrl" class="yi-zip">点击下载任务文件>>></a>
+                </div>
                 <div class="search-field">
                     <div class="label" style="left:0px;top: 4px;">任务名称：</div>
                     <el-input v-model.trim="taskName" placeholder="请输入内容"  disabled class="yi-taskName" style="color: #409EFF;"></el-input>
@@ -36,7 +39,6 @@
                             <div slot="tip" class="el-upload__tip">只能上传单个zip文件，且不超过2MB</div>
                         </el-upload>
                     </div>
-                    <a style="margin-left: 10px; color: rgb(0,192,239)" :href="zipFileUrl" download="tel.txt">点击下载任务文件>>></a>
                 </div>
                 <div class="col-md-12 search-field" style="margin-bottom: 40px;">
                     <div class="yi-transferWrap yi-transferWrapL">
@@ -345,5 +347,8 @@ export default {
     }
     .endTime {
         margin: 0 15px;
+    }
+    .yi-zip {
+        float: right;
     }
 </style>
