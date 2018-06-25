@@ -39,7 +39,7 @@
                         <tbody>
                             <tr v-for="(item,index) in taskList" :key="index">
                                 <td>{{item.Id}}</td>
-                                <td>{{item.taskName}}</td>
+                                <td :title="item.taskID">{{item.taskName}}</td>
                                 <td>{{objStatus[item.taskStatus]}}</td>
                                 <td>{{item.publisher}}</td>
                                 <td>{{item.startTime.substring(0, 16).replace("T", " ")}}</td>
