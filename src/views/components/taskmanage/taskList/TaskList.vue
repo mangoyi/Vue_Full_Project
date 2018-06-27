@@ -58,12 +58,12 @@
                                     </button>
                                     <button class="btn btn-danger" style="color: #fff;" @click="over(item.taskID)" :disabled="item.taskStatus === 2 ? true : false">结束</button>
                                 </td>
-                            </tr>                                          
+                            </tr>
                         </tbody>
                     </table>
                     <div class="page" v-show="(taskList.length > 0 && totalPageNum > 10)">
-                        <el-pagination 
-                            background 
+                        <el-pagination
+                            background
                             @current-change="searchList"
                             :current-page.sync="currentPage"
                             :page-size="pageSize"
@@ -73,7 +73,7 @@
                         </el-pagination>
                     </div>
                     <div class="info" v-show="taskList.length == 0">
-                        请根据条件搜索任务列表  
+                        请根据条件搜索任务列表
                     </div>
                 </div>
             </div>
@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import { Pagination, DatePicker, Button, Input, Message} from "element-ui";
+import { Pagination, DatePicker, Button, Input, Message, Loading} from "element-ui";
 import taskListSrv from "@/../src/views/services/taskList.service.js";
 
 /* eslint-disable */
@@ -109,7 +109,7 @@ export default {
         return {
             startDate: "",
             endDate: "",
-            pauseTaskId: "",       
+            pauseTaskId: "",
             openTaskId: "",
             objStatus: {
                 "0": "进行中",
@@ -127,29 +127,49 @@ export default {
     beforeRouteEnter: (to, from, next) => {
         console.log(to);
         next(vm => {
+            let loading = {};
             let temCurrentPage = 1;
 
             if (Number(vm.$route.query.currentPage) !== 1) {
                 // 说明从任务修改中跳转过来: 确保第几页修改，修改完成（返回）就回到第几页。
                 temCurrentPage = vm.$route.query.currentPage;
             }
+            // //加载动画 fl----- 6.26
+            loading = vm.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.5)'
+            });
 
-            taskListSrv.taskList(vm.startDate, vm.endDate, temCurrentPage, vm.pageSize).then(resp => {    
+            taskListSrv.taskList(vm.startDate, vm.endDate, temCurrentPage, vm.pageSize).then(resp => {
+                loading.close();
                 vm.taskList = resp.data.list;
                 vm.totalPageNum = resp.data.totalPageNum;
                 vm.currentPage = temCurrentPage;
             }, err => {
+                loading.close();
                 vm.$message.error(err.msg);
             });
         })
     },
     methods: {
         searchList(currentPage = this.currentPage) {
+            let loading = {};
+            // //加载动画 fl----- 6.26
+            loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.5)'
+            });
             taskListSrv.taskList(this.startDate, this.endDate, currentPage, this.pageSize).then(resp => {
+                loading.close();
                 this.taskList = resp.data.list;
                 this.totalPageNum = resp.data.totalPageNum;
-                this.currentPage = currentPage; 
+                this.currentPage = currentPage;
             }, err => {
+                loading.close();
                 this.$message.error(err.msg);
             });
         },
@@ -200,8 +220,8 @@ export default {
                 this.$message({
                     type: 'info',
                     message: '取消结束'
-                });          
-            }); 
+                });
+            });
         },
         taskUpdate(taskStatus, taskID) {
             if (taskStatus === 0) {
