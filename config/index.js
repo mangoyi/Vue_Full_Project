@@ -29,12 +29,19 @@ module.exports = {
         assetsPublicPath: '/',
         proxyTable: {
             '/api': {
-                target: 'http://zzbn.s1.natapp.cc',
+                target: 'http://www.zzbn.cn:8090/',//本地
                 changeOrigin: true,
                 pathRewrite: {
                     '^/api': ''
                 }
             }
+            // '/api': {
+            //     target: 'http://zzbn.s1.natapp.cc',
+            //     changeOrigin: true,
+            //     pathRewrite: {
+            //         '^/api': ''
+            //     }
+            // }
         },
         // CSS Sourcemaps off by default because relative paths are "buggy"
         // with this option, according to the CSS-Loader README

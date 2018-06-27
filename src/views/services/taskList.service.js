@@ -4,7 +4,7 @@ export default {
     // 任务列表
     taskList(startTime, endTime, currentPage, pageSize) {
         return axios({
-            url: "/api/task/searchTaskList",
+            url: "/api/api/task/searchTaskList",
             method: "post",
             data: { startTime, endTime, currentPage, pageSize }
         }).then(

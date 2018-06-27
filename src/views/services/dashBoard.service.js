@@ -4,7 +4,7 @@ export default {
     // 任务进度
     taskPercent() {
         return axios({
-            url: "/api/task/taskPercent",
+            url: "/api/api/task/taskPercent",
             method: "post",
             data: {}
         }).then(
@@ -26,7 +26,7 @@ export default {
     // 任务折线图
     taskLine() {
         return axios({
-            url: "/api/task/taskChart",
+            url: "/api/api/task/taskChart",
             method: "post",
             data: {}
         }).then(

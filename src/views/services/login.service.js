@@ -3,7 +3,7 @@ export default {
     // 登陆
     login(username, password) {
         return axios({
-            url: "/api/home/loginUser",
+            url: "/api/api/home/loginUser",
             method: "post",
             data: { username, password }
         }).then(
