@@ -4,7 +4,7 @@ export default {
     // 短信记录
     smsRecord(startDate, endDate, phone, currentPage, pageSize) {
         return axios({
-            url: "/api/sms/searchSmsLog",
+            url: "/api/api/sms/searchSmsLog",
             method: "post",
             data: { startDate, endDate, phone, currentPage, pageSize }
         }).then(

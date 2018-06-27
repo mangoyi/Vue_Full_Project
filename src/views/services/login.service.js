@@ -26,7 +26,7 @@ export default {
     // 修改密码
     updatePassword(username, password) {
         return axios({
-            url: "/api/home/updatePwd",
+            url: "/api/api/home/updatePwd",
             method: "post",
             data: { username, password }
         }).then(

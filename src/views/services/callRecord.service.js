@@ -4,7 +4,7 @@ export default {
     // 通话记录
     callRecord(startDate, endDate, phone, currentPage, pageSize) {
         return axios({
-            url: "/api/callLog/searchCallRecord",
+            url: "/api/api/callLog/searchCallRecord",
             method: "post",
             data: { startDate, endDate, phone, currentPage, pageSize }
         }).then(

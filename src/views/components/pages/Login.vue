@@ -10,16 +10,16 @@
                                 <p :class="{'login-info-error animated shake':login_err}" v-show="login_err">
                                     {{info}}</p>
                                 <div class="input-group mb-3">
-                  <span class="input-group-addon input-group-bg">
-                    <i class="icon-user"></i>
-                  </span>
+                                    <span class="input-group-addon input-group-bg">
+                                        <i class="icon-user"></i>
+                                    </span>
                                     <input type="text" @focus="login_err=false" v-model="username" class="form-control"
                                            placeholder="请输入用户名">
                                 </div>
                                 <div class="input-group mb-4">
-                  <span class="input-group-addon">
-                    <i class="icon-lock"></i>
-                  </span>
+                                    <span class="input-group-addon">
+                                        <i class="icon-lock"></i>
+                                    </span>
                                     <input type="password" @focus="login_err=false" v-model="password"
                                            class="form-control" placeholder="请输入密码" @keyup.enter="login">
                                 </div>
