@@ -88,7 +88,6 @@
 import { Pagination, DatePicker, Button, Input, Message, Loading} from "element-ui";
 import taskSrv from "@/../src/views/services/task.service.js";
 
-
 /* eslint-disable */
 export default {
     data() {
@@ -181,7 +180,6 @@ export default {
             taskSrv.getZip(currentTaskId).then(resp => {
                 let zipUrl = resp.msg;
                 vm.zipFileUrl = zipUrl;
-                
                 let data = resp.data.list[0];
 
                 vm.taskName = data.taskName;     // 任务名称
@@ -302,7 +300,6 @@ export default {
                 this.$message.error("请填写所有内容！");
             }
         }
-
     }
 };
 </script>

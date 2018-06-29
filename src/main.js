@@ -16,11 +16,11 @@ Vue.prototype.$echarts = echarts;
 import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(Element, { size: 'small' })
 Vue.use(animate)
-/* eslint-disable */
-/* eslint-disable no-new */
+    /* eslint-disable */
+    /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  template: '<App/>',
-  components: { App }
+    el: '#app',
+    router,
+    template: '<App/>',
+    components: { App }
 })

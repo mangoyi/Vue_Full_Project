@@ -87,29 +87,27 @@ export default {
     beforeRouteEnter: (to, from, next) => {
         next(vm => {
             let temCurrentPage = 1;
-
             if (vm.$route.query.currentPage) {
                 // 说明是从修改模板路由过来的
                 temCurrentPage = vm.$route.query.currentPage;
             }
-
             smsTemplateSrv.messageTemplateList(vm.templateContent, temCurrentPage, vm.pageSize).then(resp => {
                 vm.tempList = resp.data.list;
                 vm.totalPageNum = resp.data.totalPageNum;
                 vm.currentPage = temCurrentPage;
             }, err => {
                 vm.$message.error(err.msg); 
-            })
+            });
         })
     },
     methods: {
         searchSmsTemplate(currentPage = this.currentPage) {
              smsTemplateSrv.messageTemplateList(this.templateContent, currentPage, this.pageSize).then(resp => {
-                this.tempList = resp.data.list
-                this.currentPage = currentPage                                                      //这里注意一下，需要把当前点击的页数再告诉分页插件让他去显示数据
-                this.totalPageNum = resp.data.totalPageNum
+                this.tempList = resp.data.list;
+                this.currentPage = currentPage;                                                     //这里注意一下，需要把当前点击的页数再告诉分页插件让他去显示数据
+                this.totalPageNum = resp.data.totalPageNum;
             }, err => {
-                this.$message.error(err.msg)
+                this.$message.error(err.msg);
             })
         },
         Del(templateId) {
@@ -128,7 +126,3 @@ export default {
     }
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>

@@ -42,8 +42,6 @@
                             </template>                        
                         </div>
                     </div>
-                <!-- </div> -->
-                <!-- <div class="col-md-12 search-field" style="margin-bottom: 40px;"> -->
                     <div class="yi-transferWrap yi-transferWrapR">
                         <div class="label" style="left: -88px">人工座席：</div>
                         <div class="transfer-wrap">
@@ -93,14 +91,7 @@ export default {
             // labor data
             transferData1: [],                                  // 所有的员工坐席
             checkedTransferData1: [],                           // 工作的员工坐席
-
-            // 服务器地址
-            Url: "http://www.baidu.com"
         };
-    },
-    mounted() {
-        // this.initRobot();
-        // this.initLabor();
     },
     beforeRouteEnter: (to, from, next) => {
         next(vm => {
@@ -123,7 +114,7 @@ export default {
                             }
                         })()
                     );
-                })
+                });
             });
 
             taskSrv.getManual().then(resp => {
@@ -145,11 +136,10 @@ export default {
                             }
                         })()
                     );
-                })
-            })
-        })
+                });
+            });
+        });
     },
-
     methods: {
         beforeAvatarUpload(file){
             const testmsg=file.name.substring(file.name.lastIndexOf('.')+1);  
@@ -245,7 +235,6 @@ export default {
                     spinner: 'el-icon-loading',
                     background: 'rgba(0, 0, 0, 0.5)'
                 });
-
                 taskSrv.taskRelease(formData).then(resp => {
                     loading.close();
                     this.$message.success("任务创建成功！");

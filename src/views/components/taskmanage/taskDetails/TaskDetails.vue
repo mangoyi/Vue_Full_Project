@@ -136,16 +136,12 @@
 
             <p v-if="recordList.length == 0" style="text-align: center; margin-top: 10px;">当前通话无聊天内容</p>
         </el-dialog>
-
-
-
     </div>
 </template>
 
 <script>
 import { Pagination, DatePicker, Button, Input, Notification, MessageBox} from "element-ui";
 import taskDetailSrv from "@/../src/views/services/taskDetail.service.js";           
-
 
 /* eslint-disable */
 export default {
@@ -154,7 +150,6 @@ export default {
             startDate: "",
             endDate: "",
             number: "",
-            // listenFlag: false,
             recordSrc: "",                                                      // 录音地址
             centerDialogVisible: false,
             recordDialog: false,
@@ -162,14 +157,12 @@ export default {
             pageSize: 10,
             totalPageNum: 1,
             detailList: [],
-            // dialog: ""
 
             // 聊天内容
             showVoice: false,
             recordList: [],
             dialogNumber: "",
             completeRecordUrl: "",
-
             tab: ''
         };
     },
@@ -181,8 +174,7 @@ export default {
             }, err => {
                 vm.$message.error(err.msg);
             });
-
-        })
+        });
     },
     methods: {
         searchList(currentPage = this.currentPage) {
@@ -193,7 +185,6 @@ export default {
             }, err => {
                 this.$message.error(err.msg);
             });
-
         },
         // open 对话
         openDialog(id, phone, Src) {
@@ -225,7 +216,6 @@ export default {
         closeRecordDialog() {
             this.recordList = [];
         }
-
     }
 };
 </script>
@@ -319,6 +309,4 @@ export default {
         opacity: 0;
         width: 1px;
     }
-
-
 </style>

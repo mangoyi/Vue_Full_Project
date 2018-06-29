@@ -37,89 +37,82 @@
 </template>
 
 <script>
-    import {Loading} from "element-ui";
-    import loginSrv from "@/../src/views/services/login.service.js";
+import {Loading} from "element-ui";
+import loginSrv from "@/../src/views/services/login.service.js";
 
-    /* eslint-disable */
-    export default {
-        name: 'Login',
-        data() {
-            return {
-                username: '',
-                password: '',
-                info: '',
-                login_err: false,
-            }
-        },
-        methods: {
-            login() {
+/* eslint-disable */
+export default {
+    name: 'Login',
+    data() {
+        return {
+            username: '',
+            password: '',
+            info: '',
+            login_err: false
+        }
+    },
+    methods: {
+        login() {
+            // 加载动画 fl----6.27
+            let loading = {};
+            if (!(this.username && this.password)) {
+                this.login_err = true;
+                this.info = '请输入用户信息';
+            } else {
                 // 加载动画 fl----6.27
-                let loading = {};
-                let _this = this;
-                if (!(this.username && this.password)) {
-                    this.login_err = true;
-                    this.info = '请输入用户信息';
-                } else {
-                    // 加载动画 fl----6.27
-                    loading = this.$loading({
-                        lock: true,
-                        text: 'Loading',
-                        spinner: 'el-icon-loading',
-                        background: 'rgba(0, 0, 0, 0.5)'
-                    });
-                    this.login_err = false;
-                    loginSrv.login(this.username, this.password).then(resp => {
-                        loading.close();// 加载动画 fl----6.27
-                        let username = resp.data.userName;
-                        window.sessionStorage.setItem("username", username)
-                        this.$router.push("/dashboard");
-                    }, err => {
-                        loading.close();// 加载动画 fl----6.27
-                        this.$message.error(err.msg);
-                    })
-                }
+                loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.5)'
+                });
+                this.login_err = false;
+                loginSrv.login(this.username, this.password).then(resp => {
+                    loading.close();// 加载动画 fl----6.27
+                    let username = resp.data.userName;
+                    window.sessionStorage.setItem("username", username)
+                    this.$router.push("/dashboard");
+                }, err => {
+                    loading.close();// 加载动画 fl----6.27
+                    this.$message.error(err.msg);
+                })
             }
         }
     }
+}
 </script>
 
 <style scoped>
-    h1 {
-        font-family: 'Courier New', Courier, monospace;
-        margin-bottom: 20px;
-        text-align: center;
-        color: #fff;
-    }
-
-    form {
-        background: rgba(0, 0, 0, 0.3);
-    }
-
-    input {
-        border-radius: 5px;
-        height: 40px;
-    }
-
-    input:-webkit-autofill {
-        background-color: #ffffff;
-        background-image: none;
-    }
-
-    .login-info-error {
-        background: #F2DEDE;
-        text-align: center;
-        font-size: 16px;
-        color: red;
-        height: 35px;
-        border-radius: 5px;
-        line-height: 35px;
-    }
-
-    .card {
-        border-radius: 8px;
-    }
-
-    .cp {
-        text-align: center;
-    }
+h1 {
+    font-family: 'Courier New', Courier, monospace;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #fff;
+}
+form {
+    background: rgba(0, 0, 0, 0.3);
+}
+input {
+    border-radius: 5px;
+    height: 40px;
+}
+input:-webkit-autofill {
+    background-color: #ffffff;
+    background-image: none;
+}
+.login-info-error {
+    background: #F2DEDE;
+    text-align: center;
+    font-size: 16px;
+    color: red;
+    height: 35px;
+    border-radius: 5px;
+    line-height: 35px;
+}
+.card {
+    border-radius: 8px;
+}
+.cp {
+    text-align: center;
+}
 </style>

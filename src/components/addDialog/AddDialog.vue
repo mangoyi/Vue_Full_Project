@@ -66,18 +66,18 @@ export default {
     },
     methods: {
         confirm() {
-            let useConsume = []
-            let len = this.select.length
+            let useConsume = [];
+            let len = this.select.length;
             for (let i = 0; i < len; i++) {
-                let value = this.select[i].name + ' : ' + this.assets[i].value + ' '
-                useConsume.push(value)
+                let value = this.select[i].name + ' : ' + this.assets[i].value + ' ';
+                useConsume.push(value);
             }
-            this.useConsume = useConsume
-            this.addItemDialog = false
+            this.useConsume = useConsume;
+            this.addItemDialog = false;
         },
         selectItem() {
-            let len = this.assets.length
-            this.select = []
+            let len = this.assets.length;
+            this.select = [];
             for (let i = 0; i < len; i++) {
                 if (this.assets[i].checked == true) {
                     if (this.assets[i].value == 0) {
@@ -89,11 +89,11 @@ export default {
                     })
                 }
             }
-            return this.select
+            return this.select;
         },
         deleteData(index) {
-            this.assets.splice(index, 1)
-            this.confirmDialog = false
+            this.assets.splice(index, 1);
+            this.confirmDialog = false;
         },
         addData() {
             this.assets.push({
@@ -127,7 +127,6 @@ export default {
     margin-left: 5px;
     cursor: pointer;
 }
-
 .add-delete {
     color: #409eff;
     margin-left: -40px;
@@ -135,19 +134,16 @@ export default {
     font-size: 40px;
     display: inline-flex;
 }
-
 .input-field {
     border-radius: 5px;
     height: 40px;
 }
-
 .Spinner {
     display: block;
     overflow: hidden;
     width: 160px;
     margin-top: 3px;
 }
-
 .Spinner a {
     display: inline-block;
     width: 35px;
@@ -158,7 +154,6 @@ export default {
     cursor: pointer;
     outline: 0;
 }
-
 .Spinner .Amount {
     width: 50px;
     height: 35px;
@@ -170,13 +165,11 @@ export default {
     color: #565656;
     outline: 0;
 }
-
 .Decrease i {
     padding-left: 10px;
     font-size: 20px;
     color: #409eff;
 }
-
 .Increase i {
     padding-left: 10px;
     position: relative;

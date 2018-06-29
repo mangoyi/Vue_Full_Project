@@ -9,7 +9,6 @@
                     <div class="label" style="left:0px;">机器人ID：</div>
                     <el-input v-model="keyWord" placeholder="请输入机器人ID"></el-input>
                 </div>
-
                 <div class="col-md-1 search-field search-field_controls">
                     <button class="btn btn-primary search-btn" v-on:click.stop="searchList(1)">搜索</button>
                 </div>
@@ -83,13 +82,12 @@ export default {
         next(vm => {
             seatSrv.robotSeat(vm.keyWord, vm.currentPage, vm.pageSize).then(resp => {
                 vm.robotList = resp.data.list;
-                vm.totalPageNum = resp.data.totalPageNum
+                vm.totalPageNum = resp.data.totalPageNum;
             }, err => { 
                 vm.$message.error(err.msg);
             })
         });
     },
-
     methods: {
         searchList(currentPage = this.currentPage) {
             seatSrv.robotSeat(this.keyWord, currentPage, this.pageSize).then(resp => {
@@ -106,9 +104,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .info {
-        padding-top: 14px;
-        text-align: center;
-        color: #666;
-    }
+.info {
+    padding-top: 14px;
+    text-align: center;
+    color: #666;
+}
 </style>

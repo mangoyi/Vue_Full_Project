@@ -96,17 +96,15 @@ export default {
             }, err => {
                 this.$message.error(err.msg);
             })
-
         }
     }
 }
-
 </script>
 
 <style lang="scss" scoped>
-    .info {
-        padding-top: 14px;
-        text-align: center;
-        color: #666;
-    }
+.info {
+    padding-top: 14px;
+    text-align: center;
+    color: #666;
+}
 </style>

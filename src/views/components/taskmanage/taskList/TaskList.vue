@@ -182,10 +182,8 @@ export default {
                 this.openTaskId = item.taskID;
             }
         },
-
         confirmStop() {
             this.centerDialogVisible = false;
-
             taskListSrv.pauseTask(this.pauseTaskId).then(resp => {
                 this.searchList(this.currentPage);
                 this.$message.success("任务已暂停!");
@@ -193,10 +191,8 @@ export default {
                 this.$message.error(err.msg);
             })
         },
-
         confirmOpen() {
             this.centerDialogVisible2 = false;
-
             taskListSrv.openTask(this.openTaskId).then(resp => {
                 this.searchList(this.currentPage);
                 this.$message.success("任务已开启!");

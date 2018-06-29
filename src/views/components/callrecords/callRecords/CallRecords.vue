@@ -157,24 +157,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .i-wrap {
-        padding: 10px;
-        cursor: pointer;
-        &:hover {
-            color: rgba(78 ,189 ,116, .6);
-        }
+.i-wrap {
+    padding: 10px;
+    cursor: pointer;
+    &:hover {
+        color: rgba(78 ,189 ,116, .6);
     }
-    .callaudio{
-        width: 100%;
-    }
-    .info {
-        padding-top: 14px;
-        text-align: center;
-        color: #666;
-    }
-    .audio-wrap {
-        margin: -10px auto 10px 0;
-    }
-
-
+}
+.callaudio{
+    width: 100%;
+}
+.info {
+    padding-top: 14px;
+    text-align: center;
+    color: #666;
+}
+.audio-wrap {
+    margin: -10px auto 10px 0;
+}
 </style>
