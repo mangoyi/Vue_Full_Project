@@ -79,7 +79,7 @@ export default {
     },
     beforeRouteEnter: (to, from, next) => {
         next(vm => {
-            seatSrv.laborSeat(vm.keyWord, this.currentPage, this.pageSize).then(resp => {
+            seatSrv.laborSeat(vm.keyWord, vm.currentPage, vm.pageSize).then(resp => {
                 vm.laborList = resp.data.list
                 vm.totalPageNum = resp.data.totalPageNum
             }, err => {

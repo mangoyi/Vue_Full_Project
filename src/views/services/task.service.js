@@ -50,11 +50,11 @@ export default {
     },
 
     // 员工
-    getManual(taskId) {
+    getManual() {
         return axios({
             url: "/api/api/account/getFreeManualList",
             method: "post",
-            data: { taskId }
+            data: {}
         }).then(
             resp => {
                 if (resp.data.status == 0) {
