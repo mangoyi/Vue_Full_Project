@@ -28,6 +28,31 @@
                         </el-upload>
                     </div>
                 </div>
+                <div class="col-md-12 search-field row " style="margin-top: -10px; margin-bottom: 2em;">
+                    <div class="label" style="left:14px;top: 5px;">外呼时间：</div>
+                    <div class="col-md-3">
+                        <el-time-picker
+                            is-range
+                            format="HH:mm"
+                            v-model="period1"
+                            range-separator="至"
+                            start-placeholder="开始时间"
+                            end-placeholder="结束时间"
+                            placeholder="选择时间范围">
+                        </el-time-picker>
+                    </div>
+                    <div class="col-md-3">
+                        <el-time-picker
+                            is-range
+                            format="HH:mm"
+                            v-model="period2"
+                            range-separator="至"
+                            start-placeholder="开始时间"
+                            end-placeholder="结束时间"
+                            placeholder="选择时间范围">
+                        </el-time-picker>
+                    </div>
+                </div>
                 <div class="col-md-12 search-field" style="margin-bottom: 40px;">
                     <div class="yi-transferWrap yi-transferWrapL">
                         <div class="label" style="left: -88px;">机器人坐席：</div>
@@ -91,6 +116,10 @@ export default {
             // labor data
             transferData1: [],                                  // 所有的员工坐席
             checkedTransferData1: [],                           // 工作的员工坐席
+
+            // 机器人工作时间
+            period1: '',
+            period2: ''
         };
     },
     beforeRouteEnter: (to, from, next) => {
@@ -187,6 +216,9 @@ export default {
             this.$message.warning('只能上传单个zip文件！');
         },
         confirmCreate() {                                                           // 创建任务
+            console.log(this.period1)
+            // console.log(new Date(this.period1[0]));
+            // console.log(this.period1[1]);
             let loading = {};
             let taskName = this.taskName;                                             // 任务名称
               
