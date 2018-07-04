@@ -49,7 +49,10 @@ export default new Router({
             children: [{
                     path: "dashboard",
                     name: "控制台",
-                    component: Dashboard
+                    component: Dashboard,
+                    meta: {
+                        requireAuth: true // 添加该字段，表示进入这个路由是需要验证登陆的
+                    }
                 },
 
                 // 通话记录
@@ -65,7 +68,10 @@ export default new Router({
                     children: [{
                         path: "callRecords",
                         name: "通话记录",
-                        component: CallRecords
+                        component: CallRecords,
+                        meta: {
+                            requireAuth: true
+                        }
                     }]
                 },
 
@@ -82,22 +88,34 @@ export default new Router({
                     children: [{
                             path: "taskList",
                             name: "任务列表",
-                            component: TaskList
+                            component: TaskList,
+                            meta: {
+                                requireAuth: true
+                            }
                         },
                         {
                             path: "taskRelease",
                             name: "任务发布",
-                            component: TaskRelease
+                            component: TaskRelease,
+                            meta: {
+                                requireAuth: true
+                            }
                         },
                         {
                             path: "taskUpdate",
                             name: "任务修改",
-                            component: TaskUpdate
+                            component: TaskUpdate,
+                            meta: {
+                                requireAuth: true
+                            }
                         },
                         {
                             path: "taskDetails",
                             name: "任务明细",
-                            component: TaskDetails
+                            component: TaskDetails,
+                            meta: {
+                                requireAuth: true
+                            }
                         }
                     ]
                 },
@@ -115,12 +133,18 @@ export default new Router({
                     children: [{
                             path: "laborSeat",
                             name: "人工座席",
-                            component: LaborSeat
+                            component: LaborSeat,
+                            meta: {
+                                requireAuth: true
+                            }
                         },
                         {
                             path: "robotSeat",
                             name: "机器人坐席",
-                            component: RobotSeat
+                            component: RobotSeat,
+                            meta: {
+                                requireAuth: true
+                            }
                         }
                     ]
                 },
@@ -138,22 +162,34 @@ export default new Router({
                     children: [{
                             path: "smsTemplate",
                             name: "短信模板",
-                            component: SmsTemplate
+                            component: SmsTemplate,
+                            meta: {
+                                requireAuth: true
+                            }
                         },
                         {
                             path: "smsRecord",
                             name: "短信记录",
-                            component: SmsRecord
+                            component: SmsRecord,
+                            meta: {
+                                requireAuth: true
+                            }
                         },
                         {
                             path: "addsmsTemplate",
                             name: "短信模板",
-                            component: AddSmsTemplate
+                            component: AddSmsTemplate,
+                            meta: {
+                                requireAuth: true
+                            }
                         },
                         {
                             path: "updateSmsTemplate",
                             name: "短信模板",
-                            component: UpdateSmsTemplate
+                            component: UpdateSmsTemplate,
+                            meta: {
+                                requireAuth: true
+                            }
                         }
                     ]
                 }

@@ -28,8 +28,15 @@ module.exports = {
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         proxyTable: {
+            // '/api': {
+            //     target: 'http://www.zzbn.cn:8090/', //本地
+            //     changeOrigin: true,
+            //     pathRewrite: {
+            //         '^/api': ''
+            //     }
+            // }
             '/api': {
-                target: 'http://www.zzbn.cn:8090/', //本地
+                target: 'http://192.168.1.150:5000/', // 马 本地
                 changeOrigin: true,
                 pathRewrite: {
                     '^/api': ''

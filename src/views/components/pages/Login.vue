@@ -39,6 +39,7 @@
 <script>
 import {Loading} from "element-ui";
 import loginSrv from "@/../src/views/services/login.service.js";
+import axios from "axios";
 
 /* eslint-disable */
 export default {
@@ -53,13 +54,11 @@ export default {
     },
     methods: {
         login() {
-            // 加载动画 fl----6.27
             let loading = {};
             if (!(this.username && this.password)) {
                 this.login_err = true;
                 this.info = '请输入用户信息';
             } else {
-                // 加载动画 fl----6.27
                 loading = this.$loading({
                     lock: true,
                     text: 'Loading',
@@ -68,12 +67,18 @@ export default {
                 });
                 this.login_err = false;
                 loginSrv.login(this.username, this.password).then(resp => {
-                    loading.close();// 加载动画 fl----6.27
-                    let username = resp.data.userName;
-                    window.sessionStorage.setItem("username", username)
+                    loading.close();
+
+                    // token安全验证                    
+                    for (let [key, value] of Object.entries(resp.data)) {
+                        console.log(`${key}:${value}`);
+                        window.sessionStorage.setItem(key, value);
+                    }
+                    axios.defaults.headers.common["Authorization"] = "Bearer" + resp.data.token;
+
                     this.$router.push("/dashboard");
                 }, err => {
-                    loading.close();// 加载动画 fl----6.27
+                    loading.close();                                        
                     this.$message.error(err.msg);
                 })
             }
