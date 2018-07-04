@@ -34,6 +34,7 @@
                         <el-time-picker
                             is-range
                             format="HH:mm"
+                            value-format="HH:mm"
                             v-model="period1"
                             range-separator="至"
                             start-placeholder="开始时间"
@@ -45,6 +46,7 @@
                         <el-time-picker
                             is-range
                             format="HH:mm"
+                            value-format="HH:mm"
                             v-model="period2"
                             range-separator="至"
                             start-placeholder="开始时间"
@@ -216,13 +218,22 @@ export default {
             this.$message.warning('只能上传单个zip文件！');
         },
         confirmCreate() {                                                           // 创建任务
-            console.log(this.period1)
-            // console.log(new Date(this.period1[0]));
-            // console.log(this.period1[1]);
             let loading = {};
             let taskName = this.taskName;                                             // 任务名称
               
             let publisher = window.sessionStorage.getItem("username");                // 发布者
+
+            let tempPeriod1 = this.period1;
+            let startTime1 = tempPeriod1[0];
+            let endTime1 = tempPeriod1[1];
+
+            console.log(startTime1, endTime1);
+
+            let tempPeriod2 = this.period2;
+            let startTime2 = tempPeriod2[0];
+            let endTime2 = tempPeriod2[1];
+
+            console.log(startTime2, endTime2);
 
             let temrobotSeat = [];                                                     // 机器人坐席
             this.checkedTransferData.forEach(item => {
@@ -254,7 +265,11 @@ export default {
                 taskName: taskName,
                 publisher: publisher,
                 robotSeat: robotSeat,
-                manualSeat: manualSeat
+                manualSeat: manualSeat,
+                startTime1: startTime1,
+                endTime1: endTime1,
+                startTime2: startTime2,
+                endTime2: endTime2
             };  
             for(let key in obj){
                 formData.append(key, obj[key]);

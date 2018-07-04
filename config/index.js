@@ -29,7 +29,7 @@ module.exports = {
         assetsPublicPath: '/',
         proxyTable: {
             '/api': {
-                target: 'http://www.zzbn.cn:8090/',//本地
+                target: 'http://www.zzbn.cn:8090/', //本地
                 changeOrigin: true,
                 pathRewrite: {
                     '^/api': ''
