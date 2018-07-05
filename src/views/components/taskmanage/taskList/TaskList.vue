@@ -32,7 +32,7 @@
                                 <th>修改时间</th>
                                 <th>任务进度</th>
                                 <th>机器人个数</th>
-                                <th>查看明细</th>
+                                <th>明细</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
@@ -48,8 +48,10 @@
                                 <td>{{item.robotNum}}</td>
                                 <td>
                                     <router-link :to="{path: '/taskManage/TaskDetails', query: {
-                                        taskId: item.taskID
+                                        taskId: item.taskID,
+                                        currentPage: currentPage
                                     }}">查看明细</router-link>
+                                    <router-link to="www.baidu.com">导出明细</router-link>
                                 </td>
                                 <td>
                                     <button class="btn btn-primary" style="color: #fff;" @click="togglePause(item)" :disabled="item.taskStatus === 2 ? true : false" >{{item.taskStatus == 1 ? '开启' : '暂停'}}</button>

@@ -74,7 +74,7 @@ export default {
                         console.log(`${key}:${value}`);
                         window.sessionStorage.setItem(key, value);
                     }
-                    axios.defaults.headers.common["Authorization"] = "Bearer" + resp.data.token;
+                    axios.defaults.headers.common["Authorization"] =resp.data.token;
 
                     this.$router.push("/dashboard");
                 }, err => {

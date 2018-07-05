@@ -72,13 +72,15 @@ export default {
           this.username = window.sessionStorage.getItem('username');
       },
       loginOut(){
+          // token值为空
+          window.sessionStorage.setItem("token", "");
           this.$router.push('/pages/login');
       },
       handleCommand(command) {
           if (command == "a") {     // 修改密码
               this.passwordDialog = true;
           } else if(command == "b") {   // 退出登录
-              this.$router.push("/pages/login");
+              this.loginOut();
           }
       },
     confirmUpdate() {

@@ -29,6 +29,11 @@ import AddSmsTemplate from "@/views/components/smsmanage/smsTemplate/AddSmsTempl
 import UpdateSmsTemplate from "@/views/components/smsmanage/smsTemplate/updateSmsTemplate";
 import SmsRecord from "@/views/components/smsmanage/smsRecord/SmsRecord";
 
+// 系统管理
+import AddUser from "@/views/components/system/user/AddUser";
+import UpdateUser from "@/views/components/system/user/UpdateUser";
+import User from "@/views/components/system/user/User";
+
 // Views - Pages
 import Page404 from "@/views/components/pages/Page404";
 import Page500 from "@/views/components/pages/Page500";
@@ -192,7 +197,45 @@ export default new Router({
                             }
                         }
                     ]
+                },
+
+                // 系统管理
+                {
+                    path: "system",
+                    redirect: "/system/user",
+                    name: "短信管理",
+                    component: {
+                        render(c) {
+                            return c("router-view");
+                        }
+                    },
+                    children: [{
+                            path: "addUser",
+                            name: "用户管理",
+                            component: AddUser,
+                            meta: {
+                                requireAuth: true
+                            }
+                        },
+                        {
+                            path: "updateUser",
+                            name: "用户管理",
+                            component: UpdateUser,
+                            meta: {
+                                requireAuth: true
+                            }
+                        },
+                        {
+                            path: "user",
+                            name: "用户管理",
+                            component: User,
+                            meta: {
+                                requireAuth: true
+                            }
+                        }
+                    ]
                 }
+
 
             ]
         },

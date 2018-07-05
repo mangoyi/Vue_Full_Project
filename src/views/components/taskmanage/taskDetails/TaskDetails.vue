@@ -2,6 +2,12 @@
     <div class="animated fadeIn content_page">
         <div class="content-title">
             <div class="title">任务明细</div>
+            <router-link class="btn btn-info back" :to="{
+                path: '/taskManage/TaskList',
+                query: {currentPage: taskCurrentPage}
+            }">
+            返回
+            </router-link>
         </div>
         <div class="content-show">
             <div class="row list-search">
@@ -163,7 +169,10 @@ export default {
             recordList: [],
             dialogNumber: "",
             completeRecordUrl: "",
-            tab: ''
+            tab: '',
+
+            // 任务列表中页数
+            taskCurrentPage: 1
         };
     },
     beforeRouteEnter: (to, from, next) => {
@@ -174,6 +183,8 @@ export default {
             }, err => {
                 vm.$message.error(err.msg);
             });
+
+            vm.taskCurrentPage = vm.$route.query.currentPage;           // 确保返回到任务列表的时候是当前任务所在页
         });
     },
     methods: {
