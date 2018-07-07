@@ -51,7 +51,11 @@
                                         taskId: item.taskID,
                                         currentPage: currentPage
                                     }}">查看明细</router-link>
-                                    <router-link to="www.baidu.com">导出明细</router-link>
+                                    <router-link :to="{path: '/api/api/task/exportTaskDetail',
+                                        query: {
+                                            taskId: '20180629174935'
+                                        }
+                                    }">导出明细</router-link>
                                 </td>
                                 <td>
                                     <button class="btn btn-primary" style="color: #fff;" @click="togglePause(item)" :disabled="item.taskStatus === 2 ? true : false" >{{item.taskStatus == 1 ? '开启' : '暂停'}}</button>
@@ -123,7 +127,8 @@ export default {
             currentPage: 1,
             pageSize: 10,
             totalPageNum: 1,
-            taskList: []                                                    // json数据
+            taskList: [],                                                    // json数据
+            downLoadUrl: ''
         };
     },
     beforeRouteEnter: (to, from, next) => {
@@ -154,6 +159,12 @@ export default {
                 vm.$message.error(err.msg);
             });
         })
+    },
+    computed() {
+        // loadFile: function() {
+        //     this.downLoadUrl = "http://127.0.0.1:5000/api/task/exportTaskDetail?taskId20180629174935";
+        //     return this.downLoadUrl;
+        // }
     },
     methods: {
         searchList(currentPage = this.currentPage) {

@@ -67,14 +67,14 @@
                             </tr>                                          
                         </tbody>
                     </table>
-                    <div class="page" v-show="(recordList.length > 0 && totalPageNum > 10)">
+                    <div class="page" v-show="(recordList.length > 0 && totalRecords > 10)">
                         <el-pagination 
                             background 
                             @current-change="searchList"
                             :current-page.sync="currentPage"
                             :page-size="pageSize"
                             layout="total, prev, pager, next"
-                            :total="totalPageNum"
+                            :total="totalRecords"
                         >
                         </el-pagination>
                     </div>
@@ -113,20 +113,21 @@ export default {
             centerDialogVisible: false,
             currentPage: 1,
             pageSize: 10,
-            totalPageNum: 1,
+            totalRecords: 1,
             recordList: []
         };
     },
     methods: {
         searchList(currentPage = this.currentPage) {
             callRecordSrv.callRecord(this.startDate, this.endDate, this.phone, currentPage, this.pageSize, this.tabValue).then(resp => {
-                this.recordList = resp.data.list;
+                console.log(resp);
+                this.recordList = resp.data.pageInfo.list;
                 if (this.recordList.length == 0) {
                     this.$message.success("当前无通话记录");
                 } else {
-                    this.totalPageNum = resp.data.totalPageNum;
+                    this.totalRecords = resp.data.pageInfo.totalRecords;
                     this.currentPage = currentPage;
-                    this.recordPlayStateArr = resp.data.list.map((item, index) => {
+                    this.recordPlayStateArr = resp.data.pageInfo.list.map((item, index) => {
                         return item.recordPlayState;
                     });
                 }

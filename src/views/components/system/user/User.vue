@@ -6,35 +6,9 @@
         <div class="content-show" key="1">
             <div class="row list-search">
                 <div class="col-md-2 search-field">
-                    <div class="label">工号：</div>
-                    <input type="text" class="form-control input-field" placeholder="请输入工号" />
-                </div>
-                <div class="col-md-2 search-field">
                     <div class="label">姓名：</div>
-                    <input type="text" class="form-control input-field" placeholder="请输入姓名" />
+                    <input type="text" class="form-control input-field" placeholder="请输入姓名" v-model="username" />
                 </div>
-                <div class="col-md-2 search-field">
-                    <div class="label">状态：</div>
-                    <el-select size="large" v-model="value" class="el-field-input" placeholder="请选择">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                    </el-select>
-                </div>
-                <div class="col-md-2 search-field">
-                    <div class="label">部门：</div>
-                    <el-select size="large" v-model="value" class="el-field-input" placeholder="请选择">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                    </el-select>
-                </div>
-                <div class="col-md-2 search-field">
-                    <div class="label">角色：</div>
-                    <el-select size="large" v-model="value1" class="el-field-input" placeholder="请选择">
-                        <el-option v-for="item in options1" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                    </el-select>
-                </div>
-
                 <div class="col-md-1 search-field search-field_controls">
                     <button class="btn btn-primary search-btn">搜索</button>
                 </div>
@@ -50,81 +24,38 @@
                     <table class="table table-bordered table-striped table-sm">
                         <thead>
                             <tr>
-                                <th>工号</th>
+                                <th>ID</th>
                                 <th>姓名</th>
                                 <th>用户登录名</th>
-                                <th>部门</th>
                                 <th>角色</th>
-                                <th>联系方式</th>
-                                <th>邮箱</th>
                                 <th>状态</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
+                        <!-- <tbody v-for="(item, index) in userList" :key="index"> -->
                         <tbody>
                             <tr>
                                 <td>123</td>
                                 <td>哈哈</td>
                                 <td>ALHH</td>
-                                <td>产品部</td>
                                 <td>普通用户</td>
-                                <td>18912345678</td>
-                                <td>123456@qq.com</td>
                                 <td>正常</td>
                                 <td>
-                                    <router-link :to="'/system/updateUser'">
+                                    <router-link :to="{path: '/system/updateUser', query: {id: 'tstid', currentPage: currentPage}}">
                                         修改
                                     </router-link>
-                                    <router-link :to="{path: '/system/updateUser',  query: { disable: 1,}}"> 查看</router-link>
+                                    <!-- <router-link :to="{path: '/system/updateUser',  query: { disable: 1,}}"> 查看</router-link> -->
 
                                     <a @click="centerDialogVisible=true">锁定</a>
-                                    <a @click="passwordDialog=true">重置密码</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>123</td>
-                                <td>哈哈</td>
-                                <td>ALHH</td>
-                                <td>产品部</td>
-                                <td>普通用户</td>
-                                <td>18912345678</td>
-                                <td>123456@qq.com</td>
-                                <td>正常</td>
-                                <td>
-                                    <router-link :to="'/system/updateUser'">
-                                        修改
-                                    </router-link>
-                                    <router-link :to="{path: '/system/updateUser',  query: { disable: 1,}}"> 查看</router-link>
-                                    <a @click="centerDialogVisible=true">锁定</a>
-                                    <a @click="passwordDialog=true">重置密码</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>123</td>
-                                <td>哈哈</td>
-                                <td>ALHH</td>
-                                <td>产品部</td>
-                                <td>普通用户</td>
-                                <td>18912345678</td>
-                                <td>123456@qq.com</td>
-                                <td>正常</td>
-                                <td>
-                                    <router-link :to="'/system/updateUser'">
-                                        修改
-                                    </router-link>
-                                    <router-link :to="{path: '/system/updateUser',  query: { disable: 1,}}"> 查看</router-link>
-                                    <a @click="centerDialogVisible=true">锁定</a>
-                                    <a @click="passwordDialog=true">重置密码</a>
+                                    <a @click="centerDialogVisible=true">删除</a>
+                                    <!-- <a @click="passwordDialog=true">重置密码</a> -->
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <!-- <div class="list-empty" ng-show="content.orderList.length===0">
-                                                                                                                                    没有可以显示的订单
-                                                                                                                                </div> -->
+                    
                     <div class="page">
-
-                        <el-pagination background layout="prev, pager, next" :total="1000">
+                        <el-pagination background layout="prev, pager, next" :total="totalRecords" v-if="userList.length > 0">
                         </el-pagination>
                     </div>
                 </div>
@@ -166,35 +97,33 @@
 </template>
 
 <script>
-import { Pagination, Dialog } from 'element-ui'
+import { Pagination, Dialog } from 'element-ui';
+import userSrv from "@/../src/views/services/user.service.js";
 /* eslint-disable */
 export default {
     data() {
         return {
             passwordDialog: false,
             centerDialogVisible: false,
-            currentPage: 1,
-            value:'',
-            value1:'',
-            options: [{
-                value: '选项1',
-                label: '假数据1'
-            }, {
-                value: '选项2',
-                label: '假数据2'
-            }],
-               options1: [{
-                value: '选项1',
-                label: '假数据1'
-            }, {
-                value: '选项2',
-                label: '假数据2'
-            }],
+            userList: [],
+            username: "",
+            currentPage: 2,
+            pageSize: 10,
+            totalRecords: 0
         }
     },
     components: {
         'el-pagination': Pagination,
         'el-dialog': Dialog
+    },
+    beforeRouteEnter (to, from, next) {
+        next(vm => {
+            userSrv.getAllUsers().then(resp => {
+                // todoes
+            }, err => {
+
+            })
+        });
     }
 }
 </script>

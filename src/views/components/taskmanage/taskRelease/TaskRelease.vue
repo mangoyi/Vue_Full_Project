@@ -119,7 +119,7 @@ export default {
             transferData1: [],                                  // 所有的员工坐席
             checkedTransferData1: [],                           // 工作的员工坐席
 
-            // 机器人工作时间
+            // 机器人工作时间段
             period1: '',
             period2: ''
         };
