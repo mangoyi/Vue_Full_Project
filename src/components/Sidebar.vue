@@ -104,8 +104,10 @@ export default {
             e.target.parentElement.classList.toggle('open');
         },
         initRole() {
-            this.roles = window.sessionStorage.getItem("roles");
-            console.log(this.roles === "admin", "管理员");
+            if (window.sessionStorage.getItem("roles").indexOf("admin") > -1) {
+                this.roles = "admin";
+            }
+            console.log("管理员...........");
         }
     }
 }

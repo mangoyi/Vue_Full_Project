@@ -51,11 +51,7 @@
                                         taskId: item.taskID,
                                         currentPage: currentPage
                                     }}">查看明细</router-link>
-                                    <router-link :to="{path: '/api/api/task/exportTaskDetail',
-                                        query: {
-                                            taskId: '20180629174935'
-                                        }
-                                    }">导出明细</router-link>
+                                    <a @click="exportDetail(item.taskID)">导出明细</a>
                                 </td>
                                 <td>
                                     <button class="btn btn-primary" style="color: #fff;" @click="togglePause(item)" :disabled="item.taskStatus === 2 ? true : false" >{{item.taskStatus == 1 ? '开启' : '暂停'}}</button>
@@ -160,16 +156,9 @@ export default {
             });
         })
     },
-    computed() {
-        // loadFile: function() {
-        //     this.downLoadUrl = "http://127.0.0.1:5000/api/task/exportTaskDetail?taskId20180629174935";
-        //     return this.downLoadUrl;
-        // }
-    },
     methods: {
         searchList(currentPage = this.currentPage) {
             let loading = {};
-            // //加载动画 fl----- 6.26
             loading = this.$loading({
                 lock: true,
                 text: 'Loading',
@@ -247,6 +236,29 @@ export default {
                     }
                 });
             }
+        },
+
+        // 下载文件
+        exportDetail(taskID) {
+            taskListSrv.exportDetail(taskID).then(resp => {
+                this.download(resp);
+            }, err => {
+                this.$message.error("请刷新页面重试");
+            })            
+        },
+
+        // download下载文件方法
+        download(data) {
+            if (!data) {
+                return;
+            }
+            let url = window.URL.createObjectURL(new Blob([data]));
+            let link = document.createElement('a');
+            link.style.display = "none";
+            link.href = url;
+            link.setAttribute("download", "excel.xlsx");
+            document.body.appendChild(link);
+            link.click();
         }
     }
 };

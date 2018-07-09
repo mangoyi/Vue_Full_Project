@@ -88,6 +88,28 @@ export default {
                 return Promise.reject(err);
             }
         )
+    },
+    // 导出明细
+    exportDetail(taskId) {
+        return axios({
+            url: "/api/api/task/exportTaskDetail",
+            method: "get",
+            params: { taskId },
+            responseType: 'blob'
+        }).then(
+            resp => {
+                if (resp.data) {
+                    return Promise.resolve(resp.data);
+                } else {
+                    return Promise.reject(resp.data);
+                }
+            },
+            err => {
+                if (!err.msg) {
+                    err.msg = "网络故障";
+                }
+                return Promise.reject(err);
+            }
+        );
     }
-
 };

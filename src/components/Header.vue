@@ -73,7 +73,7 @@ export default {
       },
       loginOut(){
           // token值为空
-          window.sessionStorage.setItem("token", "");
+          window.sessionStorage.clear();            //  清楚所有保存的数据
           this.$router.push('/pages/login');
       },
       handleCommand(command) {

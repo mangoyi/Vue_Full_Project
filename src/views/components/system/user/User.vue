@@ -10,7 +10,7 @@
                     <input type="text" class="form-control input-field" placeholder="请输入姓名" v-model="username" />
                 </div>
                 <div class="col-md-1 search-field search-field_controls">
-                    <button class="btn btn-primary search-btn">搜索</button>
+                    <button class="btn btn-primary search-btn" @click.stop="searchList(1)">搜索</button>
                 </div>
                 <div class="col-md-1 search-field search-field_controls">
                     <router-link class="btn btn-success" :to="'/system/AddUser'">
@@ -32,47 +32,66 @@
                                 <th>操作</th>
                             </tr>
                         </thead>
-                        <!-- <tbody v-for="(item, index) in userList" :key="index"> -->
-                        <tbody>
+                        <tbody v-for="(item, index) in userList" :key="index">
                             <tr>
-                                <td>123</td>
-                                <td>哈哈</td>
-                                <td>ALHH</td>
-                                <td>普通用户</td>
-                                <td>正常</td>
+                                <td>{{item.Id}}</td>
+                                <td>{{item.accountName}}</td>
+                                <td>{{item.accountUser}}</td>
+                                <td>{{ revoleRole(item.Roles) }}</td>
+                                <td>{{item.accountState == 0 ? "正常" : "锁定"}}</td>
                                 <td>
-                                    <router-link :to="{path: '/system/updateUser', query: {id: 'tstid', currentPage: currentPage}}">
+                                    <router-link :to="{path: '/system/updateUser', query: {Id: item.Id, currentPage: currentPage}}">
                                         修改
                                     </router-link>
-                                    <!-- <router-link :to="{path: '/system/updateUser',  query: { disable: 1,}}"> 查看</router-link> -->
-
-                                    <a @click="centerDialogVisible=true">锁定</a>
-                                    <a @click="centerDialogVisible=true">删除</a>
-                                    <!-- <a @click="passwordDialog=true">重置密码</a> -->
+                                    <a @click="toggleLockUser(item)" >{{ item.accountState == 0 ? "锁定" : "解锁" }}</a>
+                                    <a @click="deleteUser(item.Id)">删除</a>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                     
-                    <div class="page">
-                        <el-pagination background layout="prev, pager, next" :total="totalRecords" v-if="userList.length > 0">
+                    <div class="page" v-show="totalRecords > 10">
+                        <el-pagination 
+                            background 
+                            @current-change="searchList"
+                            :current-page.sync="currentPage"
+                            :page-size="pageSize"
+                            layout="prev, pager, next" 
+                            :total="totalRecords" 
+                        >
                         </el-pagination>
                     </div>
                 </div>
             </div>
         </div>
-        <el-dialog title="锁定" :modal-append-to-body="false" :visible.sync="centerDialogVisible" width="20%" center>
+        <el-dialog title="锁定" :modal-append-to-body="false" :visible.sync="lockDialog" width="20%" center>
             <div class="text-center">
                 <span>确定要锁定此状态吗?</span>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="centerDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+                <el-button type="primary" @click="confirmLockUser">确 定</el-button>
+            </span>
+        </el-dialog>
+        
+        <el-dialog title="解锁" :modal-append-to-body="false" :visible.sync="unLockDialog" width="20%" center>
+            <div class="text-center">
+                <span>确定解除锁定吗?</span>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="confirmUnLockUser">确 定</el-button>
+            </span>
+        </el-dialog>
+
+        <el-dialog title="删除" :modal-append-to-body="false" :visible.sync="deleteDialog" width="20%" center>
+            <div class="text-center">
+                <span>删除后无法找回，确定要删除此用户吗?</span>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="confirmDeleteUser">确 定</el-button>
             </span>
         </el-dialog>
         <!-- 重置密码 -->
-        <el-dialog title="重置密码" :modal-append-to-body="false" :visible.sync="passwordDialog" width="25%" center>
-
+        <!-- <el-dialog title="重置密码" :modal-append-to-body="false" :visible.sync="passwordDialog" width="25%" center>
             <div class="content-show text-center">
                 <div class="row mb-1 list-search">
                     <div class="col-md-12 search-field">
@@ -92,7 +111,7 @@
                 <el-button @click="passwordDialog = false">取 消</el-button>
                 <el-button type="primary" @click="passwordDialog = false">确 定</el-button>
             </span>
-        </el-dialog>
+        </el-dialog> -->
     </div>
 </template>
 
@@ -104,12 +123,17 @@ export default {
     data() {
         return {
             passwordDialog: false,
-            centerDialogVisible: false,
+            lockDialog: false,
+            unLockDialog: false,
+            deleteDialog: false,
             userList: [],
             username: "",
-            currentPage: 2,
+            currentPage: 1,
             pageSize: 10,
-            totalRecords: 0
+            totalRecords: 0,
+            deleteUserId: '',
+            lockUserId: '',
+            unlockUserId: ''
         }
     },
     components: {
@@ -118,13 +142,92 @@ export default {
     },
     beforeRouteEnter (to, from, next) {
         next(vm => {
-            userSrv.getAllUsers().then(resp => {
-                // todoes
-            }, err => {
+            let temCurrentPage = 1;                                                     // 如果是从修改用户页面跳转过来，那么要显示当前用户所在页
 
+            if (Number(vm.$route.query.currentPage) !== 1) {
+                // 如果是从修改用户页面跳转过来，那么要显示当前用户所在页
+                temCurrentPage = Number(vm.$route.query.currentPage);
+            }
+
+            userSrv.getAllUsers(vm.username, temCurrentPage, vm.pageSize).then(resp => {
+                let data = resp.data.pageInfo;
+                vm.userList = data.list;
+                vm.totalRecords = data.totalRecords;
+                vm.currentPage = temCurrentPage;
+            }, err => {
+                vm.$message.error(err.msg);
             })
         });
+    },
+    methods: {
+        // 根据参数搜索用户信息
+        searchList(currentPage = this.currentPage) {
+            userSrv.getAllUsers(this.username, currentPage, this.pageSize).then(resp => {
+                let data = resp.data.pageInfo;
+                this.userList = data.list;
+                this.totalPageNum = data.totalRecords;
+                this.currentPage = currentPage;
+            }, err => {
+                this.$message.error(err.msg);
+            });
+        },
+        revoleRole(roles) {
+            if (roles.length == 0) {    // 普通用户
+                return "普通用户";
+            } else {
+                let arr = roles.map(x => x.RoleName == "admin" ? "管理员" : "普通用户");
+                // return Array.from(new Set(roles.map(x => x.RoleName == "admin" ? "管理员" : "普通用户"))).join();
+                return arr.join();
+            }
+        },
+
+        // 删除用户
+        deleteUser(Id) {
+            this.deleteUserId = Id;
+            this.deleteDialog = true;
+            console.log(this.deleteUserId);
+        },
+        confirmDeleteUser() {
+            userSrv.deleteUser(this.deleteUserId).then(resp => {
+                this.searchList(this.currentPage);                  // 第2页删除并且保留在第2页
+                this.deleteDialog = false;
+                this.$message.success("用户已删除");
+            }, err => {
+                this.$message.error(err.msg);
+            });
+        },
+
+        // 锁定用户
+        toggleLockUser(item) {
+            if (item.accountState === 0) {                // 锁定用户
+                this.lockUserId = item.Id;
+                this.lockDialog = true;
+            } else {                                // 解除锁定
+                this.unlockUserId = item.Id;    
+                this.unLockDialog = true; 
+            }
+        },
+        confirmLockUser() {
+            userSrv.lockUser(this.lockUserId).then(resp => {
+                this.searchList(this.currentPage);                  // 第2页锁定并且保留在第2页
+                this.lockDialog = false;
+                this.$message.success("用户已锁定");
+            }, err => {
+                this.$message.error(err.msg);
+            });
+        },
+        confirmUnLockUser() {
+            userSrv.unLockUser(this.unlockUserId).then(resp => {
+                this.searchList(this.currentPage);                  // 第2页解锁并且保留在第2页
+                this.unLockDialog = false;
+                this.$message.success("成功解锁用户");
+            }, err => {
+                this.$message.error(err.msg);
+            });
+        }
+
     }
+
 }
 </script>
 

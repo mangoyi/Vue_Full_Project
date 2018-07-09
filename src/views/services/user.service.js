@@ -3,11 +3,11 @@ import axios from "axios";
 export default {
 
     // 所有用户
-    getAllUsers() {
+    getAllUsers(userName, currentPage, pageSize) {
         return axios({
             url: "/api/api/ManageUser/GetAllUsers",
             method: "post",
-            data: {}
+            data: { userName, currentPage, pageSize }
         }).then(
             resp => {
                 if (resp.data.status == 0) {
@@ -49,11 +49,11 @@ export default {
     },
 
     // 新增时检索用户登录名
-    checkLoginName(loginName) {
+    checkLoginName(userName) {
         return axios({
             url: "/api/api/ManageUser/CheckUsername",
             method: "post",
-            data: { loginName }
+            data: { userName }
         }).then(
             resp => {
                 if (resp.data.status == 0) {
@@ -72,11 +72,11 @@ export default {
     },
 
     // 增加用户
-    addUser(accountUser, accountPwd, accountName, selectedRoles, errSum, accountType) {
+    addUser(accountUser, accountPwd, accountName, selectedRoles, accountState, accountType) {
         return axios({
             url: "/api/api/ManageUser/AddUser",
             method: "post",
-            data: { accountUser, accountPwd, accountName, selectedRoles, errSum, accountType }
+            data: { accountUser, accountPwd, accountName, selectedRoles, accountState, accountType }
         }).then(
             resp => {
                 if (resp.data.status == 0) {
@@ -118,11 +118,11 @@ export default {
     },
 
     // 修改用户
-    updateUser(accountUser, accountPwd, accountName, selectedRoles, errSum, accountType) {
+    updateUser(Id, accountUser, accountPwd, accountName, selectedRoles, accountState, accountType) {
         return axios({
             url: "/api/api/ManageUser/UpdateUser",
             method: "post",
-            data: { accountUser, accountPwd, accountName, selectedRoles, errSum, accountType }
+            data: { Id, accountUser, accountPwd, accountName, selectedRoles, accountState, accountType }
         }).then(
             resp => {
                 if (resp.data.status == 0) {
@@ -184,6 +184,29 @@ export default {
                 return Promise.reject(err);
             }
         )
-    }
+    },
+
+    // 解除锁定
+    unLockUser(Id) {
+        return axios({
+            url: "/api/api/ManageUser/UnLockUser",
+            method: "post",
+            data: { Id }
+        }).then(
+            resp => {
+                if (resp.data.status == 0) {
+                    return Promise.resolve(resp.data);
+                } else {
+                    return Promise.reject(resp.data);
+                }
+            },
+            err => {
+                if (!err.msg) {
+                    err.msg = "网络故障";
+                }
+                return Promise.reject(err);
+            }
+        )
+    },
 
 }

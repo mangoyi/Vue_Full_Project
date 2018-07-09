@@ -24,7 +24,7 @@
             <div class="row list-search">
                 <div class="col-md-4 search-field">
                     <div class="label">角色：</div>
-                    <el-select ref="selectRole" size="large" v-model="role" class="el-field-input" placeholder="请选择">
+                    <el-select ref="selectRole" size="large" v-model="role" class="el-field-input" placeholder="请选择" multiple >
                         <el-option v-for="item in roleOptions" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                     </el-select>
@@ -42,7 +42,7 @@
             <span :class="{'login-info-error animated shake':login_err}" v-show="login_err">登录名重复，请修改</span>
         </div>
         <div class="content-footer">
-            <el-button class="btn btn-primary makesure" :plain="true" @click="open">确定</el-button>
+            <el-button class="btn btn-primary makesure" :plain="true" @click="open" :disabled="loginNameFlag">确定</el-button>
         </div>
 
     </div>
@@ -58,19 +58,11 @@ export default {
             loginName: '',
             password: '',
             username: '',
-            role:'',
+            role:[],
             status: "normal",
-            roleOptions: [
-                {
-                    value: 1,
-                    label: '普通员工'
-                }, 
-                {
-                    value: 2,
-                    label: '系统管理员'
-                }
-            ],
-            login_err: false
+            roleOptions: [],
+            login_err: false,
+            loginNameFlag: false
         }
     },
     components: {
@@ -79,22 +71,31 @@ export default {
     mounted(){
         this.$el.addEventListener('animationend',this.resizeRole);
         this.$el.addEventListener('animationend',this.resizeStatus);
-        this.initRoles;
+    },
+    beforeRouteEnter (to, from, next) {
+        next(vm => {
+            userSrv.getAllRoles().then(resp => {
+                let dataArr = resp.data.roles;
+                dataArr.map( ( item )=> {
+                    let roleOption = {};
+                    roleOption["value"] = item.Id;
+                    roleOption["label"] = item.RoleName == "admin" ? "管理员" : "普通用户";
+                    vm.roleOptions.push(roleOption);
+                });
+                console.log(vm.roleOptions);
+            }, err => {
+                vm.$message.error(err.msg);
+            });
+        });
     },
     methods: {
-        initRoles() {
-            userSrv.getAllRoles().then(resp => {
-                // todos
-            }, err => {
-
-            });
-        },
         checkName() {
             userSrv.checkLoginName(this.loginName).then(resp => {
-                console.log(resp);
-                // todos
+                this.login_err = true;              // 用户名已存在
+                this.loginNameFlag = true;
             }, err => {
-
+                this.login_err = false;             // 用户名不存在
+                this.loginNameFlag = false;
             });
         },
         resizeStatus(){
@@ -107,14 +108,23 @@ export default {
             // 0: 正常状态   5: 锁定状态
             let tempStatus = 0;
             if (this.status == 'lock') {
-                tempStatus = 5;
+                tempStatus = 1;
             }
-            if (this.loginName && this.password && this.username && this.role && this.status) {   
-                userSrv.addUser(this.loginName, this.password, this.username, this.role, tempStatus, 0).then(resp => {
-                    console.log(resp);
-                    // todos
-                }, err => {
 
+            let tempRole = [];                  // 提交后台数据格式
+            this.role.forEach(x => {
+                let tempOption = {};
+                tempOption["Id"] = x;
+                tempRole.push(tempOption);
+            });
+
+            if (this.loginName && this.password && this.username && tempRole.length > 0 && this.status) {    
+                console.log("提交啦提交啦提交啦提交啦");              
+                userSrv.addUser(this.loginName, this.password, this.username, tempRole, tempStatus, 0).then(resp => {
+                    this.$message.success("用户添加成功！");
+                    this.$router.push("/system/User");
+                }, err => {
+                    this.$message.error(err.msg);
                 });
             }
         }

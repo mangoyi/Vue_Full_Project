@@ -33,6 +33,7 @@
                         <el-option key="C" label="C类别" value="C" ></el-option>
                         <el-option key="D" label="D类别" value="D" ></el-option>
                         <el-option key="E" label="E类别" value="E" ></el-option>
+                        <el-option key="F" label="F类别" value="F" ></el-option>
                     </el-select>
                 </div>
                 <div class="col-md-1 search-field search-field_controls">
