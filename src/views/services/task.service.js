@@ -72,10 +72,10 @@ export default {
         )
     },
 
-    // zip文件
+    // 任务信息
     getZip(taskId) {
         return axios({
-            url: "/api/api/task/searchTask",
+            url: "/api/api/task/GetTask",
             method: "get",
             params: { taskId }
         }).then(
@@ -105,6 +105,30 @@ export default {
         }).then(
             resp => {
                 if (resp.data.status == 0) {
+                    return Promise.resolve(resp.data);
+                } else {
+                    return Promise.reject(resp.data);
+                }
+            },
+            err => {
+                if (!err.msg) {
+                    err.msg = "网络故障";
+                }
+                return Promise.reject(err);
+            }
+        )
+    },
+
+    // 下载文件
+    downloadFile(taskId) {
+        return axios({
+            url: "/api/api/Task/DownloadFile",
+            method: "get",
+            params: { taskId },
+            responseType: 'blob'
+        }).then(
+            resp => {
+                if (resp.data) {
                     return Promise.resolve(resp.data);
                 } else {
                     return Promise.reject(resp.data);

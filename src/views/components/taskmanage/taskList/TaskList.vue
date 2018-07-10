@@ -59,6 +59,7 @@
                                         修改
                                     </button>
                                     <button class="btn btn-danger" style="color: #fff;" @click="over(item.taskID)" :disabled="item.taskStatus === 2 ? true : false">结束</button>
+                                    <button class="btn btn-info" style="color: #fff;" @click="deleteTask(item.taskID)" >删除</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -133,9 +134,9 @@ export default {
             let loading = {};
             let temCurrentPage = 1;
 
-            if (Number(vm.$route.query.currentPage) !== 1) {
+            if (vm.$route.query.currentPage) {
                 // 说明从任务修改中跳转过来: 确保第几页修改，修改完成（返回）就回到第几页。
-                temCurrentPage = vm.$route.query.currentPage;
+                temCurrentPage =Number( vm.$route.query.currentPage);
             }
             // //加载动画 fl----- 6.26
             loading = vm.$loading({
@@ -256,9 +257,31 @@ export default {
             let link = document.createElement('a');
             link.style.display = "none";
             link.href = url;
-            link.setAttribute("download", "excel.xlsx");
+            link.setAttribute("download", "任务明细.xlsx");
             document.body.appendChild(link);
             link.click();
+        },
+
+        // 删除任务
+        deleteTask(taskId) {
+            this.$confirm('此操作将永久删除该任务, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+                center: 'true'
+            }).then(() => {
+                taskListSrv.deleteTask(taskId).then(resp => {
+                    this.searchList(this.currentPage);
+                    this.$message.success("任务已经删除");
+                }, err => {
+                    this.$message.error(err.msg);
+                });
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '取消结束'
+                });
+            });
         }
     }
 };

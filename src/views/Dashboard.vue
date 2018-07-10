@@ -4,14 +4,14 @@
         <div class="content-show" style="padding-left: 0px;">
             <div class="row list-search">
                 <div class="col-md-3 well" v-for="item in percentlist" :key="item.id">
-                    <p class="taskName">{{item.taskName}}</p>
+                    <p class="taskName">{{item.TaskName}}</p>
                     <div class="yi-taskPercent_wrap">
                         <div class="yi-taskPercent">
-                            <el-progress :percentage="Number(item.taskPercent)" :color="item.color" :stroke-width="18"
+                            <el-progress :percentage="Number(item.Percent)" :color="item.Color" :stroke-width="18"
                                          :text-inside="true"></el-progress>
                         </div>
                         <div class="yi-taskComplete">
-                            ({{item.complete}}/{{item.total}})
+                            ({{item.Complete}}/{{item.Total}})
                         </div>
                     </div>
                 </div>
@@ -54,7 +54,7 @@ export default {
             });
 
             dashBoardSrv.taskLine().then(resp => {
-                let data = resp.data.list[0];
+                let data = resp.data.taskChart;
                 vm.taskArr = data.taskName;
                 vm.taskRecent = data.taskRecent;
                 vm.taskSeries = data.taskSeries;

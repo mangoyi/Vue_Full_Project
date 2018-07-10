@@ -29,30 +29,55 @@
                     </div>
                 </div>
                 <div class="col-md-12 search-field row " style="margin-top: -10px; margin-bottom: 2em;">
-                    <div class="label" style="left:14px;top: 5px;">外呼时间：</div>
-                    <div class="col-md-3">
-                        <el-time-picker
-                            is-range
-                            format="HH:mm"
-                            value-format="HH:mm"
-                            v-model="period1"
-                            range-separator="至"
-                            start-placeholder="开始时间"
-                            end-placeholder="结束时间"
-                            placeholder="选择时间范围">
-                        </el-time-picker>
+                    <div class="label" style="left:14px;top: 5px;">时间段一：</div>
+                    <div class="col-md-2 yi_placeholder_start">
+                        <el-time-select
+                            placeholder="起始时间"
+                            v-model="startTime1"
+                            :picker-options="{
+                                start: '09:00',
+                                step: '00:10',
+                                end: '20:00'
+                            }">
+                        </el-time-select>
                     </div>
-                    <div class="col-md-3">
-                        <el-time-picker
-                            is-range
-                            format="HH:mm"
-                            value-format="HH:mm"
-                            v-model="period2"
-                            range-separator="至"
-                            start-placeholder="开始时间"
-                            end-placeholder="结束时间"
-                            placeholder="选择时间范围">
-                        </el-time-picker>
+                    <div class="col-md-2 yi_placeholder_end">
+                        <el-time-select
+                            placeholder="结束时间"
+                            v-model="endTime1"
+                            :picker-options="{
+                                start: '09:00',
+                                step: '00:10',
+                                end: '20:00',
+                                minTime: startTime1
+                            }">
+                        </el-time-select>                       
+                    </div>
+                </div>
+                <div class="col-md-12 search-field row " style="margin-top: -10px; margin-bottom: 2em;">
+                    <div class="label" style="left:14px;top: 5px;">时间段二：</div>
+                    <div class="col-md-2 yi_placeholder_start">
+                        <el-time-select
+                            placeholder="起始时间"
+                            v-model="startTime2"
+                            :picker-options="{
+                                start: '09:00',
+                                step: '00:10',
+                                end: '20:00',
+                                minTime: endTime1
+                            }">
+                        </el-time-select>
+                    </div>
+                    <div class="col-md-2 yi_placeholder_end">
+                        <el-time-select
+                            placeholder="结束时间"
+                            v-model="endTime2"
+                            :picker-options="{
+                                start: '09:00',
+                                step: '00:10',
+                                end: '20:00'
+                            }">
+                        </el-time-select>                       
                     </div>
                 </div>
                 <div class="col-md-12 search-field" style="margin-bottom: 40px;">
@@ -100,7 +125,7 @@
 </template>
 
 <script>
-import { Pagination, DatePicker, Button, Input, Loading} from "element-ui";
+import { Pagination, DatePicker, Button, Input, Loading, TimePicker} from "element-ui";
 import taskSrv from "@/../src/views/services/task.service.js";
 
 /* eslint-disable */
@@ -120,8 +145,10 @@ export default {
             checkedTransferData1: [],                           // 工作的员工坐席
 
             // 机器人工作时间段
-            period1: '',
-            period2: ''
+            startTime1: '',
+            endTime1: '',
+            startTime2: '',
+            endTime2: ''
         };
     },
     beforeRouteEnter: (to, from, next) => {
@@ -223,17 +250,11 @@ export default {
               
             let publisher = window.sessionStorage.getItem("username");                // 发布者
 
-            let tempPeriod1 = this.period1;
-            let startTime1 = tempPeriod1[0];
-            let endTime1 = tempPeriod1[1];
-
-            console.log(startTime1, endTime1);
-
-            let tempPeriod2 = this.period2;
-            let startTime2 = tempPeriod2[0];
-            let endTime2 = tempPeriod2[1];
-
-            console.log(startTime2, endTime2);
+            // 外呼时间段
+            let startTime1 = this.startTime1;
+            let endTime1 = this.endTime1;
+            let startTime2 = this.startTime2;
+            let endTime2 = this.endTime2;
 
             let temrobotSeat = [];                                                     // 机器人坐席
             this.checkedTransferData.forEach(item => {
@@ -330,6 +351,10 @@ export default {
     .yi-transferWrapL{
         margin-right: 130px;
         margin-bottom: 20px;
+    }
+
+    .yi_placeholder_start .el-date-editor input {
+        // todoes
     }
     
 </style>

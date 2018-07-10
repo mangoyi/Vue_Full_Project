@@ -40,7 +40,10 @@
                                 <td>{{ revoleRole(item.Roles) }}</td>
                                 <td>{{item.accountState == 0 ? "正常" : "锁定"}}</td>
                                 <td>
-                                    <router-link :to="{path: '/system/updateUser', query: {Id: item.Id, currentPage: currentPage}}">
+                                    <!-- <router-link :to="{path: '/system/updateUser', query: {Id: item.Id, currentPage: currentPage}}">
+                                        修改
+                                    </router-link> -->
+                                    <router-link :to="{path: '/system/updateUser', query: {Id: item.Id}}">
                                         修改
                                     </router-link>
                                     <a @click="toggleLockUser(item)" >{{ item.accountState == 0 ? "锁定" : "解锁" }}</a>
@@ -142,18 +145,18 @@ export default {
     },
     beforeRouteEnter (to, from, next) {
         next(vm => {
-            let temCurrentPage = 1;                                                     // 如果是从修改用户页面跳转过来，那么要显示当前用户所在页
+            // let temCurrentPage = 1;                                                     // 如果是从修改用户页面跳转过来，那么要显示当前用户所在页
 
-            if (Number(vm.$route.query.currentPage) !== 1) {
+            //if (Number(vm.$route.query.currentPage) !== 1) {
                 // 如果是从修改用户页面跳转过来，那么要显示当前用户所在页
-                temCurrentPage = Number(vm.$route.query.currentPage);
-            }
+               // temCurrentPage = Number(vm.$route.query.currentPage);
+            //}
 
-            userSrv.getAllUsers(vm.username, temCurrentPage, vm.pageSize).then(resp => {
+            userSrv.getAllUsers(vm.username, vm.currentPage, vm.pageSize).then(resp => {
                 let data = resp.data.pageInfo;
                 vm.userList = data.list;
                 vm.totalRecords = data.totalRecords;
-                vm.currentPage = temCurrentPage;
+                // vm.currentPage = temCurrentPage;
             }, err => {
                 vm.$message.error(err.msg);
             })

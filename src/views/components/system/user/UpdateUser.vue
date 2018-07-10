@@ -2,9 +2,14 @@
     <div class="content_page animated zoomIn">
         <div class="content-title">
             <div class="title">修改用户信息</div>
-            <router-link class="btn btn-info back" :to="{
+            <!-- <router-link class="btn btn-info back" :to="{
                 path: '/system/user',
                 query: {currentPage: userCurrentPage}
+            }">
+            返回
+            </router-link> -->
+            <router-link class="btn btn-info back" :to="{
+                path: '/system/user'
             }">
             返回
             </router-link>
@@ -62,8 +67,8 @@ export default {
             roleOptions: [],
             login_err: false,
             loginNameFlag: false,
-            Id: '',                // 当前用户Id
-            userCurrentPage: 1     // 在用户列表中的当前页数
+            Id: ''                // 当前用户Id
+            // userCurrentPage: 1     // 在用户列表中的当前页数
         }
     },
     components: {
@@ -76,7 +81,7 @@ export default {
     },
     beforeRouteEnter(from, to, next) {
         next(vm => {
-            vm.userCurrentPage = vm.$route.query.currentPage;           // 确保返回到用户列表的时候是当前用户所在页
+            // vm.userCurrentPage = vm.$route.query.currentPage;           // 确保返回到用户列表的时候是当前用户所在页
 
             // 获取所有用户角色
             userSrv.getAllRoles().then(resp => {
@@ -140,7 +145,8 @@ export default {
                 console.log("提交啦提交啦提交啦提交啦");              
                 userSrv.updateUser(this.$route.query.Id ,this.loginName, this.password, this.username, tempRole, tempStatus, 0).then(resp => {
                     this.$message.success("用户修改成功!");
-                    this.$router.push({path: "/system/user", query:{currentPage: this.$route.query.currentPage}});          // 跳回任务列表所在当前页
+                    // this.$router.push({path: "/system/user", query:{currentPage: this.$route.query.currentPage}});          // 跳回任务列表所在当前页
+                    this.$router.push({path: "/system/user"});          // 跳回任务列表所在当前页
                 }, err => {
                     this.$message.error(err.msg);
                 });
@@ -150,6 +156,12 @@ export default {
             
         },
 
+    },
+    beforeRouteLeave(to, from, next) {
+        // 设置下一个路由的meta
+        to.meta.keepAlive = true;           
+        console.log("sfasdfsdfsdfsafdasdf...............................");
+        next();
     }
 }
 </script>

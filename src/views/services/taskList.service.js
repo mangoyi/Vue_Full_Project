@@ -48,7 +48,7 @@ export default {
     // 开启任务
     openTask(taskId) {
         return axios({
-            url: "/api/api/task/goOnTask",
+            url: "/api/api/task/ContinueTask",
             method: "post",
             data: { taskId }
         }).then(
@@ -70,7 +70,29 @@ export default {
     // 结束任务
     overTask(taskId) {
         return axios({
-            url: "/api/api/task/overTask",
+            url: "/api/api/task/CompleteTask",
+            method: "post",
+            data: { taskId }
+        }).then(
+            resp => {
+                if (resp.data.status == 0) {
+                    return Promise.resolve(resp.data);
+                } else {
+                    return Promise.reject(resp.data);
+                }
+            },
+            err => {
+                if (!err.msg) {
+                    err.msg = "网络故障";
+                }
+                return Promise.reject(err);
+            }
+        )
+    },
+    // 删除任务
+    deleteTask(taskId) {
+        return axios({
+            url: "/api/api/task/DeleteTask",
             method: "post",
             data: { taskId }
         }).then(

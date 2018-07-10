@@ -230,7 +230,8 @@ export default new Router({
                             name: "用户管理",
                             component: User,
                             meta: {
-                                requireAuth: true
+                                requireAuth: true,
+                                keepAlive: true // 用户列表需要被缓存
                             }
                         }
                     ]
