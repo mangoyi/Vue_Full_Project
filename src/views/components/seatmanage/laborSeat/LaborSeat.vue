@@ -30,26 +30,27 @@
                         <tbody >
                             <tr v-for="(item, index) in laborList" :key="index">
                                 <td>{{index + (currentPage - 1)*10}}</td>
-                                <td>{{item.accountName}}</td>
-                                <td>{{item.accountUser}}</td>
+                                <td>{{item.maccount}}</td>
+                                <td>{{item.mname}}</td>
                                 <td>{{item.taskState == 0 ? "空闲中" : "工作中"}}
                                     <!-- <i class="fa fa-lg" :class="{'fa-phone': item.onLineState == '未知' ? true : false}"></i> -->
                                 </td>
                                 <td>
-                                    <span v-for="info in item.taskInfo" :key="info.id">{{info.taskName}} ,</span>
+                                    {{item.taskId}}
+                                    <!-- <span v-for="info in item.taskInfo" :key="info.id">{{info.taskName}} ,</span> -->
                                 </td>
                                 <td>{{item.onLineState}}</td>
                             </tr>                                          
                         </tbody>
                     </table>
-                    <div class="page" v-show="(laborList.length > 0 && totalPageNum > 10)">
+                    <div class="page" v-show="(laborList.length > 0 && totalRecords > 10)">
                         <el-pagination 
                             background 
                             @current-change="searchList"
                             :current-page.sync="currentPage"
                             :page-size="pageSize"
                             layout="total, prev, pager, next"
-                            :total="totalPageNum"
+                            :total="totalRecords"
                         >
                         </el-pagination>
                     </div>
@@ -74,14 +75,15 @@ export default {
             pageSize: 10,
             keyWord: "",
             laborList: [],
-            totalPageNum: 1
+            totalRecords: 1
         };
     },
     beforeRouteEnter: (to, from, next) => {
         next(vm => {
             seatSrv.laborSeat(vm.keyWord, vm.currentPage, vm.pageSize).then(resp => {
-                vm.laborList = resp.data.list
-                vm.totalPageNum = resp.data.totalPageNum
+                let laborData = resp.data.pageInfo;
+                vm.laborList = laborData.list
+                vm.totalRecords = laborData.totalRecords
             }, err => {
                 vm.$message.error(err.msg);
             });
@@ -90,9 +92,10 @@ export default {
     methods: {
         searchList(currentPage = this.currentPage) {
             seatSrv.laborSeat(this.keyWord, currentPage, this.pageSize).then(resp => {
-                this.laborList = resp.data.list;
+                let laborData = resp.data.pageInfo;
+                this.laborList = laborData.list;
                 this.currentPage = currentPage;
-                this.totalPageNum = resp.data.totalPageNum;
+                this.totalRecords = laborData.totalRecords;
             }, err => {
                 this.$message.error(err.msg);
             })

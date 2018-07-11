@@ -72,7 +72,7 @@
                 </router-link>
 
                 <!-- 系统管理 -->
-                <router-link tag="li" class="nav-item nav-dropdown" :to="{ path: '/system'}" disabled v-if=" roles === 'admin' ">
+                <router-link tag="li" class="nav-item nav-dropdown" :to="{ path: '/system'}" disabled v-if=" roleAdmin ">
                     <div class="nav-link nav-dropdown-toggle" @click="handleClick">
                         <i class="fa fa-envelope fa-lg"></i>系统管理</div>
                     <ul class="nav-dropdown-items">
@@ -92,7 +92,7 @@ export default {
     name: 'sidebar',
     data() {
         return {
-            roles: ""
+            roleAdmin: false
         }
     },
     mounted() {
@@ -105,7 +105,7 @@ export default {
         },
         initRole() {
             if (window.sessionStorage.getItem("roles").indexOf("admin") > -1) {
-                this.roles = "admin";
+                this.roleAdmin = true;
             }
             console.log("管理员...........");
         }

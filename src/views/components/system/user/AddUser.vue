@@ -78,8 +78,8 @@ export default {
                 let dataArr = resp.data.roles;
                 dataArr.map( ( item )=> {
                     let roleOption = {};
-                    roleOption["value"] = item.Id;
-                    roleOption["label"] = item.RoleName == "admin" ? "管理员" : "普通用户";
+                    roleOption["value"] = item.id;
+                    roleOption["label"] = item.roleName == "admin" ? "管理员" : "普通用户";
                     vm.roleOptions.push(roleOption);
                 });
                 console.log(vm.roleOptions);
@@ -117,10 +117,10 @@ export default {
                 tempOption["Id"] = x;
                 tempRole.push(tempOption);
             });
-
+            console.log(tempRole);
             if (this.loginName && this.password && this.username && tempRole.length > 0 && this.status) {    
                 console.log("提交啦提交啦提交啦提交啦");              
-                userSrv.addUser(this.loginName, this.password, this.username, tempRole, tempStatus, 0).then(resp => {
+                userSrv.addUser(this.loginName, this.password, this.username, tempRole, tempStatus, 2).then(resp => {
                     this.$message.success("用户添加成功！");
                     this.$router.push("/system/User");
                 }, err => {

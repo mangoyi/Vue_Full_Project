@@ -39,17 +39,17 @@
                                 <td>
                                     <router-link :to="{path: '/smsmanage/updateSmsTemplate',
                                                         query: {
-                                                            smsTempLateId: item.smsTempLateId,
+                                                            Id: item.Id,
                                                             currentPage: currentPage
                                                             }
                                                         }">修改</router-link>
-                                    <a @click="Del(item.smsTempLateId)">删除</a>
+                                    <a @click="Del(item.Id)">删除</a>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                     <div class="page">
-                        <el-pagination background @current-change="searchSmsTemplate" :current-page.sync="currentPage" :page-size="pageSize" layout="total, prev, pager, next" :total="totalPageNum" v-if="tempList.length > 0">
+                        <el-pagination background @current-change="searchSmsTemplate" :current-page.sync="currentPage" :page-size="pageSize" layout="total, prev, pager, next" :total="totalRecords" v-if="tempList.length > 0">
                         </el-pagination>
                     </div>
                 </div>
@@ -78,7 +78,7 @@ export default {
             centerDialogVisible: false,
             currentPage: 1,
             pageSize: 10,
-            totalPageNum: 1,
+            totalRecords: 1,
             templateContent: '',
             tempList: [],
             delsmsTemplateId: ''
@@ -89,11 +89,12 @@ export default {
             let temCurrentPage = 1;
             if (vm.$route.query.currentPage) {
                 // 说明是从修改模板路由过来的
-                temCurrentPage = vm.$route.query.currentPage;
+                temCurrentPage = Number(vm.$route.query.currentPage);
             }
             smsTemplateSrv.messageTemplateList(vm.templateContent, temCurrentPage, vm.pageSize).then(resp => {
-                vm.tempList = resp.data.list;
-                vm.totalPageNum = resp.data.totalPageNum;
+                let tempData = resp.data.pageInfo;
+                vm.tempList = tempData.list;
+                vm.totalRecords = tempData.totalRecords;
                 vm.currentPage = temCurrentPage;
             }, err => {
                 vm.$message.error(err.msg); 
@@ -102,10 +103,11 @@ export default {
     },
     methods: {
         searchSmsTemplate(currentPage = this.currentPage) {
-             smsTemplateSrv.messageTemplateList(this.templateContent, currentPage, this.pageSize).then(resp => {
-                this.tempList = resp.data.list;
+            smsTemplateSrv.messageTemplateList(this.templateContent, currentPage, this.pageSize).then(resp => {
+                let tempData = resp.data.pageInfo;
+                this.tempList = tempData.list;
                 this.currentPage = currentPage;                                                     //这里注意一下，需要把当前点击的页数再告诉分页插件让他去显示数据
-                this.totalPageNum = resp.data.totalPageNum;
+                this.totalRecords = tempData.totalRecords;
             }, err => {
                 this.$message.error(err.msg);
             })
@@ -118,7 +120,7 @@ export default {
             this.centerDialogVisible = false;
             smsTemplateSrv.delTemplate(this.delsmsTemplateId).then(resp => {
                 this.$message.success("模板删除成功！");
-                location.reload();
+                this.searchSmsTemplate(this.currentPage);
             }, err => {
                 this.$message.error("删除失败，请重试！");
             });

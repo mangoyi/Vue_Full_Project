@@ -38,7 +38,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="(item,index) in taskList" :key="index">
-                                <td>{{item.Id}}</td>
+                                <td>{{item.id}}</td>
                                 <td :title="item.taskID">{{item.taskName}}</td>
                                 <td>{{objStatus[item.taskStatus]}}</td>
                                 <td>{{item.publisher}}</td>
@@ -59,19 +59,19 @@
                                         修改
                                     </button>
                                     <button class="btn btn-danger" style="color: #fff;" @click="over(item.taskID)" :disabled="item.taskStatus === 2 ? true : false">结束</button>
-                                    <button class="btn btn-info" style="color: #fff;" @click="deleteTask(item.taskID)" >删除</button>
+                                    <button class="btn btn-info" style="color: #fff;" @click="deleteTask(item.taskID)" v-if="roleAdmin">删除</button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <div class="page" v-show="(taskList.length > 0 && totalPageNum > 10)">
+                    <div class="page" v-show="(taskList.length > 0 && totalRecords > 10)">
                         <el-pagination
                             background
                             @current-change="searchList"
                             :current-page.sync="currentPage"
                             :page-size="pageSize"
                             layout="total, prev, pager, next"
-                            :total="totalPageNum"
+                            :total="totalRecords"
                         >
                         </el-pagination>
                     </div>
@@ -123,9 +123,10 @@ export default {
             centerDialogVisible2: false,
             currentPage: 1,
             pageSize: 10,
-            totalPageNum: 1,
+            totalRecords: 1,
             taskList: [],                                                    // json数据
-            downLoadUrl: ''
+            downLoadUrl: '',
+            roleAdmin: false
         };
     },
     beforeRouteEnter: (to, from, next) => {
@@ -148,13 +149,19 @@ export default {
 
             taskListSrv.taskList(vm.startDate, vm.endDate, temCurrentPage, vm.pageSize).then(resp => {
                 loading.close();
-                vm.taskList = resp.data.list;
-                vm.totalPageNum = resp.data.totalPageNum;
+                let taskData  =  resp.data.pageInfo;
+                vm.taskList = taskData.list;
+                vm.totalRecords = taskData.totalRecords;
                 vm.currentPage = temCurrentPage;
             }, err => {
                 loading.close();
                 vm.$message.error(err.msg);
             });
+
+            // 管理员才有删除按钮
+            if (window.sessionStorage.getItem("roles").indexOf("admin") > -1) {
+                vm.roleAdmin = true;
+            }
         })
     },
     methods: {
@@ -168,8 +175,9 @@ export default {
             });
             taskListSrv.taskList(this.startDate, this.endDate, currentPage, this.pageSize).then(resp => {
                 loading.close();
-                this.taskList = resp.data.list;
-                this.totalPageNum = resp.data.totalPageNum;
+                let taskData = resp.data.pageInfo;
+                this.taskList = taskData.list;
+                this.totalRecords = taskData.totalRecords;
                 this.currentPage = currentPage;
             }, err => {
                 loading.close();

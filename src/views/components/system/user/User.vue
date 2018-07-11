@@ -34,20 +34,20 @@
                         </thead>
                         <tbody v-for="(item, index) in userList" :key="index">
                             <tr>
-                                <td>{{item.Id}}</td>
+                                <td>{{item.id}}</td>
                                 <td>{{item.accountName}}</td>
                                 <td>{{item.accountUser}}</td>
-                                <td>{{ revoleRole(item.Roles) }}</td>
+                                <td>{{ revoleRole(item.roles) }}</td>
                                 <td>{{item.accountState == 0 ? "正常" : "锁定"}}</td>
                                 <td>
                                     <!-- <router-link :to="{path: '/system/updateUser', query: {Id: item.Id, currentPage: currentPage}}">
                                         修改
                                     </router-link> -->
-                                    <router-link :to="{path: '/system/updateUser', query: {Id: item.Id}}">
+                                    <router-link :to="{path: '/system/updateUser', query: {Id: item.id}}">
                                         修改
                                     </router-link>
                                     <a @click="toggleLockUser(item)" >{{ item.accountState == 0 ? "锁定" : "解锁" }}</a>
-                                    <a @click="deleteUser(item.Id)">删除</a>
+                                    <a @click="deleteUser(item.id)">删除</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -93,28 +93,6 @@
                 <el-button type="primary" @click="confirmDeleteUser">确 定</el-button>
             </span>
         </el-dialog>
-        <!-- 重置密码 -->
-        <!-- <el-dialog title="重置密码" :modal-append-to-body="false" :visible.sync="passwordDialog" width="25%" center>
-            <div class="content-show text-center">
-                <div class="row mb-1 list-search">
-                    <div class="col-md-12 search-field">
-                        <div class="label">原密码：</div>
-                        <input type="password" class="form-control input-field" placeholder="原密码" />
-                    </div>
-                </div>
-                <div class="row mb-1 list-search">
-                    <div class="col-md-12 search-field">
-                        <div class="label">新密码：</div>
-                        <input type="password" class="form-control input-field" placeholder="新密码" />
-                    </div>
-                </div>
-            </div>
-
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="passwordDialog = false">取 消</el-button>
-                <el-button type="primary" @click="passwordDialog = false">确 定</el-button>
-            </span>
-        </el-dialog> -->
     </div>
 </template>
 
@@ -168,7 +146,7 @@ export default {
             userSrv.getAllUsers(this.username, currentPage, this.pageSize).then(resp => {
                 let data = resp.data.pageInfo;
                 this.userList = data.list;
-                this.totalPageNum = data.totalRecords;
+                this.totalRecords = data.totalRecords;
                 this.currentPage = currentPage;
             }, err => {
                 this.$message.error(err.msg);
@@ -178,7 +156,7 @@ export default {
             if (roles.length == 0) {    // 普通用户
                 return "普通用户";
             } else {
-                let arr = roles.map(x => x.RoleName == "admin" ? "管理员" : "普通用户");
+                let arr = roles.map(x => x.roleName == "admin" ? "管理员" : "普通用户");
                 // return Array.from(new Set(roles.map(x => x.RoleName == "admin" ? "管理员" : "普通用户"))).join();
                 return arr.join();
             }
@@ -203,10 +181,10 @@ export default {
         // 锁定用户
         toggleLockUser(item) {
             if (item.accountState === 0) {                // 锁定用户
-                this.lockUserId = item.Id;
+                this.lockUserId = item.id;
                 this.lockDialog = true;
             } else {                                // 解除锁定
-                this.unlockUserId = item.Id;    
+                this.unlockUserId = item.id;    
                 this.unLockDialog = true; 
             }
         },

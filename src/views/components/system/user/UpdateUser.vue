@@ -88,8 +88,8 @@ export default {
                 let dataArr = resp.data.roles;
                 dataArr.map( ( item )=> {
                     let roleOption = {};
-                    roleOption["value"] = item.Id;
-                    roleOption["label"] = item.RoleName == "admin" ? "管理员" : "普通用户";
+                    roleOption["value"] = item.id;
+                    roleOption["label"] = item.roleName == "admin" ? "管理员" : "普通用户";
                     vm.roleOptions.push(roleOption);
                 });
                 console.log(vm.roleOptions);
@@ -105,8 +105,8 @@ export default {
                 vm.username = userData.accountName;                     // 姓名
                 
                 // 角色
-                userData.Roles.map(x => {
-                    vm.role.push(x.Id);
+                userData.roles.map(x => {
+                    vm.role.push(x.id);
                 });
 
                 // 状态
@@ -128,10 +128,10 @@ export default {
             this.$refs.selectRole.resetInputWidth()
         },
         update() {
-            // 0: 正常状态   5: 锁定状态
+            // 0: 正常状态   1: 锁定状态
             let tempStatus = 0;
             if (this.status == 'lock') {
-                tempStatus = 5;
+                tempStatus = 1;
             }
 
             let tempRole = [];                  // 提交后台数据格式
@@ -143,7 +143,7 @@ export default {
 
             if (this.loginName && this.password && this.username && tempRole.length > 0 && this.status) {    
                 console.log("提交啦提交啦提交啦提交啦");              
-                userSrv.updateUser(this.$route.query.Id ,this.loginName, this.password, this.username, tempRole, tempStatus, 0).then(resp => {
+                userSrv.updateUser(this.$route.query.Id ,this.loginName, this.password, this.username, tempRole, tempStatus, 2).then(resp => {
                     this.$message.success("用户修改成功!");
                     // this.$router.push({path: "/system/user", query:{currentPage: this.$route.query.currentPage}});          // 跳回任务列表所在当前页
                     this.$router.push({path: "/system/user"});          // 跳回任务列表所在当前页

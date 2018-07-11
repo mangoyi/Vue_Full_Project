@@ -158,16 +158,16 @@ export default {
                 data.forEach((item, index) => {
                     vm.transferData.push(
                         (function() {
-                            if ( item.robotState == 1) {                                           // 机器人在工作 所以不能选择
-                                return {
-                                    key: index,
-                                    label: item.Raccount + "("+item.Rname+")",
-                                    disabled: true
-                                }
-                            }
+                            // if ( item.robotState == 1) {                                           // 机器人在工作 所以不能选择
+                            //     return {
+                            //         key: index,
+                            //         label: item.raccount + "("+item.rname+")",
+                            //         disabled: true
+                            //     }
+                            // }
                             return {
                                 key: index,                                                         // 自增, 所有机器人(空闲机器人)
-                                label: item.Raccount + "(" + item.Rname + ")",
+                                label: item.raccount + "(" + item.rname + ")",
                                 disabled: false
                             }
                         })()

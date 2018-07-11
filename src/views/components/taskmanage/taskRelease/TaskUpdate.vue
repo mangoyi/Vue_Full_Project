@@ -2,10 +2,14 @@
     <div class="animated fadeIn content_page">
         <div class="content-title">
             <div class="title">任务修改</div>
-            <router-link class="btn btn-info back" :to="{
+            <!-- <router-link class="btn btn-info back" :to="{
                 path: '/taskManage/TaskList',
                 query: {currentPage: currentPage}
             }">
+                返回
+            </router-link> -->
+            <router-link class="btn btn-info back" :to="{
+                path: '/taskManage/TaskList'}">
                 返回
             </router-link>
         </div>
@@ -164,7 +168,7 @@ export default {
             taskID: '',
 
             // 在任务列表中的页数
-            currentPage: 1,
+            // currentPage: 1,
 
             // 备注信息
             remarkStartTime: '',
@@ -182,24 +186,18 @@ export default {
         next(vm => {
             let currentTaskId = vm.$route.query.taskId;
             
-            taskSrv.getRobot().then(resp => {
+            taskSrv.getCurrentRobot(currentTaskId).then(resp => {
                 let data = resp.data.list;
                 let thatcheckedTransferData = [];
                 data.forEach((item, index) => {
                     vm.transferData.push(
                         (function() {
-                            if ( item.robotState == 1 && item.taskId != currentTaskId) {                    // 机器人在工作，并且不是在当前这个任务中。 所以不能选择
-                                return {
-                                    key: index,
-                                    label: item.Raccount + "("+item.Rname+")",
-                                    disabled: true
-                                }
-                            } else if ( item.robotState == 1 && item.taskId == currentTaskId) {
+                            if ( item.robotState == 1 && item.taskId == currentTaskId) {
                                 thatcheckedTransferData.push(index);                                            // 机器人在工作，并且在当前这个任务中。所以显示在右侧
                             } 
                             return {
                                 key: index,                                                                     // 自增, 所有机器人(空闲机器人)
-                                label: item.Raccount + "("+item.Rname+")",
+                                label: item.raccount + "("+item.rname+")",
                                 disabled: false
                             }
                         })()
@@ -260,7 +258,7 @@ export default {
                 vm.$message.error(err.msg);
             });
 
-            vm.currentPage = vm.$route.query.currentPage;                    
+            // vm.currentPage = vm.$route.query.currentPage;                    
         });
     },
     methods: {
@@ -360,7 +358,8 @@ export default {
                 taskSrv.updateTask(formData).then(resp => {
                     loading.close();
                     this.$message.success("任务修改成功");
-                    this.$router.push({path: "/taskManage/TaskList", query:{currentPage: this.$route.query.currentPage}});          // 跳回任务列表所在当前页
+                    // this.$router.push({path: "/taskManage/TaskList", query:{currentPage: this.$route.query.currentPage}});          // 跳回任务列表所在当前页
+                    this.$router.push({path: "/taskManage/TaskList"});          // 跳回任务列表所在当前页                    
                 }, err => {
                     loading.close();
                     this.$message.error(err.msg);
@@ -393,7 +392,14 @@ export default {
             document.body.appendChild(link);
             link.click();
         }
+    },
+    beforeRouteLeave(to, from, next) {
+        // 设置下一个路由的meta
+        to.meta.keepAlive = true;           
+        console.log("。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。alive");
+        next();
     }
+    
 };
 </script>
 

@@ -53,11 +53,12 @@ export default {
     },
     beforeRouteEnter:(to, from, next) => {
         next(vm => {
-            smsTemplateSrv.getTemplate(vm.$route.query.smsTempLateId).then(resp => {
-                let data = resp.data.list[0];
-                vm.smsId = data.smsTempLateId;
-                vm.smsName = data.smsTempLateName;
-                vm.smsText = data.smsTemplateText;
+            console.log(vm.$route.query.Id);
+            smsTemplateSrv.getTemplate(vm.$route.query.Id).then(resp => {
+                let tempData = resp.data.smsTemplate;
+                vm.smsId = tempData.smsTempLateId;
+                vm.smsName = tempData.smsTempLateName;
+                vm.smsText = tempData.smsTemplateText;
             }, error => {
                 vm.$message.error(err.msg);
             });
@@ -71,7 +72,7 @@ export default {
             let smsText = this.smsText;
             let smsId = this.smsId;
             if (smsName && smsText) {
-                smsTemplateSrv.updateTemplate(smsId, smsName, smsText).then(resp => {
+                smsTemplateSrv.updateTemplate(this.$route.query.Id, smsId, smsName, smsText).then(resp => {
                     console.log(resp);
                     this.$message.success("更新成功");
                     this.$router.push({path: "/smsmanage/SmsTemplate", query:{currentPage: this.$route.query.currentPage}});          // 跳回模板列表所在当前页
@@ -82,6 +83,6 @@ export default {
                 this.$message.error("请填写所有的内容!");
             }
         }
-    }
+    },
 };
 </script>

@@ -29,27 +29,28 @@
                         <tbody>
                             <tr v-for="(item, index) in robotList" :key="index">
                                 <td>{{index+(currentPage - 1)*10}}</td>
-                                <td>{{item.accountName}}</td>
-                                <td>{{item.accountUser}}</td>
+                                <td>{{item.rname}}</td>
+                                <td>{{item.raccount}}</td>
                                 <td>
                                     <!-- <i class="fa fa-lg" :class="{'fa-phone': item.robotStatus == '未知' ? false : true}"></i> -->
                                     {{item.taskState == 0 ? "空闲中":"工作中"}}
                                 </td>
                                 <td>
-                                    <span v-for="info in item.taskInfo" :key="info.id">{{info.taskID}} ,</span>
+                                    {{item.taskId}}
+                                    <!-- <span v-for="info in item.taskInfo" :key="info.id">{{info.taskID}} ,</span> -->
                                 </td>
                                 <td>{{item.onLineState}}</td>
                             </tr>                                          
                         </tbody>
                     </table>
-                    <div class="page" v-show="(robotList.length > 0 && totalPageNum > 10)">
+                    <div class="page" v-show="(robotList.length > 0 && totalRecords > 10)">
                         <el-pagination 
                             background 
                             @current-change="searchList"
                             :current-page.sync="currentPage"
                             :page-size="pageSize"
                             layout="total, prev, pager, next"
-                            :total="totalPageNum"
+                            :total="totalRecords"
                         >
                         </el-pagination>
                     </div>
@@ -74,15 +75,16 @@ export default {
             pageSize: 10,
             keyWord: "",
             robotList: [],
-            totalPageNum: 1,
+            totalRecords: 1,
             sequence: 1
         };
     },
     beforeRouteEnter: (to, from, next) => {
         next(vm => {
             seatSrv.robotSeat(vm.keyWord, vm.currentPage, vm.pageSize).then(resp => {
-                vm.robotList = resp.data.list;
-                vm.totalPageNum = resp.data.totalPageNum;
+                let robotData = resp.data.pageInfo;
+                vm.robotList = robotData.list;
+                vm.totalRecords = robotData.totalRecords;
             }, err => { 
                 vm.$message.error(err.msg);
             })
@@ -91,8 +93,9 @@ export default {
     methods: {
         searchList(currentPage = this.currentPage) {
             seatSrv.robotSeat(this.keyWord, currentPage, this.pageSize).then(resp => {
-                this.robotList = resp.data.list;
-                this.totalPageNum = resp.data.totalPageNum;
+                let robotData = resp.data.pageInfo;
+                this.robotList = robotData.list;
+                this.totalRecords = robotData.totalRecords;
                 this.currentPage = currentPage;
             }, err => {
                 this.$message.error(err.msg);

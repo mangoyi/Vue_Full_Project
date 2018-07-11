@@ -78,7 +78,7 @@
                                 </td> -->
                                 <td>
                                     <!-- <el-button class="btn btn-primary" plain @click="openDialog(item.Id)" >查看聊天对话</el-button> -->
-                                    <el-button class="btn btn-primary" plain @click="openDialog(item.Id, item.phone, item.recordSrc)" >查看聊天对话</el-button>
+                                    <el-button class="btn btn-primary" plain @click="openDialog(item.id, item.phone, item.recordSrc)" >查看聊天对话</el-button>
                                 </td>
                                 <td>{{item.flag}}</td>
                             </tr>                                          
@@ -91,7 +91,7 @@
                             :current-page.sync="currentPage"
                             :page-size="pageSize"
                             layout="total, prev, pager, next"
-                            :total="totalPageNum"
+                            :total="totalRecords"
                         >
                         </el-pagination>
                     </div>
@@ -162,7 +162,7 @@ export default {
             recordDialog: false,
             currentPage: 1,
             pageSize: 10,
-            totalPageNum: 1,
+            totalRecords: 1,
             detailList: [],
 
             // 聊天内容
@@ -179,8 +179,9 @@ export default {
     beforeRouteEnter: (to, from, next) => {
         next(vm => {
             taskDetailSrv.taskDetail(vm.$route.query.taskId, vm.startDate, vm.endDate, vm.number, vm.currentPage, vm.pageSize, vm.tab).then(resp => {
-                vm.detailList = resp.data.list;
-                vm.totalPageNum = resp.data.totalPageNum;
+                let detailData = resp.data.pageInfo;
+                vm.detailList = detailData.list;
+                vm.totalRecords = detailData.totalRecords;
             }, err => {
                 vm.$message.error(err.msg);
             });
@@ -191,8 +192,9 @@ export default {
     methods: {
         searchList(currentPage = this.currentPage) {
             taskDetailSrv.taskDetail(this.$route.query.taskId, this.startDate, this.endDate, this.number, currentPage, this.pageSize, this.tab).then(resp => {
-                this.detailList = resp.data.list;
-                this.totalPageNum = resp.data.totalPageNum;
+                let detailData = resp.data.pageInfo;
+                this.detailList = detailData.list;
+                this.totalRecords = detailData.totalRecords;
                 this.currentPage = currentPage;
             }, err => {
                 this.$message.error(err.msg);
@@ -207,7 +209,8 @@ export default {
             this.dialogNumber = "聊天内容 ("+ phone +")";
             this.completeRecordUrl = Src;
             taskDetailSrv.dialog(id).then(resp => {
-                let data = resp.data.list;
+                let data = resp.data.diaglogTexts;
+                console.log(data);
                 data.forEach((item) => {
                     item["imgFlag"] = false;
                 })

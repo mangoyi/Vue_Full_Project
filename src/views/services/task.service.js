@@ -26,12 +26,35 @@ export default {
         );
     },
 
-    // 机器人
+    // 机器人:发布任务中所有空闲机器人
     getRobot() {
         return axios({
             url: "/api/api/account/getFreeRobotList",
             method: "post",
             data: {}
+        }).then(
+            resp => {
+                if (resp.data.status == 0) {
+                    return Promise.resolve(resp.data);
+                } else {
+                    return Promise.reject(resp.data);
+                }
+            },
+            err => {
+                if (!err.msg) {
+                    err.msg = "网络故障";
+                }
+                return Promise.reject(err);
+            }
+        );
+    },
+
+    // 机器人： 修改任务中包含当前任务和所有的空闲机器人
+    getCurrentRobot(taskId) {
+        return axios({
+            url: "/api/api/account/getCurrentTaskRobots",
+            method: "post",
+            data: { taskId }
         }).then(
             resp => {
                 if (resp.data.status == 0) {
