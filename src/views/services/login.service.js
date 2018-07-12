@@ -24,11 +24,11 @@ export default {
     },
 
     // 修改密码
-    updatePassword(username, password) {
+    updatePassword(origPassword, password, repassword) {
         return axios({
             url: "/api/api/home/updatePwd",
             method: "post",
-            data: { username, password }
+            data: { origPassword, password, repassword }
         }).then(
             resp => {
                 if (resp.data.status == 0) {

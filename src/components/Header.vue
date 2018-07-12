@@ -25,19 +25,28 @@
             <div class="content-show text-center">
                 <div class="row mb-1 list-search">
                     <div class="col-md-12 search-field">
+                        <div class="label yi-confirm">原始密码：</div>
+                        <input type="password" class="form-control input-field" placeholder="输入原始密码" v-model.trim="origPassword" />
+                    </div>
+                </div>
+                <div class="row mb-1 list-search">
+                    <div class="col-md-12 search-field">
                         <div class="label">新密码：</div>
-                        <input type="password" class="form-control input-field" placeholder="输入新密码" v-model="oldPwd" />
+                        <input type="password" class="form-control input-field" placeholder="输入新密码" v-model.trim="password" />
                     </div>
                 </div>
                 <div class="row mb-1 list-search">
                     <div class="col-md-12 search-field">
                         <div class="label yi-confirm">确认密码：</div>
-                        <input type="password" class="form-control input-field" placeholder="请再次输入新密码" v-model="newPwd" />
+                        <input type="password" class="form-control input-field" placeholder="请再次输入新密码" v-model.trim="rePassword" v-on:blur="checkPwd" />
                     </div>
+                </div>
+                <div class="row mb-1 yi_footer">
+                    <span :class="{'pwd-info-error animated shake': pwd_err}" v-show="pwd_err">两次输入密码不一致</span>
                 </div>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="confirmUpdate">确 定</el-button>
+                <el-button type="primary" @click="confirmUpdate" :disabled="pwd_err">确 定</el-button>
             </span>
         </el-dialog>
     </navbar>
@@ -55,8 +64,10 @@ export default {
         return {
             username: "",
             passwordDialog: false,
-            oldPwd: "",
-            newPwd: ""
+            origPassword: "",
+            password: "",
+            rePassword: "",
+            pwd_err: false
         }
     },
   components: {
@@ -84,15 +95,24 @@ export default {
           }
       },
     confirmUpdate() {
-        if (this.oldPwd == this.newPwd && this.oldPwd) {
-            loginSrv.updatePassword(this.username, this.newPwd).then(resp => {
+        if (this.origPassword && this.password && this.rePassword) {
+            loginSrv.updatePassword( this.origPassword, this.password, this.rePassword).then(resp => {
                 this.$message.success("密码修改成功!");
                 this.passwordDialog = false;
+                this.handleCommand("b");
             }, err => {
                 this.$message.error(err.msg);
             });
         } else {
-            this.$message.error("请确认密码一致!");
+            this.$message.error("请填写所有内容");
+        }
+    },
+    checkPwd() {
+        if (this.password === this.rePassword) {
+            this.pwd_err = false;
+            return;
+        } else {
+            this.pwd_err = true;
         }
     },
     sidebarToggle(e) {
@@ -136,6 +156,19 @@ export default {
               }
           }
       }
+  }
+  .pwd-info-error{
+        background: #F2DEDE;
+        text-align: center;
+        font-size: 14px;
+        color: red;
+        height: 30px;
+        border-radius: 5px;
+        line-height: 30px;
+        padding: 0 10px;
+  }
+  .yi_footer {
+      justify-content: center;
   }
 </style>
 
