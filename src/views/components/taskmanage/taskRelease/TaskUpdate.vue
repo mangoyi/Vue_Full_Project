@@ -92,7 +92,8 @@
                             :picker-options="{
                                 start: '09:00',
                                 step: '00:10',
-                                end: '20:00'
+                                end: '20:00',
+                                minTime: startTime2
                             }">
                         </el-time-select>                       
                     </div>
@@ -166,6 +167,7 @@ export default {
 
             // 任务ID
             taskID: '',
+            Id: "",
 
             // 在任务列表中的页数
             // currentPage: 1,
@@ -215,18 +217,12 @@ export default {
                 data.forEach((item, index) => {
                     vm.transferData1.push(
                         (function() {
-                            if ( item.manualState == 1 && item.taskId != currentTaskId) {                    // 员工在工作，并且不是在当前这个任务中。 所以不能选择
-                                return {
-                                    key: index,
-                                    label: item.Maccount + "("+item.Mname+")",
-                                    disabled: true
-                                }
-                            } else if ( item.manualState == 1 && item.taskId == currentTaskId) {
+                            if ( item.manualState == 1 && item.taskId == currentTaskId) {
                                 thatcheckedTransferData1.push(index);                                                    // 员工在工作，并且在当前这个任务中。所以显示在右侧
                             } 
                             return {
                                 key: index,                                                                              // 自增, 所有员工(空闲员工)
-                                label: item.Maccount + "("+item.Mname+")",
+                                label: item.maccount + "("+item.mname+")",
                                 disabled: false
                             }
                         })()
@@ -254,6 +250,7 @@ export default {
                 vm.startTime2 = executeTime.startTime2;
                 vm.endTime2 = executeTime.endTime2;
 
+                vm.Id = data.id;
             }, err => {
                 vm.$message.error(err.msg);
             });
@@ -267,7 +264,7 @@ export default {
             const extention = testmsg === 'zip';
             const isLt4M = file.size / 1024 / 1024 < 4;
             if (!extention) {
-                this.$confirm('上传文件只能是zip格式,请重新选择', '提示', {
+                this.$confirm('上传文件只能是zip格式,请移除并重新选择', '提示', {
                         confirmButtonText: '确定',
                         callback: action => {
                             this.$message({
@@ -278,7 +275,7 @@ export default {
                 });
             }
             if (!isLt4M) {
-                this.$confirm('上传文件不能超过4MB,请重新选择', '提示', {
+                this.$confirm('上传文件不能超过4MB,请移除并重新选择', '提示', {
                         confirmButtonText: '确定',
                         callback: action => {
                             this.$message({
@@ -344,9 +341,10 @@ export default {
             // }
             formData.append("file", this.formfile.raw);                              // 单文件formdata
             let obj = {
+                Id: this.Id,
                 taskId: taskId,                                                     
                 taskName: taskName,
-                publisher: "mangoyi",
+                publisher: "",
                 robotSeat: robotSeat,
                 manualSeat: manualSeat,
                 startTime1: startTime1,
@@ -358,7 +356,7 @@ export default {
                 formData.append(key, obj[key]);
             };
             
-            if ( !!this.formfile || robotSeat.length > 0 || manualSeat.length > 0) {                // zip文件/机器人坐席/人工座席 存在一个即可
+            if ( startTime1 && endTime1 && startTime2 && endTime2 && robotSeat.length > 0 && manualSeat.length > 0) {                // zip文件/机器人坐席/人工座席 存在一个即可
                 loading = this.$loading({
                     lock: true,
                     text: 'Loading',

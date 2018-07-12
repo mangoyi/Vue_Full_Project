@@ -73,11 +73,11 @@ export default {
     },
 
     // 员工
-    getManual() {
+    getManual(taskId) {
         return axios({
             url: "/api/api/account/getFreeManualList",
             method: "post",
-            data: {}
+            data: { taskId }
         }).then(
             resp => {
                 if (resp.data.status == 0) {

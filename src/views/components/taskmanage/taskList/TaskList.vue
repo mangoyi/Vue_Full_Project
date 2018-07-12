@@ -55,7 +55,7 @@
                                 </td>
                                 <td>
                                     <button class="btn btn-primary" style="color: #fff;" @click="togglePause(item)" :disabled="item.taskStatus === 2 ? true : false" >{{item.taskStatus == 1 ? '开启' : '暂停'}}</button>
-                                    <button class="btn btn-warning"  :disabled="(item.taskStatus === 2 || item.taskStatus === 1) ? true : false" @click="taskUpdate(taskID)">
+                                    <button class="btn btn-warning"  :disabled="(item.taskStatus === 2 || item.taskStatus === 0) ? true : false" @click="taskUpdate(item.taskID)">
                                         修改
                                     </button>
                                     <button class="btn btn-danger" style="color: #fff;" @click="over(item.taskID)" :disabled="item.taskStatus === 2 ? true : false">结束</button>

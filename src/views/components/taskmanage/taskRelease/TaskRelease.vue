@@ -15,7 +15,7 @@
                         <el-upload
                             class="upload-file"
                             ref="upload"
-                            :before-upload = "beforeAvatarUpload"
+                            :before-upload = "beforeZipUpload"
                             action="https://jsonplaceholder.typicode.com/posts/"
                             :on-remove="handleRemove"
                             :on-change = "handleFileChange"
@@ -75,7 +75,8 @@
                             :picker-options="{
                                 start: '09:00',
                                 step: '00:10',
-                                end: '20:00'
+                                end: '20:00',
+                                minTime: startTime2                                
                             }">
                         </el-time-select>                       
                     </div>
@@ -180,16 +181,16 @@ export default {
                 data.forEach((item, index) => {
                     vm.transferData1.push(
                         (function() {
-                            if ( item.manualState == 1) {                                           // 员工在工作，所以不能选择
-                                return {
-                                    key: index,
-                                    label: item.Maccount + "(" + item.Mname +")",
-                                    disabled: true
-                                }
-                            } 
+                            // if ( item.manualState == 1) {                                           // 员工在工作，所以不能选择
+                            //     return {
+                            //         key: index,
+                            //         label: item.maccount + "(" + item.mname +")",
+                            //         disabled: true
+                            //     }
+                            // } 
                             return {
                                 key: index,                                                         // 自增, 所有员工(空闲员工)
-                                label: item.Maccount + "("+ item.Mname +")",
+                                label: item.maccount + "("+ item.mname +")",
                                 disabled: false
                             }
                         })()
@@ -199,12 +200,12 @@ export default {
         });
     },
     methods: {
-        beforeAvatarUpload(file){
+        beforeZipUpload(file){
             const testmsg=file.name.substring(file.name.lastIndexOf('.')+1);  
             const extention = testmsg === 'zip';
             const isLt4M = file.size / 1024 / 1024 < 4;
             if (!extention) {
-                this.$confirm('上传文件只能是zip格式,请重新选择', '提示', {
+                this.$confirm('上传文件只能是zip格式,请移除并重新选择', '提示', {
                         confirmButtonText: '确定',
                         callback: action => {
                             this.$message({
@@ -215,7 +216,7 @@ export default {
                 });
             }
             if (!isLt4M) {
-                this.$confirm('上传文件不能超过4MB,请重新选择', '提示', {
+                this.$confirm('上传文件不能超过4MB,请移除并重新选择', '提示', {
                         confirmButtonText: '确定',
                         callback: action => {
                             this.$message({
@@ -229,7 +230,7 @@ export default {
         },
         handleFileChange(file) {
             this.formfile = ""; 
-            let fileType = this.beforeAvatarUpload(file);                  // 判断上传格式和大小
+            let fileType = this.beforeZipUpload(file);                  // 判断上传格式和大小
             // let obj = {
             //     name: name,
             //     file

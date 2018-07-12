@@ -104,10 +104,11 @@ export default {
             e.target.parentElement.classList.toggle('open');
         },
         initRole() {
-            if (window.sessionStorage.getItem("roles").indexOf("admin") > -1) {
-                this.roleAdmin = true;
+            let roles = window.sessionStorage.getItem("roles");
+            if (roles) {            // 存在这个用户角色
+                roles.indexOf("admin") > -1 ? this.roleAdmin = true : this.roleAdmin = false;
+                console.log("管理员...........");
             }
-            console.log("管理员...........");
         }
     }
 }
