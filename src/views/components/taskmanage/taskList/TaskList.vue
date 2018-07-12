@@ -55,7 +55,7 @@
                                 </td>
                                 <td>
                                     <button class="btn btn-primary" style="color: #fff;" @click="togglePause(item)" :disabled="item.taskStatus === 2 ? true : false" >{{item.taskStatus == 1 ? '开启' : '暂停'}}</button>
-                                    <button class="btn btn-warning"  :disabled="item.taskStatus === 2 ? true : false" @click="taskUpdate(item.taskStatus, item.taskID)">
+                                    <button class="btn btn-warning"  :disabled="(item.taskStatus === 2 || item.taskStatus === 1) ? true : false" @click="taskUpdate(taskID)">
                                         修改
                                     </button>
                                     <button class="btn btn-danger" style="color: #fff;" @click="over(item.taskID)" :disabled="item.taskStatus === 2 ? true : false">结束</button>
@@ -230,21 +230,14 @@ export default {
                 });
             });
         },
-        taskUpdate(taskStatus, taskID) {
-            if (taskStatus === 0) {
-                this.$alert('修改任务之前，请先暂停该任务', '提示', {
-                    confirmButtonText: '确定',
-                    callback: action => {}
-                });
-            } else if (taskStatus === 1) {
-                this.$router.push({
-                    path: '/taskmanage/TaskUpdate',
-                    query: {
-                        taskId: taskID,
-                        currentPage: this.currentPage
-                    }
-                });
-            }
+        taskUpdate(taskID) {
+            this.$router.push({
+                path: '/taskmanage/TaskUpdate',
+                query: {
+                    taskId: taskID
+                    // currentPage: this.currentPage
+                }
+            });
         },
 
         // 下载文件
@@ -291,6 +284,10 @@ export default {
                 });
             });
         }
+    },
+    activated() {
+        console.log("activete")
+        // this.searchList();
     }
 };
 </script>

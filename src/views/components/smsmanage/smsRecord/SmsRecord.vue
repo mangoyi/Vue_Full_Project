@@ -45,14 +45,14 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div class="page" v-show="totalPageNum >= 10">
+                    <div class="page" v-show="totalRecords >= 10">
                         <el-pagination 
                             background 
                             @current-change="searchList"
                             :current-page.sync="currentPage"
                             :page-size="pageSize"
                             layout="total, prev, pager, next"
-                            :total="totalPageNum"
+                            :total="totalRecords"
                         >
                         </el-pagination>
                     </div>
@@ -83,7 +83,7 @@ export default {
             centerDialogVisible: false,
             currentPage: 1,
             pageSize: 10,
-            totalPageNum: 1,
+            totalRecords: 1,
             input: '',
             startDate: '',
             endDate: '',
@@ -94,8 +94,9 @@ export default {
     beforeRouteEnter: (to, from, next) => {
         next(vm => {
             smsRecordSrv.smsRecord(vm.startDate, vm.endDate, vm.phone, vm.currentPage, vm.pageSize).then(resp => {
-                vm.recordList = resp.data.list;
-                vm.totalPageNum = resp.data.totalPageNum;
+                let smsData = resp.data.pageInfo;
+                vm.recordList = smsData.list;
+                vm.totalRecords = smsData.totalRecords;
             }, err => {
                 vm.$message.error(err.msg);
             });
@@ -104,8 +105,9 @@ export default {
     methods: {
         searchList(currentPage = this.currentPage) {
             smsRecordSrv.smsRecord(this.startDate, this.endDate, this.phone, currentPage, this.pageSize).then(resp => {
-                this.recordList = resp.data.list;
-                this.totalPageNum = resp.data.totalPageNum;
+                let smsData = resp.data.pageInfo;
+                this.recordList = smsData.list;
+                this.totalRecords = smsData.totalRecords;
                 this.currentPage = currentPage;
             }, err => {
                 this.$message.error(err.msg);

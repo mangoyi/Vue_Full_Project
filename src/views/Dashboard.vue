@@ -49,6 +49,7 @@ export default {
             });
             dashBoardSrv.taskPercent().then(resp => {
                 vm.percentlist = resp.data.list;
+                loading.close();
             }, err => {
                 vm.$message.error(err.msg);
             });
@@ -59,7 +60,6 @@ export default {
                 vm.taskRecent = data.taskRecent;
                 vm.taskSeries = data.taskSeries;
                 vm.drawCanvas(vm.taskArr, vm.taskRecent, vm.taskSeries);
-                loading.close();
             });
         });
     },

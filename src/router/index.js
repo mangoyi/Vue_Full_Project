@@ -96,7 +96,7 @@ export default new Router({
                             component: TaskList,
                             meta: {
                                 requireAuth: true,
-                                keepAlive: true // 用户列表需要被缓存
+                                keepAlive: true // 任务列表需要被缓存
                             }
                         },
                         {

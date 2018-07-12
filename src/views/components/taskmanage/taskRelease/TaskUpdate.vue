@@ -312,7 +312,13 @@ export default {
             let taskId = this.$route.query.taskId;                                  // 任务ID
             
             let taskName = this.taskName;                                             // 任务名称
-              
+            
+            // 外呼时间段
+            let startTime1 = this.startTime1;
+            let endTime1 = this.endTime1;
+            let startTime2 = this.startTime2;
+            let endTime2 = this.endTime2;
+
             let temrobotSeat = [];                                                     // 机器人坐席
             this.checkedTransferData.forEach(item => {
                 temrobotSeat.push(this.transferData[item].label);
@@ -342,7 +348,11 @@ export default {
                 taskName: taskName,
                 publisher: "mangoyi",
                 robotSeat: robotSeat,
-                manualSeat: manualSeat
+                manualSeat: manualSeat,
+                startTime1: startTime1,
+                endTime1: endTime1,
+                startTime2: startTime2,
+                endTime2: endTime2
             };  
             for(let key in obj){
                 formData.append(key, obj[key]);
@@ -395,8 +405,8 @@ export default {
     },
     beforeRouteLeave(to, from, next) {
         // 设置下一个路由的meta
-        to.meta.keepAlive = true;           
-        console.log("。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。alive");
+        to.meta.keepAlive = true;   // 跳转到下一个路由不刷新        
+        console.log("。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。taskList Live");
         next();
     }
     

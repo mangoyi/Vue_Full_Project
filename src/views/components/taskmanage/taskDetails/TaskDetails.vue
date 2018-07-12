@@ -84,6 +84,9 @@
                             </tr>                                          
                         </tbody>
                     </table>
+                    <p style="float: left; margin-top: 10px;" v-show="detailList.length > 0" >
+                        <span style="margin-right: 10px;" v-for="(typeItem, index) in typeList" :key="index">{{typeItem.type}}类: {{typeItem.percent}}；</span>
+                    </p>
                     <div class="page" v-show="detailList.length > 0">
                         <el-pagination 
                             background 
@@ -173,7 +176,10 @@ export default {
             tab: '',
 
             // 任务列表中页数
-            taskCurrentPage: 1
+            taskCurrentPage: 1,
+
+            // typeList
+            typeList: []
         };
     },
     beforeRouteEnter: (to, from, next) => {
@@ -187,6 +193,13 @@ export default {
             });
 
             vm.taskCurrentPage = vm.$route.query.currentPage;           // 确保返回到任务列表的时候是当前任务所在页
+        
+            taskDetailSrv.getTaskTypes(vm.$route.query.taskId).then(resp => {
+                vm.typeList = resp.data.list;
+                console.log(vm.typeList);
+            }, err => {
+                this.$message.error(err.msg);
+            });
         });
     },
     methods: {
