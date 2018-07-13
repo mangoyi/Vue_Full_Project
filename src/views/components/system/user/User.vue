@@ -5,7 +5,7 @@
         </div>
         <div class="content-show" key="1">
             <div class="row list-search">
-                <div class="col-md-2 search-field">
+                <div class="col-md-3 search-field">
                     <div class="label">姓名：</div>
                     <input type="text" class="form-control input-field" placeholder="请输入姓名" v-model="username" />
                 </div>

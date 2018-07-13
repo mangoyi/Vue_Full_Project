@@ -55,7 +55,7 @@
                                 <td>{{item.callState}}</td>
                                 <td>{{item.inCall}}</td>
                                 <td>{{item.outCall}}</td>
-                                <td>{{item.startTime.substring(0, 19).replace("T"," ")}}</td>
+                                <td>{{item.startTime}}</td>
                                 <td>{{item.duration + 's'}}</td>
                                 <td>{{item.robotId}}</td>
                                 <td>{{item.manualId}}</td>
@@ -141,6 +141,7 @@ export default {
         listen(item) {
             if (!item.recordPlayState) {                                                     // 播放
                 this.recordSrc = item.recordSrc;
+                // this.recordSrc = "http://192.168.1.150:5000/api/taskFiles/20180713101902/demoMp3/7.1.mp3";
                 console.log(this.recordSrc + "-----------------------播放--------------------------");
                 let len = this.recordList.length;
                 for(let i=0; i<len; i++) {

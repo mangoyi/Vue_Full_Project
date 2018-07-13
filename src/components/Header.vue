@@ -3,11 +3,15 @@
         <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button" @click="mobileSidebarToggle">&#9776;</button>
         <a class="navbar-brand"></a>
         <ul class="nav navbar-nav d-md-down-none">
-          <li class="nav-item">
-            <a class="nav-link navbar-toggler sidebar-toggler" @click="sidebarMinimize">&#9776;</a>
-          </li>
+            <li class="nav-item">
+                <a class="nav-link navbar-toggler sidebar-toggler" @click="sidebarMinimize">&#9776;</a>
+            </li>
         </ul>
         <ul class="nav navbar-nav ml-auto d-md-down-none">
+            <li class="yi-proName"><span style="color: #20a8d8;font-weight: 600;">Albrid</span>爱博得智能外呼系统</li> 
+        </ul>
+        <ul class="nav navbar-nav ml-auto d-md-down-none">
+                       
             <li class="nav-item">
               <!-- <a @click="loginOut" class="nav-link pr-3">{{username}}</a> -->
                 <el-dropdown @command="handleCommand">
@@ -169,6 +173,9 @@ export default {
   }
   .yi_footer {
       justify-content: center;
+  }
+  .yi-proName {
+      font-size: 16px;
   }
 </style>
 

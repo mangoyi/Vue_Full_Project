@@ -3,7 +3,7 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-8">
-                    <h1 class="title">智能外呼系统</h1>
+                    <h1 class="title">Albrid智能外呼系统</h1>
                     <div class="card-group mb-0">
                         <form class="card p-4" name="loginForm" novalidate>
                             <div class="card-block">

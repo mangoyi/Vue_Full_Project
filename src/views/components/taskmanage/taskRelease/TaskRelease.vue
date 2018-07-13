@@ -240,6 +240,7 @@ export default {
             }
         },
         handleRemove(file, fileList) {
+            this.formfile.raw = '';
             this.$message.success("已成功移除了" + file.name + "文件");
         },
         handleLimit(file, fileList) {                                                   // 超出文件个数的钩子
@@ -297,7 +298,7 @@ export default {
                 formData.append(key, obj[key]);
             };
 
-            if ( !!taskName && !!this.formfile && robotSeat.length > 0) {
+            if ( startTime1 && endTime1 && startTime2 && endTime2 && taskName && !!this.formfile.raw && robotSeat.length > 0) {
                 loading = this.$loading({
                     lock: true,
                     text: 'Loading',

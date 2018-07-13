@@ -356,7 +356,7 @@ export default {
                 formData.append(key, obj[key]);
             };
             
-            if ( startTime1 && endTime1 && startTime2 && endTime2 && robotSeat.length > 0 && manualSeat.length > 0) {                // zip文件/机器人坐席/人工座席 存在一个即可
+            if ( startTime1 && endTime1 && startTime2 && endTime2 && robotSeat.length > 0) {               
                 loading = this.$loading({
                     lock: true,
                     text: 'Loading',

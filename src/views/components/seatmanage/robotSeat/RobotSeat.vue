@@ -1,10 +1,38 @@
 <template>
     <div class="animated fadeIn content_page">
         <div class="content-title">
-            <div class="title">任务列表</div>
+            <div class="title">机器人坐席</div>
         </div>
         <div class="content-show">
-            <div class="row list-search">
+            <div class="dierban">
+                <el-card class="box-card" v-for="(item, index) in taskList" :key="index">
+                    <div slot="header" class="clearfix">
+                        <span v-if="item.item1">任务: {{item.item2}}</span>
+                        <span v-if="item.item1">({{item.item1}})</span>
+                        <span v-else>空闲机器人</span>
+                        <span class="robot-count">机器人个数: {{item.item4}}</span>
+                    </div>
+                    <div class="robot-wrapper">
+                        <div class="float-robot" v-for="subitem in item.item3" :key="subitem">
+                            <span class="robot-item robot-item-line" v-if="subitem.onLineState == '离线'">
+                                {{subitem.name}}<br />
+                                ({{subitem.onLineState}})
+                            </span>
+                            <span class="robot-item robot-item-offline" v-else-if="subitem.onLineState == '在线'">
+                                {{subitem.name}}<br />
+                                ({{subitem.onLineState}})
+                            </span>
+                            <span class="robot-item robot-item-unknow" v-else-if="subitem.onLineState == '未知'">
+                                {{subitem.name}}<br />
+                                ({{subitem.onLineState}})
+                            </span>
+                        </div>                       
+                    </div>
+                </el-card>
+            </div>
+
+            
+            <!-- <div class="row list-search">
                 <div class="col-md-3 search-field">
                     <div class="label" style="left:0px;">机器人ID：</div>
                     <el-input v-model="keyWord" placeholder="请输入机器人ID"></el-input>
@@ -32,12 +60,10 @@
                                 <td>{{item.rname}}</td>
                                 <td>{{item.raccount}}</td>
                                 <td>
-                                    <!-- <i class="fa fa-lg" :class="{'fa-phone': item.robotStatus == '未知' ? false : true}"></i> -->
-                                    {{item.taskState == 0 ? "空闲中":"工作中"}}
+                                    {{item.robotState == 0 ? "空闲中":"工作中"}}
                                 </td>
                                 <td>
                                     {{item.taskId}}
-                                    <!-- <span v-for="info in item.taskInfo" :key="info.id">{{info.taskID}} ,</span> -->
                                 </td>
                                 <td>{{item.onLineState}}</td>
                             </tr>                                          
@@ -59,6 +85,7 @@
                     </div>
                 </div>
             </div>
+            -->
         </div>
     </div>
 </template>
@@ -76,18 +103,27 @@ export default {
             keyWord: "",
             robotList: [],
             totalRecords: 1,
-            sequence: 1
+            sequence: 1,
+
+            // 模拟
+            taskId: "10230",
+            taskList: []
         };
     },
     beforeRouteEnter: (to, from, next) => {
         next(vm => {
-            seatSrv.robotSeat(vm.keyWord, vm.currentPage, vm.pageSize).then(resp => {
-                let robotData = resp.data.pageInfo;
-                vm.robotList = robotData.list;
-                vm.totalRecords = robotData.totalRecords;
-            }, err => { 
-                vm.$message.error(err.msg);
+            // seatSrv.robotSeat(vm.keyWord, vm.currentPage, vm.pageSize).then(resp => {
+            //     let robotData = resp.data.pageInfo;
+            //     vm.robotList = robotData.list;
+            //     vm.totalRecords = robotData.totalRecords;
+            // }, err => { 
+            //     vm.$message.error(err.msg);
+            // });
+            seatSrv.robotWorksSeat().then(resp => {
+                vm.taskList = resp.data.list;
+                console.log(vm.taskList);
             })
+
         });
     },
     methods: {
@@ -111,5 +147,33 @@ export default {
     padding-top: 14px;
     text-align: center;
     color: #666;
+}
+.robot-item {
+    display: inline-block;
+    width: 90px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 10px 0;
+    text-align: center;
+    color: #ffffff;
+    border-radius: 10px;
+}
+.robot-item-line {
+    background: #67C23A;
+}
+.robot-item-offline {
+    background: #F56C6C;
+}
+.robot-count {
+    float: right;
+}
+.el-card {
+    margin-bottom: 20px;
+}
+.float-robot {
+    float: left;
+}
+.robot-item-unknow {
+    background: #909399;
 }
 </style>
