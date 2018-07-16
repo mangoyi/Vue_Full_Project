@@ -137,7 +137,8 @@ export default {
                 // vm.currentPage = temCurrentPage;
             }, err => {
                 vm.$message.error(err.msg);
-            })
+            });
+
         });
     },
     methods: {

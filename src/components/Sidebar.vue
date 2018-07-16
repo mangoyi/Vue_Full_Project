@@ -80,6 +80,10 @@
                             <router-link :to="'/system/User'" class="nav-padding nav-link" exact>
                               <i class="icon-star"></i>用户管理</router-link>
                         </li>
+                        <li class="nav-item">
+                            <router-link :to="'/system/LoginLog'" class="nav-padding nav-link" exact>
+                              <i class="icon-star"></i>登录日志</router-link>
+                        </li>
                     </ul>
                 </router-link>
 

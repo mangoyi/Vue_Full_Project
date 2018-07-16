@@ -42,10 +42,15 @@
                                 <td :title="item.taskID">{{item.taskName}}</td>
                                 <td>{{objStatus[item.taskStatus]}}</td>
                                 <td>{{item.publisher}}</td>
-                                <td>{{item.startTime.substring(0, 16).replace("T", " ")}}</td>
-                                <td>{{item.zipUpdateTime.substring(0, 16).replace("T", " ")}}</td>
+                                <td>{{item.startTime}}</td>
+                                <td>{{item.zipUpdateTime}}</td>
                                 <td>{{item.speed}}</td>
-                                <td>{{item.robotNum}}</td>
+                                <td>
+                                    <el-popover trigger="hover" placement="right-start" >
+                                        <el-button slot="reference">{{item.robotNum}}</el-button>
+                                        <span>{{item.robotAccount}}</span>
+                                    </el-popover>
+                                </td>
                                 <td>
                                     <router-link :to="{path: '/taskManage/TaskDetails', query: {
                                         taskId: item.taskID,
@@ -103,7 +108,7 @@
 </template>
 
 <script>
-import { Pagination, DatePicker, Button, Input, Message, Loading} from "element-ui";
+import { Pagination, DatePicker, Button, Input, Message, Loading, Tooltip} from "element-ui";
 import taskListSrv from "@/../src/views/services/taskList.service.js";
 
 /* eslint-disable */
@@ -126,7 +131,10 @@ export default {
             totalRecords: 1,
             taskList: [],                                                    // json数据
             downLoadUrl: '',
-            roleAdmin: false
+            roleAdmin: false,
+
+            // loop
+            // success: 
         };
     },
     beforeRouteEnter: (to, from, next) => {

@@ -33,6 +33,7 @@ import SmsRecord from "@/views/components/smsmanage/smsRecord/SmsRecord";
 import AddUser from "@/views/components/system/user/AddUser";
 import UpdateUser from "@/views/components/system/user/UpdateUser";
 import User from "@/views/components/system/user/User";
+import LoginLog from '@/views/components/system/log/LoginLog';
 
 // Views - Pages
 import Page404 from "@/views/components/pages/Page404";
@@ -234,10 +235,17 @@ export default new Router({
                                 requireAuth: true,
                                 keepAlive: true // 用户列表需要被缓存
                             }
+                        },
+                        {
+                            path: "loginLog",
+                            name: "登录日志",
+                            component: LoginLog,
+                            meta: {
+                                requireAuth: true
+                            }
                         }
                     ]
                 }
-
 
             ]
         },

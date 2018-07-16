@@ -14,11 +14,11 @@
                     </div>
                     <div class="robot-wrapper">
                         <div class="float-robot" v-for="subitem in item.item3" :key="subitem">
-                            <span class="robot-item robot-item-line" v-if="subitem.onLineState == '离线'">
+                            <span class="robot-item robot-item-line" v-if="subitem.onLineState == '在线'">
                                 {{subitem.name}}<br />
                                 ({{subitem.onLineState}})
                             </span>
-                            <span class="robot-item robot-item-offline" v-else-if="subitem.onLineState == '在线'">
+                            <span class="robot-item robot-item-offline" v-else-if="subitem.onLineState == '离线'">
                                 {{subitem.name}}<br />
                                 ({{subitem.onLineState}})
                             </span>

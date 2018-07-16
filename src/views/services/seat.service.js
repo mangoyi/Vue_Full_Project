@@ -4,7 +4,7 @@ export default {
     // 员工坐席
     laborSeat(keyword, currentPage, pageSize) {
         return axios({
-            url: "/api/api/account/searchManualSeat",
+            url: "/api/account/searchManualSeat",
             method: "post",
             data: { keyword, currentPage, pageSize }
         }).then(
@@ -26,7 +26,7 @@ export default {
     // 机器人坐席
     robotSeat(keyword, currentPage, pageSize) {
         return axios({
-            url: "/api/api/account/searchRobotSeat",
+            url: "/api/account/searchRobotSeat",
             method: "post",
             data: { keyword, currentPage, pageSize }
         }).then(
@@ -49,7 +49,7 @@ export default {
     // 机器人坐席第二个版本
     robotWorksSeat() {
         return axios({
-            url: "/api/api/task/getRobotsWorkStatus",
+            url: "/api/task/getRobotsWorkStatus",
             method: "post",
             data: {}
         }).then(

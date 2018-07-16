@@ -316,23 +316,23 @@ export default {
             let startTime2 = this.startTime2;
             let endTime2 = this.endTime2;
 
-            let temrobotSeat = [];                                                     // 机器人坐席
+            let robotSeat = [];                                                     // 机器人坐席
             this.checkedTransferData.forEach(item => {
-                temrobotSeat.push(this.transferData[item].label);
+                robotSeat.push(this.transferData[item].label);
             });
 
-            let robotSeat = temrobotSeat.map((item) => {
-                return item.substring(0, 4);
-            });
+            // let robotSeat = temrobotSeat.map((item) => {
+            //     return item.substring(0, 4);
+            // });
 
-            let temmanualSeat = [];                                                     // 员工坐席
+            let manualSeat = [];                                                     // 员工坐席
             this.checkedTransferData1.forEach(item => {
-                temmanualSeat.push(this.transferData1[item].label);
+                manualSeat.push(this.transferData1[item].label);
             });
 
-            let manualSeat = temmanualSeat.map((item) => {
-                return item.substring(0, 4);
-            })
+            // let manualSeat = temmanualSeat.map((item) => {
+            //     return item.substring(0, 4);
+            // })
 
             let formData = new FormData();
             // 多个文件就要采用这样的遍历方式
