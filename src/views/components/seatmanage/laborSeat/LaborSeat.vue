@@ -36,8 +36,7 @@
                                     <!-- <i class="fa fa-lg" :class="{'fa-phone': item.onLineState == '未知' ? true : false}"></i> -->
                                 </td>
                                 <td>
-                                    {{item.taskId}}
-                                    <!-- <span v-for="info in item.taskInfo" :key="info.id">{{info.taskName}} ,</span> -->
+                                    <span v-for="info in item.tasks" :key="info.id">{{info.taskId}}({{info.taskName}})，</span>
                                 </td>
                                 <td>{{item.onLineState}}</td>
                             </tr>                                          
