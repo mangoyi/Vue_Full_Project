@@ -5,7 +5,7 @@ export default {
     // 所有用户
     getAllUsers(userName, currentPage, pageSize) {
         return axios({
-            url: "/api/ManageUser/GetAllUsers",
+            url: "/api/api/ManageUser/GetAllUsers",
             method: "post",
             data: { userName, currentPage, pageSize }
         }).then(
@@ -28,7 +28,7 @@ export default {
     // 所有角色
     getAllRoles() {
         return axios({
-            url: "/api/ManageUser/GetAllRoles",
+            url: "/api/api/ManageUser/GetAllRoles",
             method: "post",
             data: {}
         }).then(
@@ -51,7 +51,7 @@ export default {
     // 新增时检索用户登录名
     checkLoginName(userName) {
         return axios({
-            url: "/api/ManageUser/CheckUsername",
+            url: "/api/api/ManageUser/CheckUsername",
             method: "post",
             data: { userName }
         }).then(
@@ -74,7 +74,7 @@ export default {
     // 增加用户
     addUser(accountUser, accountPwd, accountName, selectedRoles, accountState, accountType) {
         return axios({
-            url: "/api/ManageUser/AddUser",
+            url: "/api/api/ManageUser/AddUser",
             method: "post",
             data: { accountUser, accountPwd, accountName, selectedRoles, accountState, accountType }
         }).then(
@@ -97,7 +97,7 @@ export default {
     // 删除用户
     deleteUser(Id) {
         return axios({
-            url: "/api/ManageUser/DeleteUser",
+            url: "/api/api/ManageUser/DeleteUser",
             method: "post",
             data: { Id }
         }).then(
@@ -120,7 +120,7 @@ export default {
     // 修改用户
     updateUser(Id, accountUser, accountPwd, accountName, selectedRoles, accountState, accountType) {
         return axios({
-            url: "/api/ManageUser/UpdateUser",
+            url: "/api/api/ManageUser/UpdateUser",
             method: "post",
             data: { Id, accountUser, accountPwd, accountName, selectedRoles, accountState, accountType }
         }).then(
@@ -143,7 +143,7 @@ export default {
     // 查看用户
     getUser(Id) {
         return axios({
-            url: "/api/ManageUser/GetUser",
+            url: "/api/api/ManageUser/GetUser",
             method: "post",
             data: { Id }
         }).then(
@@ -166,7 +166,7 @@ export default {
     // 锁定用户
     lockUser(Id) {
         return axios({
-            url: "/api/ManageUser/LockUser",
+            url: "/api/api/ManageUser/LockUser",
             method: "post",
             data: { Id }
         }).then(
@@ -189,7 +189,7 @@ export default {
     // 解除锁定
     unLockUser(Id) {
         return axios({
-            url: "/api/ManageUser/UnLockUser",
+            url: "/api/api/ManageUser/UnLockUser",
             method: "post",
             data: { Id }
         }).then(
@@ -212,7 +212,7 @@ export default {
     // 登陆记录
     loginLog(ip, mac, userName, startTime, endTime, currentPage, pageSize) {
         return axios({
-            url: "/api/account/getLoginInfos",
+            url: "/api/api/account/getLoginInfos",
             method: "post",
             data: { ip, mac, userName, startTime, endTime, currentPage, pageSize }
         }).then(

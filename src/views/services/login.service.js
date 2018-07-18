@@ -3,7 +3,7 @@ export default {
     // 登陆
     login(username, password) {
         return axios({
-            url: "/api/home/loginUser",
+            url: "/api/api/home/loginUser",
             method: "post",
             data: { username, password }
         }).then(
@@ -26,7 +26,7 @@ export default {
     // 修改密码
     updatePassword(origPassword, password, repassword) {
         return axios({
-            url: "/api/home/updatePwd",
+            url: "/api/api/home/updatePwd",
             method: "post",
             data: { origPassword, password, repassword }
         }).then(

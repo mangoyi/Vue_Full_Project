@@ -3,7 +3,7 @@
         <div class="content-title">
             <div class="title">机器人坐席</div>
         </div>
-        <div class="content-show">
+        <div class="content-show">    
             <div class="dierban">
                 <el-card class="box-card" v-for="(item, index) in taskList" :key="index">
                     <div slot="header" class="clearfix">
@@ -16,17 +16,20 @@
                         <div class="float-robot" v-for="subitem in item.item3" :key="subitem">
                             <span class="robot-item robot-item-line" v-if="subitem.onLineState == '在线'">
                                 {{subitem.name}}<br />
+                                <img src="../../../../../static/img/online.png" alt="error" width="34" height="48"><br />
                                 ({{subitem.onLineState}})
                             </span>
                             <span class="robot-item robot-item-offline" v-else-if="subitem.onLineState == '离线'">
                                 {{subitem.name}}<br />
+                                <img src="../../../../../static/img/offline.png" alt="error" width="34" height="48"><br />
                                 ({{subitem.onLineState}})
                             </span>
                             <span class="robot-item robot-item-unknow" v-else-if="subitem.onLineState == '未知'">
                                 {{subitem.name}}<br />
+                                <img src="../../../../../static/img/unknow.png" alt="error" width="34" height="48"><br />
                                 ({{subitem.onLineState}})
                             </span>
-                        </div>                       
+                        </div>      
                     </div>
                 </el-card>
             </div>

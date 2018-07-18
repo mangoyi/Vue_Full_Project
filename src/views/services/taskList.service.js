@@ -4,7 +4,7 @@ export default {
     // 任务列表
     taskList(startTime, endTime, currentPage, pageSize) {
         return axios({
-            url: "/api/task/searchTaskList",
+            url: "/api/api/task/searchTaskList",
             method: "post",
             data: { startTime, endTime, currentPage, pageSize }
         }).then(
@@ -26,7 +26,7 @@ export default {
     // 暂停任务
     pauseTask(taskId) {
         return axios({
-            url: "/api/task/pauseTask",
+            url: "/api/api/task/pauseTask",
             method: "post",
             data: { taskId }
         }).then(
@@ -48,7 +48,7 @@ export default {
     // 开启任务
     openTask(taskId) {
         return axios({
-            url: "/api/task/ContinueTask",
+            url: "/api/api/task/ContinueTask",
             method: "post",
             data: { taskId }
         }).then(
@@ -70,7 +70,7 @@ export default {
     // 结束任务
     overTask(taskId) {
         return axios({
-            url: "/api/task/CompleteTask",
+            url: "/api/api/task/CompleteTask",
             method: "post",
             data: { taskId }
         }).then(
@@ -92,7 +92,7 @@ export default {
     // 删除任务
     deleteTask(taskId) {
         return axios({
-            url: "/api/task/DeleteTask",
+            url: "/api/api/task/DeleteTask",
             method: "post",
             data: { taskId }
         }).then(
@@ -114,7 +114,7 @@ export default {
     // 导出明细
     exportDetail(taskId) {
         return axios({
-            url: "/api/task/exportTaskDetail",
+            url: "/api/api/task/exportTaskDetail",
             method: "get",
             params: { taskId },
             responseType: 'blob'

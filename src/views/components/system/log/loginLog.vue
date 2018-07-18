@@ -7,22 +7,22 @@
             <div class="row list-search">
                 <div class="col-md-3 search-field">
                     <div class="label">IP：</div>
-                    <input type="text" class="form-control input-field" placeholder="请输入姓名" v-model="ip" />
+                    <input type="text" class="form-control input-field" placeholder="请输入IP" v-model="ip" />
                 </div>
                 <div class="col-md-3 search-field">
                     <div class="label">MAC：</div>
-                    <input type="text" class="form-control input-field" placeholder="请输入姓名" v-model="mac" />
+                    <input type="text" class="form-control input-field" placeholder="请输入MAC" v-model="mac" />
                 </div>
                 <div class="col-md-3 search-field">
                     <div class="label">登录名：</div>
-                    <input type="text" class="form-control input-field" placeholder="请输入姓名" v-model="accountUser" />
+                    <input type="text" class="form-control input-field" placeholder="请输入登录名" v-model="accountUser" />
                 </div>
-                <div class="col-md-3 search-field">
+                <div class="col-md-4 search-field">
                     <div style="left:0px" class="label">开始日期：</div>
                     <el-date-picker size="normal" v-model="startTime" type="date" placeholder="选择日期时间" value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </div>
-                <div class="col-md-3 search-field">
+                <div class="col-md-4 search-field">
                     <div style="left: 0px" class="label">结束日期：</div>
                     <el-date-picker size="large" v-model="endTime" type="date" placeholder="选择日期时间" value-format="yyyy-MM-dd">
                     </el-date-picker>

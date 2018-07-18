@@ -4,7 +4,7 @@ export default {
     // 任务明细
     taskDetail(taskId, startDate, endDate, number, currentPage, pageSize, tab) {
         return axios({
-            url: "/api/task/taskDetail",
+            url: "/api/api/task/taskDetail",
             method: "post",
             data: { taskId, startDate, endDate, number, currentPage, pageSize, tab }
         }).then(
@@ -27,7 +27,7 @@ export default {
     // 聊天对话
     dialog(Id) {
         return axios({
-            url: "/api/task/searchDialog",
+            url: "/api/api/task/searchDialog",
             method: "post",
             data: { Id }
         }).then(
@@ -50,7 +50,7 @@ export default {
     // 获取当前列表中类型所占百分比
     getTaskTypes(taskId) {
         return axios({
-            url: "/api/task/GetTaskTypes",
+            url: "/api/api/task/GetTaskTypes",
             method: "post",
             data: { taskId }
         }).then(
