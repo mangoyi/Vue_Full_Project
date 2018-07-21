@@ -61,7 +61,7 @@ axios.interceptors.request.use(
 // 替代拦截器
 // axios.defaults.headers.common["Authorization"] = window.localStorage.getItem("token")
 
-// http response 全局拦截
+// http response 全局拦截token失效的情况
 axios.interceptors.response.use(
     response => {
         console.log(response.data.msg);
