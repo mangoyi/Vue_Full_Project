@@ -116,8 +116,14 @@ input:-webkit-autofill {
 }
 .card {
     border-radius: 8px;
+    /* ie11 */
+    -ms-flex: 1 0;
 }
 .cp {
     text-align: center;
+}
+.app, app-dashboard, app-root {
+    /* ie11 */
+    height: 100vh;              
 }
 </style>
