@@ -60,3 +60,20 @@ axios.interceptors.request.use(
 
 // 替代拦截器
 // axios.defaults.headers.common["Authorization"] = window.localStorage.getItem("token")
+
+// http response 全局拦截
+axios.interceptors.response.use(
+    response => {
+        console.log(response.data.msg);
+        if (response.data) {
+            switch (response.data.status) {
+                case 403:
+                    router.push("/pages/login"); // token失效执行
+            }
+        }
+        return response;
+    },
+    error => {
+        return Promise.reject(error.response.status); // 返回接口错误信息
+    }
+)

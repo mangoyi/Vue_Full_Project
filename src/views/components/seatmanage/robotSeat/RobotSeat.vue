@@ -14,81 +14,28 @@
                     </div>
                     <div class="robot-wrapper">
                         <div class="float-robot" v-for="subitem in item.item3" :key="subitem">
-                            <span class="robot-item robot-item-line" v-if="subitem.onLineState == '在线'">
-                                {{subitem.name}}<br />
-                                <img src="../../../../../static/img/online.png" alt="error" width="34" height="48"><br />
-                                ({{subitem.onLineState}})
-                            </span>
-                            <span class="robot-item robot-item-offline" v-else-if="subitem.onLineState == '离线'">
-                                {{subitem.name}}<br />
-                                <img src="../../../../../static/img/offline.png" alt="error" width="34" height="48"><br />
-                                ({{subitem.onLineState}})
-                            </span>
-                            <span class="robot-item robot-item-unknow" v-else-if="subitem.onLineState == '未知'">
-                                {{subitem.name}}<br />
-                                <img src="../../../../../static/img/unknow.png" alt="error" width="34" height="48"><br />
-                                ({{subitem.onLineState}})
-                            </span>
+                            <el-popover trigger="hover" placement="right" >
+                                <span class="robot-item robot-item-line" v-if="subitem.onLineState == '在线'" slot="reference">
+                                    {{subitem.name}}<br />
+                                    <img src="../../../../../static/img/online.png" alt="error" width="17" height="24"><br />
+                                    ({{subitem.onLineState}})
+                                </span>
+                                <span class="robot-item robot-item-offline" v-else-if="subitem.onLineState == '离线'" slot="reference">
+                                    {{subitem.name}}<br />
+                                    <img src="../../../../../static/img/offline.png" alt="error" width="17" height="24" ><br />
+                                    ({{subitem.onLineState}})
+                                </span>
+                                <span class="robot-item robot-item-unknow" v-else-if="subitem.onLineState == '未知'" slot="reference">
+                                    {{subitem.name}}<br /> 
+                                    <img src="../../../../../static/img/unknow.png" alt="error" width="17" height="24"><br />
+                                    ({{subitem.onLineState}})
+                                </span>
+                                <span>IP: {{subitem.ip}}</span>
+                            </el-popover>
                         </div>      
                     </div>
                 </el-card>
             </div>
-
-            
-            <!-- <div class="row list-search">
-                <div class="col-md-3 search-field">
-                    <div class="label" style="left:0px;">机器人ID：</div>
-                    <el-input v-model="keyWord" placeholder="请输入机器人ID"></el-input>
-                </div>
-                <div class="col-md-1 search-field search-field_controls">
-                    <button class="btn btn-primary search-btn" v-on:click.stop="searchList(1)">搜索</button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <table class="table table-bordered table-striped table-sm">
-                        <thead>
-                            <tr>
-                                <th>序列</th>
-                                <th>机器人名称</th>
-                                <th>机器人ID</th>
-                                <th>工作状态</th>
-                                <th>任务名称(任务ID)</th>
-                                <th>在线状态</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(item, index) in robotList" :key="index">
-                                <td>{{index+(currentPage - 1)*10}}</td>
-                                <td>{{item.rname}}</td>
-                                <td>{{item.raccount}}</td>
-                                <td>
-                                    {{item.robotState == 0 ? "空闲中":"工作中"}}
-                                </td>
-                                <td>
-                                    {{item.taskId}}
-                                </td>
-                                <td>{{item.onLineState}}</td>
-                            </tr>                                          
-                        </tbody>
-                    </table>
-                    <div class="page" v-show="(robotList.length > 0 && totalRecords > 10)">
-                        <el-pagination 
-                            background 
-                            @current-change="searchList"
-                            :current-page.sync="currentPage"
-                            :page-size="pageSize"
-                            layout="total, prev, pager, next"
-                            :total="totalRecords"
-                        >
-                        </el-pagination>
-                    </div>
-                    <div class="info" v-show="robotList.length == 0">
-                        请根据条件搜索任务列表  
-                    </div>
-                </div>
-            </div>
-            -->
         </div>
     </div>
 </template>

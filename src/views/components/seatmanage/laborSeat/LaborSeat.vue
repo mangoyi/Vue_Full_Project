@@ -30,8 +30,8 @@
                         <tbody >
                             <tr v-for="(item, index) in laborList" :key="index">
                                 <td>{{index + (currentPage - 1)*10}}</td>
-                                <td>{{item.maccount}}</td>
                                 <td>{{item.mname}}</td>
+                                <td>{{item.maccount}}</td>
                                 <td>{{item.taskState == 0 ? "空闲中" : "工作中"}}
                                     <!-- <i class="fa fa-lg" :class="{'fa-phone': item.onLineState == '未知' ? true : false}"></i> -->
                                 </td>
