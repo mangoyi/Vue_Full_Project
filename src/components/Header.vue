@@ -8,7 +8,7 @@
             </li>
         </ul>
         <ul class="nav navbar-nav ml-auto d-md-down-none">
-            <li class="yi-proName"><span style="color: #20a8d8;font-weight: 600;">智慧鸟</span>智能外呼系统</li> 
+            <li class="yi-proName"><span style="color: #20a8d8;font-weight: 600;">智慧鸟(AIbrid)</span>智能外呼系统</li> 
         </ul>
         <ul class="nav navbar-nav ml-auto d-md-down-none">
                        

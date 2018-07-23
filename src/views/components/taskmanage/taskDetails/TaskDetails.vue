@@ -78,7 +78,7 @@
                                 </td> -->
                                 <td>
                                     <!-- <el-button class="btn btn-primary" plain @click="openDialog(item.Id)" >查看聊天对话</el-button> -->
-                                    <el-button class="btn btn-primary" plain @click="openDialog(item.id, item.phone, item.recordSrc)" >查看聊天对话</el-button>
+                                    <el-button class="btn btn-primary" plain @click="openDialog(item.additionalInfo, item.id, item.phone, item.recordSrc)" >查看聊天对话</el-button>
                                 </td>
                                 <td>{{item.flag}}</td>
                             </tr>                                          
@@ -120,6 +120,7 @@
         <el-dialog :title="dialogNumber" :modal-append-to-body="false" :visible.sync="recordDialog" width="44%" center @close="closeRecordDialog">
             <div class="yi-wrap">
                 <div class="row mb-4" v-for="(item, index) in recordList" :key="index" v-if="recordList.length > 0">
+                    <p v-once>{{item.additionalInfo}}</p>
                     <div class="say" v-if="item.infoType == 'R'">
                         <span class="g-time">{{item.startTime}}</span>
                         <div class="say-text common-text">{{item.sayText}}<span style="padding-left: 12px;font-size: 12px;color: #38F;">"匹配规则:"{{item.mathRule}}</span></div>
@@ -137,12 +138,17 @@
                 </div>
             </div>
             
-            <span slot="footer" class="dialog-footer" v-if="recordList.length > 0">
+            <div slot="footer" class="dialog-footer" v-if="recordList.length > 0" >
                 <!-- <el-button type="primary" @click="recordDialog = false">确 定</el-button> -->
-                    <audio :src="completeRecordUrl" controls="controls" class="" preload="none">
-                        Your browser does not support the audio element.
-                    </audio>
-            </span>
+                <div class="dialoginfo_wrap">
+                    <span class="info_customer">当前用户: <i>{{dialogCustomer}}</i> , </span>
+                    <span class="info_month">账单月份: <i>{{dialogMonth}}</i> ,</span>
+                    <span class="info_bill">账单金额: <i>{{dialogBill}}元</i></span>
+                </div>
+                <audio :src="completeRecordUrl" controls="controls" class="" preload="none">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
 
             <p v-if="recordList.length == 0" style="text-align: center; margin-top: 10px;">当前通话无聊天内容</p>
         </el-dialog>
@@ -174,6 +180,9 @@ export default {
             dialogNumber: "",
             completeRecordUrl: "",
             tab: '',
+            dialogCustomer: "",
+            dialogMonth: "",
+            dialogBill: "",
 
             // 任务列表中页数
             taskCurrentPage: 1,
@@ -214,7 +223,13 @@ export default {
             });
         },
         // open 对话
-        openDialog(id, phone, Src) {
+        openDialog(additionalInfo, id, phone, Src) {
+            console.log(JSON.parse(additionalInfo));
+            let JS_addtional = JSON.parse(additionalInfo);
+            this.dialogCustomer = JS_addtional.customer;
+            this.dialogMonth = JS_addtional.month;
+            this.dialogBill = JS_addtional.bill;
+
             if (this.recordList.length > 0) {
                 this.recordList = [];                                       // 清空上次数据
             }
@@ -336,5 +351,14 @@ export default {
         height: 0px;
         opacity: 0;
         width: 1px;
+    }
+    .dialog-footer {
+        line-height: 37px;
+    }
+    .dialog-footer audio {
+        vertical-align: middle;
+    }
+    .dialoginfo_wrap i {
+        color: #1985ac;
     }
 </style>

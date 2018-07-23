@@ -6,7 +6,7 @@
         <div class="content-show">
             <div class="row">
                 <div class="audio-wrap col-md-12">
-                    <audio :src="recordSrc" controls="controls" class="callaudio" autoplay ref="audio_ref">
+                    <audio :src="recordSrc" controls="controls" class="callaudio" autoplay ref="audio_ref" v-if="recordSrc">
                         Your browser does not support the audio element.
                     </audio>
                 </div>

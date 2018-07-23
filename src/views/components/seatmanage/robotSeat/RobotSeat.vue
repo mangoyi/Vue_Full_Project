@@ -17,17 +17,17 @@
                             <el-popover trigger="hover" placement="right" >
                                 <span class="robot-item robot-item-line" v-if="subitem.onLineState == '在线'" slot="reference">
                                     {{subitem.name}}<br />
-                                    <img src="../../../../../static/img/online.png" alt="error" width="17" height="24"><br />
+                                    <img src="http://47.96.0.103:5000/APi/image/getimage?fileName=online.png" alt="error" width="17" height="24"><br />
                                     ({{subitem.onLineState}})
                                 </span>
                                 <span class="robot-item robot-item-offline" v-else-if="subitem.onLineState == '离线'" slot="reference">
                                     {{subitem.name}}<br />
-                                    <img src="../../../../../static/img/offline.png" alt="error" width="17" height="24" ><br />
+                                    <img src="http://47.96.0.103:5000/APi/image/getimage?fileName=offline.png" alt="error" width="17" height="24" ><br />
                                     ({{subitem.onLineState}})
                                 </span>
                                 <span class="robot-item robot-item-unknow" v-else-if="subitem.onLineState == '未知'" slot="reference">
                                     {{subitem.name}}<br /> 
-                                    <img src="../../../../../static/img/unknow.png" alt="error" width="17" height="24"><br />
+                                    <img src="http://47.96.0.103:5000/APi/image/getimage?fileName=unknow.png" alt="error" width="17" height="24"><br />
                                     ({{subitem.onLineState}})
                                 </span>
                                 <span>IP: {{subitem.ip}}</span>
@@ -122,6 +122,10 @@ export default {
 }
 .float-robot {
     float: left;
+    cursor: pointer;
+}
+.float-robot:hover {
+    opacity: 0.7;
 }
 .robot-item-unknow {
     background: #909399;
