@@ -33,7 +33,7 @@ export default {
         return {
             percentlist: [],
             taskArr: [],
-            taskRecent: [],
+            date: [],
             seriesArr: []
         }
     },
@@ -56,51 +56,76 @@ export default {
 
             dashBoardSrv.taskLine().then(resp => {
                 let data = resp.data.taskChart;
-                vm.taskArr = data.taskName;
-                vm.taskRecent = data.taskRecent;
-                vm.taskSeries = data.taskSeries;
-                vm.drawCanvas(vm.taskArr, vm.taskRecent, vm.taskSeries);
+                vm.date = data.date;
+                let tempSeries = data.series;
+                tempSeries.map((item, index) => {
+                    if (index === 2) {
+                        item["yAxisIndex"] = 1;
+                    }
+                    return item;
+                });
+                vm.drawCanvas(vm.date, tempSeries);
+                console.log(tempSeries);
             });
         });
     },
     methods: {
-        drawCanvas(taskArr, taskRecent, seriesArr) {
+        drawCanvas(date, series) {
             // 基于DOM，初始化echarts实例
             let dom = this.$refs["chart"];
             let myChart = this.$echarts.init(dom);
             let app = {};
             let option = null;
             option = {
-                title: {
-                    text: '任务工作量'
-                },
                 tooltip: {
-                    trigger: 'axis'
-                },
-                legend: {
-                    data: taskArr                                        // 任务名
-                },
-                grid: {
-                    left: '3%',
-                    right: '4%',
-                    bottom: '3%',
-                    containLabel: true
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        crossStyle: {
+                            color: '#999'
+                        }
+                    }
                 },
                 toolbox: {
                     feature: {
-                        saveAsImage: {}
+                        saveAsImage: {show: true}
                     }
                 },
-                xAxis: {
-                    type: 'category',
-                    boundaryGap: false,
-                    data: taskRecent                                         // 日期
+                legend: {
+                    data:['接通量','外呼量','接通率']
                 },
-                yAxis: {
-                    type: 'value'
-                },
-                series: seriesArr                                        // 详细信息
-            };
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: date,
+                        axisPointer: {
+                            type: 'shadow'
+                        }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '呼叫量',
+                        min: 0,
+                        interval: 2000,
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    },
+                    {
+                        type: 'value',
+                        name: '接通率',
+                        min: 0,
+                        max: 100,
+                        interval: 20,
+                        axisLabel: {
+                            formatter: '{value} %'
+                        }
+                    }
+                ],
+                series: series
+            }
             if (option && typeof option === "object") {
                 myChart.setOption(option, true);
             }

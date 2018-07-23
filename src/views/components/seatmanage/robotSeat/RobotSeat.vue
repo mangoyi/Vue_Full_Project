@@ -100,10 +100,9 @@ export default {
 }
 .robot-item {
     display: inline-block;
-    width: 90px;
+    width: 64px;
     margin-right: 10px;
     margin-bottom: 10px;
-    padding: 10px 0;
     text-align: center;
     color: #ffffff;
     border-radius: 10px;

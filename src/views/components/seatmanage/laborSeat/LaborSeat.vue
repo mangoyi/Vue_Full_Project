@@ -38,7 +38,10 @@
                                 <td>
                                     <span v-for="info in item.tasks" :key="info.id">{{info.taskId}}({{info.taskName}})，</span>
                                 </td>
-                                <td>{{item.onLineState}}</td>
+                                <td>
+                                    <span v-if="item.onLineState == '在线'" style="color: #67C23A;"><i class="el-icon-service"></i>{{item.onLineState}}</span>
+                                    <span v-else-if="item.onLineState == '离线'" style="color: #F56C6C;"><i class="el-icon-service"></i>{{item.onLineState}}</span>
+                                </td>
                             </tr>                                          
                         </tbody>
                     </table>
