@@ -85,7 +85,10 @@
                         </tbody>
                     </table>
                     <p style="float: left; margin-top: 10px;" v-show="detailList.length > 0" >
-                        <span style="margin-right: 10px;" v-for="(typeItem, index) in typeList" :key="index">{{typeItem.type}}类: {{typeItem.percent}}；</span>
+                        <span style="margin-right: 10px;" v-for="(typeItem, index) in typeList" :key="index">
+                            <span v-if="typeItem.type == '接通率'">{{typeItem.type}}: {{typeItem.percent}}；</span>
+                            <span v-else>{{typeItem.type}}类: {{typeItem.percent}}；</span>
+                        </span>
                     </p>
                     <div class="page" v-show="detailList.length > 0">
                         <el-pagination 
