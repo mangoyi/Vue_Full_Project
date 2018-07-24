@@ -65,7 +65,6 @@ export default {
                     return item;
                 });
                 vm.drawCanvas(vm.date, tempSeries);
-                console.log(tempSeries);
             });
         });
     },
@@ -84,6 +83,16 @@ export default {
                         crossStyle: {
                             color: '#999'
                         }
+                    },
+                    formatter: function(params, ticket, callback) {     // 修改echart提示框浮层数据样式
+                        let showContent = '';
+                        params.map((item, index) => {
+                            let showName = item['seriesName'];
+                            let showValue = '';
+                            index === 2 ? showValue = item['value'] + "%" : showValue = item['value'];
+                            showContent += item.marker + showName + ":" + showValue + "<br />";
+                        });
+                        return showContent;
                     }
                 },
                 toolbox: {
