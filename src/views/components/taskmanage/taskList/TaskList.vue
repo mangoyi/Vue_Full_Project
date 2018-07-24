@@ -138,7 +138,6 @@ export default {
         };
     },
     beforeRouteEnter: (to, from, next) => {
-        console.log(to);
         next(vm => {
             let loading = {};
             let temCurrentPage = 1;
@@ -292,10 +291,6 @@ export default {
                 });
             });
         }
-    },
-    activated() {
-        console.log("activete")
-        // this.searchList();
     }
 };
 </script>

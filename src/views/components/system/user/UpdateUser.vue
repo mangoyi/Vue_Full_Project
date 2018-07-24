@@ -92,7 +92,6 @@ export default {
                     roleOption["label"] = item.roleName == "admin" ? "管理员" : "普通用户";
                     vm.roleOptions.push(roleOption);
                 });
-                console.log(vm.roleOptions);
             }, err => {
                 vm.$message.error(err.msg);
             });
@@ -142,7 +141,6 @@ export default {
             });
 
             if (this.loginName && this.password && this.username && tempRole.length > 0 && this.status) {    
-                console.log("提交啦提交啦提交啦提交啦");              
                 userSrv.updateUser(this.$route.query.Id ,this.loginName, this.password, this.username, tempRole, tempStatus, 2).then(resp => {
                     this.$message.success("用户修改成功!");
                     // this.$router.push({path: "/system/user", query:{currentPage: this.$route.query.currentPage}});          // 跳回任务列表所在当前页
@@ -160,7 +158,6 @@ export default {
     beforeRouteLeave(to, from, next) {
         // 设置下一个路由的meta
         to.meta.keepAlive = true;           
-        console.log("sfasdfsdfsdfsafdasdf...............................");
         next();
     }
 }

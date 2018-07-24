@@ -208,7 +208,6 @@ export default {
         
             taskDetailSrv.getTaskTypes(vm.$route.query.taskId).then(resp => {
                 vm.typeList = resp.data.list;
-                console.log(vm.typeList);
             }, err => {
                 this.$message.error(err.msg);
             });
@@ -227,7 +226,6 @@ export default {
         },
         // open 对话
         openDialog(additionalInfo, id, phone, Src) {
-            console.log(JSON.parse(additionalInfo));
             let JS_addtional = JSON.parse(additionalInfo);
             this.dialogCustomer = JS_addtional.customer;
             this.dialogMonth = JS_addtional.month;
@@ -241,7 +239,6 @@ export default {
             this.completeRecordUrl = Src;
             taskDetailSrv.dialog(id).then(resp => {
                 let data = resp.data.diaglogTexts;
-                console.log(data);
                 data.forEach((item) => {
                     item["imgFlag"] = false;
                 })
@@ -253,8 +250,6 @@ export default {
         playVoice(refIndex, item) {
             item.imgFlag = true;                                // 当前图片动画
             this.$refs[refIndex][0].play();                     // 当前录音播放
-            console.log(refIndex);
-            console.log(this.$refs[refIndex][0]);
         },
         ended(item) {
             item.imgFlag = false;

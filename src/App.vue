@@ -53,7 +53,8 @@ export default {
     height: 40px;
 }
 .align-items-center {
-    background-image: url(/static/img/admin_bg.jpg);
+    // background-image: url(/static/img/admin_bg.jpg);
+    background-image: url(/APi/image/getimage?fileName=admin_bg.jpg);
     background-size: 100% 100%;
 }
 .el-button.is-plain:hover,

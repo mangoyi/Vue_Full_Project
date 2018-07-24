@@ -17,17 +17,17 @@
                             <el-popover trigger="hover" placement="right" >
                                 <span class="robot-item robot-item-line" v-if="subitem.onLineState == '在线'" slot="reference">
                                     {{subitem.name}}<br />
-                                    <img src="http://47.96.0.103:5000/APi/image/getimage?fileName=online.png" alt="error" width="17" height="24"><br />
+                                    <img src="/api/image/getimage?fileName=online.png" alt="error" width="17" height="24"><br />
                                     ({{subitem.onLineState}})
                                 </span>
                                 <span class="robot-item robot-item-offline" v-else-if="subitem.onLineState == '离线'" slot="reference">
                                     {{subitem.name}}<br />
-                                    <img src="http://47.96.0.103:5000/APi/image/getimage?fileName=offline.png" alt="error" width="17" height="24" ><br />
+                                    <img src="/api/image/getimage?fileName=offline.png" alt="error" width="17" height="24" ><br />
                                     ({{subitem.onLineState}})
                                 </span>
                                 <span class="robot-item robot-item-unknow" v-else-if="subitem.onLineState == '未知'" slot="reference">
                                     {{subitem.name}}<br /> 
-                                    <img src="http://47.96.0.103:5000/APi/image/getimage?fileName=unknow.png" alt="error" width="17" height="24"><br />
+                                    <img src="/api/image/getimage?fileName=unknow.png" alt="error" width="17" height="24"><br />
                                     ({{subitem.onLineState}})
                                 </span>
                                 <span>IP: {{subitem.ip}}</span>
@@ -62,16 +62,8 @@ export default {
     },
     beforeRouteEnter: (to, from, next) => {
         next(vm => {
-            // seatSrv.robotSeat(vm.keyWord, vm.currentPage, vm.pageSize).then(resp => {
-            //     let robotData = resp.data.pageInfo;
-            //     vm.robotList = robotData.list;
-            //     vm.totalRecords = robotData.totalRecords;
-            // }, err => { 
-            //     vm.$message.error(err.msg);
-            // });
             seatSrv.robotWorksSeat().then(resp => {
                 vm.taskList = resp.data.list;
-                console.log(vm.taskList);
             })
 
         });

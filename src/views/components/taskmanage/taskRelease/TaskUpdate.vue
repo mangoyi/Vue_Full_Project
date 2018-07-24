@@ -206,7 +206,6 @@ export default {
                     );
                 });
                 vm.checkedTransferData = thatcheckedTransferData;
-                console.log(thatcheckedTransferData);
             }, err => {
                 vm.$message.error(err.msg);
             });
@@ -236,7 +235,6 @@ export default {
             taskSrv.getZip(currentTaskId).then(resp => {
                 let data = resp.data.task;
                 // vm.zipFileUrl = data.zipSrc;
-                // console.log(vm.zipFileUrl);
                 vm.taskID = data.taskID;
 
                 vm.taskName = data.taskName;     // 任务名称
@@ -378,9 +376,7 @@ export default {
             }
         },
         downloadFile(taskID) {
-            console.log(taskID);
             taskSrv.downloadFile(taskID).then(resp => {
-                console.log(".......................................下载文件...................");
                 this.download(resp);
             }, err => { 
                 this.$message.error(err.msg);
@@ -404,7 +400,6 @@ export default {
     beforeRouteLeave(to, from, next) {
         // 设置下一个路由的meta
         to.meta.keepAlive = true;   // 跳转到下一个路由不刷新        
-        console.log("。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。taskList Live");
         next();
     }
     

@@ -167,7 +167,6 @@ export default {
         deleteUser(Id) {
             this.deleteUserId = Id;
             this.deleteDialog = true;
-            console.log(this.deleteUserId);
         },
         confirmDeleteUser() {
             userSrv.deleteUser(this.deleteUserId).then(resp => {

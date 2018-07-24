@@ -71,7 +71,6 @@ export default {
 
                     // token安全验证                    
                     for (let [key, value] of Object.entries(resp.data)) {
-                        console.log(`${key}:${value}`);
                         window.sessionStorage.setItem(key, value);
                     }
                     axios.defaults.headers.common["Authorization"] =resp.data.token;

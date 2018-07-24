@@ -28,12 +28,10 @@ new Vue({
 
 // 判断是否是登录状态, 如果不是登陆状态，永远将路由跳转到login页面
 router.beforeEach((to, from, next) => {
-    console.log("to", to.meta);
     if (to.meta.requireAuth) { // 判断该路由是否需要登陆权限
         if (window.sessionStorage.getItem("token")) { // 判断当前的token是否存在
             next();
         } else {
-            console.log("没有登陆没有登陆没有登陆没有登陆没有登陆没有登陆没有登陆没有登陆没有登陆没有登陆没有登陆");
             next({
                 path: "/pages/login",
                 query: { redirect: to.fullPath } //将跳转的路由path作为参数，登陆成功后跳转到该路由
@@ -49,7 +47,6 @@ axios.interceptors.request.use(
     config => {
         if (window.sessionStorage.getItem("token")) { // 判断是否存在token, 为每个http请求header都加上token
             config.headers.Authorization = `${window.sessionStorage.getItem("token")}`;
-            console.log("请求头加上token请求头加上token请求头加上token请求头加上token请求头加上token请求头加上token");
         }
         return config;
     },
@@ -64,7 +61,6 @@ axios.interceptors.request.use(
 // http response 全局拦截token失效的情况
 axios.interceptors.response.use(
     response => {
-        console.log(response.data.msg);
         if (response.data) {
             switch (response.data.status) {
                 case 403:

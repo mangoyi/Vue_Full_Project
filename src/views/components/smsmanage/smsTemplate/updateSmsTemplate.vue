@@ -53,7 +53,6 @@ export default {
     },
     beforeRouteEnter:(to, from, next) => {
         next(vm => {
-            console.log(vm.$route.query.Id);
             smsTemplateSrv.getTemplate(vm.$route.query.Id).then(resp => {
                 let tempData = resp.data.smsTemplate;
                 vm.smsId = tempData.smsTempLateId;
@@ -73,7 +72,6 @@ export default {
             let smsId = this.smsId;
             if (smsName && smsText) {
                 smsTemplateSrv.updateTemplate(this.$route.query.Id, smsId, smsName, smsText).then(resp => {
-                    console.log(resp);
                     this.$message.success("更新成功");
                     this.$router.push({path: "/smsmanage/SmsTemplate", query:{currentPage: this.$route.query.currentPage}});          // 跳回模板列表所在当前页
                 }, err => {

@@ -111,7 +111,6 @@ export default {
             let roles = window.sessionStorage.getItem("roles");
             if (roles) {            // 存在这个用户角色
                 roles.indexOf("admin") > -1 ? this.roleAdmin = true : this.roleAdmin = false;
-                console.log("管理员...........");
             }
         }
     }

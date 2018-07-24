@@ -120,7 +120,6 @@ export default {
     methods: {
         searchList(currentPage = this.currentPage) {
             callRecordSrv.callRecord(this.startDate, this.endDate, this.phone, currentPage, this.pageSize, this.tabValue).then(resp => {
-                console.log(resp);
                 this.recordList = resp.data.pageInfo.list;
                 if (this.recordList.length == 0) {
                     this.$message.success("当前无通话记录");
@@ -142,15 +141,12 @@ export default {
             if (!item.recordPlayState) {                                                     // 播放
                 this.recordSrc = item.recordSrc;
                 // this.recordSrc = "http://192.168.1.150:5000/api/taskFiles/20180713101902/demoMp3/7.1.mp3";
-                console.log(this.recordSrc + "-----------------------播放--------------------------");
                 let len = this.recordList.length;
                 for(let i=0; i<len; i++) {
                     this.recordList[i].recordPlayState = false;
                 }
             } else {                                                                         // 暂停     
-                console.log(this.$refs["audio_ref"]);
                 this.$refs["audio_ref"].pause();
-                console.log("---------------------暂停=---------------------------------------");
             }
             item.recordPlayState = !item.recordPlayState;
         }
