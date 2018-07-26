@@ -2,11 +2,11 @@ import axios from "axios";
 
 export default {
     // 通话记录
-    callRecord(startDate, endDate, phone, currentPage, pageSize) {
+    callRecord(startDate, endDate, phone, userName, currentPage, pageSize) {
         return axios({
             url: "/api/callLog/SearchCallLog",
             method: "post",
-            data: { startDate, endDate, phone, currentPage, pageSize }
+            data: { startDate, endDate, phone, userName, currentPage, pageSize }
         }).then(
             resp => {
                 if (resp.data.status == 0) {

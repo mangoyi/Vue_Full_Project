@@ -26,6 +26,10 @@
                     <div style="left: 0px" class="label">查询号码：</div>
                     <input type="text" class="form-control input-field" placeholder="请输入电话号码" v-model.trim="phone" style="font-size: 12px;"/>
                 </div>
+                <div class="col-md-2 search-field">
+                    <div style="left: 0px" class="label">查询工号：</div>
+                    <input type="text" class="form-control input-field" placeholder="请输入工号" v-model.trim="userName" style="font-size: 12px;"/>
+                </div>
                 <div class="col-md-1 search-field search-field_controls">
                     <button class="btn btn-primary search-btn" v-on:click.stop="searchList(1)">搜索</button>
                 </div>
@@ -108,6 +112,7 @@ export default {
             startDate: "",
             endDate: "",
             phone: "",
+            userName: "",
             listenFlag: false,
             recordSrc: "",
             centerDialogVisible: false,
@@ -119,7 +124,7 @@ export default {
     },
     methods: {
         searchList(currentPage = this.currentPage) {
-            callRecordSrv.callRecord(this.startDate, this.endDate, this.phone, currentPage, this.pageSize, this.tabValue).then(resp => {
+            callRecordSrv.callRecord(this.startDate, this.endDate, this.phone, this.userName, currentPage, this.pageSize, this.tabValue).then(resp => {
                 this.recordList = resp.data.pageInfo.list;
                 if (this.recordList.length == 0) {
                     this.$message.success("当前无通话记录");
