@@ -6,7 +6,10 @@
             <main class="main">
                 <breadcrumb :list="list"/>
                 <div class="container-fluid">
-                    <router-view></router-view>
+                    <keep-alive>
+                        <router-view v-if="$route.meta.keepAlive"></router-view>
+                    </keep-alive>
+                    <router-view v-if="!$route.meta.keepAlive"></router-view>
                 </div>
             </main>
         </div>

@@ -84,7 +84,7 @@ export default new Router({
                 // 任务管理
                 {
                     path: "taskmanage",
-                    redirect: "/taskmanage/taskList",
+                    redirect: "/taskmanage/TaskList",
                     name: "任务管理",
                     component: {
                         render(c) {
@@ -92,12 +92,12 @@ export default new Router({
                         }
                     },
                     children: [{
-                            path: "taskList",
+                            path: "TaskList",
                             name: "任务列表",
                             component: TaskList,
                             meta: {
                                 requireAuth: true,
-                                keepAlive: true // 任务列表需要被缓存
+                                keepAlive: true
                             }
                         },
                         {
@@ -205,7 +205,7 @@ export default new Router({
                 {
                     path: "system",
                     redirect: "/system/user",
-                    name: "短信管理",
+                    name: "系统管理",
                     component: {
                         render(c) {
                             return c("router-view");
@@ -213,7 +213,7 @@ export default new Router({
                     },
                     children: [{
                             path: "addUser",
-                            name: "用户管理",
+                            name: "新增用户",
                             component: AddUser,
                             meta: {
                                 requireAuth: true
@@ -221,7 +221,7 @@ export default new Router({
                         },
                         {
                             path: "updateUser",
-                            name: "用户管理",
+                            name: "修改用户",
                             component: UpdateUser,
                             meta: {
                                 requireAuth: true
@@ -233,7 +233,7 @@ export default new Router({
                             component: User,
                             meta: {
                                 requireAuth: true,
-                                keepAlive: true // 用户列表需要被缓存
+                                keepAlive: true
                             }
                         },
                         {

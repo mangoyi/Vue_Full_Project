@@ -138,14 +138,15 @@ export default {
         };
     },
     beforeRouteEnter: (to, from, next) => {
+        if (from.path.indexOf("TaskUpdate") > -1) {
+            // 判断是从修改路由进入到TaskList组件中
+            to.meta.keepAlive = true;
+        } else {
+            to.meta.keepAlive = false;      // 其他组件进入到TaskList组件中应重新请求数据
+        }
         next(vm => {
             let loading = {};
-            let temCurrentPage = 1;
 
-            if (vm.$route.query.currentPage) {
-                // 说明从任务修改中跳转过来: 确保第几页修改，修改完成（返回）就回到第几页。
-                temCurrentPage =Number( vm.$route.query.currentPage);
-            }
             // //加载动画 fl----- 6.26
             loading = vm.$loading({
                 lock: true,
@@ -154,12 +155,11 @@ export default {
                 background: 'rgba(0, 0, 0, 0.5)'
             });
 
-            taskListSrv.taskList(vm.startDate, vm.endDate, temCurrentPage, vm.pageSize).then(resp => {
+            taskListSrv.taskList(vm.startDate, vm.endDate, vm.currentPage, vm.pageSize).then(resp => {
                 loading.close();
                 let taskData  =  resp.data.pageInfo;
                 vm.taskList = taskData.list;
                 vm.totalRecords = taskData.totalRecords;
-                vm.currentPage = temCurrentPage;
             }, err => {
                 loading.close();
                 vm.$message.error(err.msg);
@@ -278,8 +278,14 @@ export default {
                 type: 'warning',
                 center: 'true'
             }).then(() => {
+                // 判断如果是删除第n页唯一的一个数据，就返回前一页数据
+                let tempCurrentPage = this.currentPage;
+                let totalRecords = this.totalRecords;
+                if (totalRecords > 10 && totalRecords%10 === 1) {
+                    tempCurrentPage = this.currentPage - 1;
+                }
                 taskListSrv.deleteTask(taskId).then(resp => {
-                    this.searchList(this.currentPage);
+                    this.searchList(tempCurrentPage);
                     this.$message.success("任务已经删除");
                 }, err => {
                     this.$message.error(err.msg);

@@ -101,6 +101,7 @@ import { Pagination, Dialog } from 'element-ui';
 import userSrv from "@/../src/views/services/user.service.js";
 /* eslint-disable */
 export default {
+    name: "userC",               // 组件名
     data() {
         return {
             passwordDialog: false,
@@ -122,19 +123,17 @@ export default {
         'el-dialog': Dialog
     },
     beforeRouteEnter (to, from, next) {
+        if (from.path.indexOf("updateUser") > -1) {
+            // 判断是从修改路由进入到User组件中
+            to.meta.keepAlive = true;
+        } else {
+            to.meta.keepAlive = false;      // 其他组件进入到User组件中应重新请求数据
+        }
         next(vm => {
-            // let temCurrentPage = 1;                                                     // 如果是从修改用户页面跳转过来，那么要显示当前用户所在页
-
-            //if (Number(vm.$route.query.currentPage) !== 1) {
-                // 如果是从修改用户页面跳转过来，那么要显示当前用户所在页
-               // temCurrentPage = Number(vm.$route.query.currentPage);
-            //}
-
             userSrv.getAllUsers(vm.username, vm.currentPage, vm.pageSize).then(resp => {
                 let data = resp.data.pageInfo;
                 vm.userList = data.list;
                 vm.totalRecords = data.totalRecords;
-                // vm.currentPage = temCurrentPage;
             }, err => {
                 vm.$message.error(err.msg);
             });
@@ -158,7 +157,6 @@ export default {
                 return "普通用户";
             } else {
                 let arr = roles.map(x => x.roleName == "admin" ? "管理员" : "普通用户");
-                // return Array.from(new Set(roles.map(x => x.RoleName == "admin" ? "管理员" : "普通用户"))).join();
                 return arr.join();
             }
         },
@@ -207,6 +205,12 @@ export default {
             });
         }
 
+    },
+    activated() {
+        console.log('触发keepAlive');
+    },
+    deactivated() {
+        console.log("销毁keepAlive");
     }
 
 }
