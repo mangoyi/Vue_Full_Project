@@ -27,13 +27,14 @@
                 </div>
                 <div class="col-md-2 search-field yi-tDetailOption">
                     <div style="left: 0px" class="label">选择类别：</div>
-                    <el-select v-model="tab" clearable placeholder="请选择标记" size="medium" >
+                    <el-select v-model="flag" clearable placeholder="请选择标记" size="medium" >
                         <el-option key="A" label="A类别" value="A" ></el-option>
                         <el-option key="B" label="B类别" value="B" ></el-option>
                         <el-option key="C" label="C类别" value="C" ></el-option>
                         <el-option key="D" label="D类别" value="D" ></el-option>
                         <el-option key="E" label="E类别" value="E" ></el-option>
                         <el-option key="F" label="F类别" value="F" ></el-option>
+                        <el-option key="G" label="G类别" value="G" ></el-option>
                     </el-select>
                 </div>
                 <div class="col-md-1 search-field search-field_controls">
@@ -182,7 +183,7 @@ export default {
             recordList: [],
             dialogNumber: "",
             completeRecordUrl: "",
-            tab: '',
+            flag: '',
             dialogCustomer: "",
             dialogMonth: "",
             dialogBill: "",
@@ -196,7 +197,7 @@ export default {
     },
     beforeRouteEnter: (to, from, next) => {
         next(vm => {
-            taskDetailSrv.taskDetail(vm.$route.query.taskId, vm.startDate, vm.endDate, vm.number, vm.currentPage, vm.pageSize, vm.tab).then(resp => {
+            taskDetailSrv.taskDetail(vm.$route.query.taskId, vm.startDate, vm.endDate, vm.number, vm.currentPage, vm.pageSize, vm.flag).then(resp => {
                 let detailData = resp.data.pageInfo;
                 vm.detailList = detailData.list;
                 vm.totalRecords = detailData.totalRecords;
@@ -215,7 +216,7 @@ export default {
     },
     methods: {
         searchList(currentPage = this.currentPage) {
-            taskDetailSrv.taskDetail(this.$route.query.taskId, this.startDate, this.endDate, this.number, currentPage, this.pageSize, this.tab).then(resp => {
+            taskDetailSrv.taskDetail(this.$route.query.taskId, this.startDate, this.endDate, this.number, currentPage, this.pageSize, this.flag).then(resp => {
                 let detailData = resp.data.pageInfo;
                 this.detailList = detailData.list;
                 this.totalRecords = detailData.totalRecords;

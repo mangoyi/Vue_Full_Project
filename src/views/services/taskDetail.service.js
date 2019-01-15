@@ -2,11 +2,11 @@ import axios from "axios";
 
 export default {
     // 任务明细
-    taskDetail(taskId, startDate, endDate, number, currentPage, pageSize, tab) {
+    taskDetail(taskId, startDate, endDate, number, currentPage, pageSize, flag) {
         return axios({
             url: "/api/task/taskDetail",
             method: "post",
-            data: { taskId, startDate, endDate, number, currentPage, pageSize, tab }
+            data: { taskId, startDate, endDate, number, currentPage, pageSize, flag }
         }).then(
             resp => {
                 if (resp.data.status == 0) {
